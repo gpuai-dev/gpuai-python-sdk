@@ -6,7 +6,7 @@ name = "gpuai-sdk"
 # injected tree. This file is ignore-protected (see .openapi-generator-ignore)
 # so the placeholder survives regeneration; sdk/release/assert-placeholder.sh
 # fails CI if a real version ever lands here.
-version = "0.1.1"
+version = "0.1.2"
 description = "GPU.ai Public Developer API"
 authors = [
   {name = "GPU.ai Support",email = "support@gpu.ai"},
@@ -30,7 +30,9 @@ dependencies = [
 [project.urls]
 # Real URL hand-set here (78-08 F2): this file is ignore-protected, so the
 # generator's --git-user-id/--git-repo-id flags cannot rewrite it.
-Repository = "https://github.com/gpuai-dev/gpu-ai"
+# Points at the PUBLIC mirror (D-16/D-17) — the private monorepo 404s for
+# customers on the PyPI project page.
+Repository = "https://github.com/gpuai-dev/gpuai-python-sdk"
 
 [tool.poetry]
 requires-poetry = ">=2.0"
