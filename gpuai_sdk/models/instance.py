@@ -45,7 +45,8 @@ class Instance(BaseModel):
     created_at: datetime
     ready_at: Optional[datetime] = None
     terminated_at: Optional[datetime] = None
-    __properties: ClassVar[List[str]] = ["id", "name", "status", "gpu_type", "gpu_count", "region", "tier", "price_per_hour", "connection", "disk_gb", "status_reason", "created_at", "ready_at", "terminated_at"]
+    last_reachable_at: Optional[datetime] = Field(default=None, description="Last time the platform verified the SSH path to this instance end-to-end through the tunnel. Absent means the instance has not been probed yet (freshly launched, or no tunnel) — it does NOT mean unreachable. An instance whose status is still \"running\" while this timestamp stops advancing is one whose SSH has died even though the machine is up.")
+    __properties: ClassVar[List[str]] = ["id", "name", "status", "gpu_type", "gpu_count", "region", "tier", "price_per_hour", "connection", "disk_gb", "status_reason", "created_at", "ready_at", "terminated_at", "last_reachable_at"]
 
     @field_validator('status')
     def status_validate_enum(cls, value):
@@ -128,7 +129,8 @@ class Instance(BaseModel):
             "status_reason": obj.get("status_reason"),
             "created_at": obj.get("created_at"),
             "ready_at": obj.get("ready_at"),
-            "terminated_at": obj.get("terminated_at")
+            "terminated_at": obj.get("terminated_at"),
+            "last_reachable_at": obj.get("last_reachable_at")
         })
         return _obj
 

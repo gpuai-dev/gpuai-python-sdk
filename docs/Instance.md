@@ -19,6 +19,7 @@ Name | Type | Description | Notes
 **created_at** | **datetime** |  | 
 **ready_at** | **datetime** |  | [optional] 
 **terminated_at** | **datetime** |  | [optional] 
+**last_reachable_at** | **datetime** | Last time the platform verified the SSH path to this instance end-to-end through the tunnel. Absent means the instance has not been probed yet (freshly launched, or no tunnel) — it does NOT mean unreachable. An instance whose status is still \&quot;running\&quot; while this timestamp stops advancing is one whose SSH has died even though the machine is up. | [optional] 
 
 ## Example
 
