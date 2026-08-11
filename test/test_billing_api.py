@@ -27,31 +27,10 @@ class TestBillingApi(unittest.TestCase):
     def tearDown(self) -> None:
         pass
 
-    def test_create_crypto_deposit(self) -> None:
-        """Test case for create_crypto_deposit
-
-        Create a stablecoin deposit
-        """
-        pass
-
-    def test_get_deposit(self) -> None:
-        """Test case for get_deposit
-
-        Get one stablecoin deposit
-        """
-        pass
-
     def test_get_spending_limit(self) -> None:
         """Test case for get_spending_limit
 
         Get the org spending limit
-        """
-        pass
-
-    def test_list_deposits(self) -> None:
-        """Test case for list_deposits
-
-        List stablecoin deposits
         """
         pass
 
