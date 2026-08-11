@@ -6,6 +6,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **deposits** | [**List[CryptoDeposit]**](CryptoDeposit.md) |  | 
+**min_deposit_cents** | **int** | The effective minimum deposit in USD cents (admin override, else the deployment&#39;s configured floor). Validate amounts against this live value rather than hardcoding the default. | 
 
 ## Example
 

@@ -18,7 +18,7 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field, StrictInt
 from typing import Any, ClassVar, Dict, List
 from gpuai_sdk.models.crypto_deposit import CryptoDeposit
 from typing import Optional, Set
@@ -30,7 +30,8 @@ class ListDeposits200Response(BaseModel):
     ListDeposits200Response
     """ # noqa: E501
     deposits: List[CryptoDeposit]
-    __properties: ClassVar[List[str]] = ["deposits"]
+    min_deposit_cents: StrictInt = Field(description="The effective minimum deposit in USD cents (admin override, else the deployment's configured floor). Validate amounts against this live value rather than hardcoding the default.", json_schema_extra={"examples": [500]})
+    __properties: ClassVar[List[str]] = ["deposits", "min_deposit_cents"]
 
     model_config = ConfigDict(
         validate_by_name=True,
@@ -90,7 +91,8 @@ class ListDeposits200Response(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "deposits": [CryptoDeposit.from_dict(_item) for _item in obj["deposits"]] if obj.get("deposits") is not None else None
+            "deposits": [CryptoDeposit.from_dict(_item) for _item in obj["deposits"]] if obj.get("deposits") is not None else None,
+            "min_deposit_cents": obj.get("min_deposit_cents")
         })
         return _obj
 
