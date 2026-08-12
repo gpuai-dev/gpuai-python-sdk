@@ -7,7 +7,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **gpu_type** | **str** |  | 
 **vram_gb** | **int** |  | 
-**cpu_cores** | **int** | Representative host vCPU count for this GPU model. Unlike vram_gb (invariant per model) this varies per offering, so it is the first-sighting/typical value; GET /v1/pricing carries the exact per-offering spec. 0 marks a spec the upstream did not report. | [optional] 
+**cpu_cores** | **int** | Representative host vCPU count for this GPU model. Unlike vram_gb (the minimum across the model&#39;s current offerings — the value every launch of the model can honor) this varies per offering, so it is the first-sighting/typical value; GET /v1/pricing carries the exact per-offering spec. 0 marks a spec the upstream did not report. | [optional] 
 **ram_gb** | **int** | Representative host RAM (GB) for this GPU model; varies per offering — see cpu_cores. 0 marks an unreported spec. | [optional] 
 **storage_gb** | **int** | Representative host storage (GB) for this GPU model; varies per offering — see cpu_cores. 0 marks an unreported spec. | [optional] 
 **instance_disk_gb** | **int** | Representative instance filesystem size (GB) a launch of this model receives — the platform default where the upstream honors a configured size, otherwise the machine&#39;s reported disk; varies per offering — see cpu_cores. 0 marks an unreported disk (unknown, not zero). GET /v1/pricing carries the exact per-offering value. | [optional] 
