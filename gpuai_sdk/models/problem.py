@@ -39,8 +39,8 @@ class Problem(BaseModel):
     @field_validator('code')
     def code_validate_enum(cls, value):
         """Validates the enum"""
-        if value not in set(['unauthenticated', 'invalid_api_key', 'insufficient_scope', 'not_found', 'idempotency_conflict', 'idempotency_mismatch', 'validation_failed', 'invalid_gpu_type', 'disk_unavailable', 'model_too_large', 'insufficient_balance', 'quota_exceeded', 'rate_limited', 'internal_error', 'operation_failed']):
-            raise ValueError("must be one of enum values ('unauthenticated', 'invalid_api_key', 'insufficient_scope', 'not_found', 'idempotency_conflict', 'idempotency_mismatch', 'validation_failed', 'invalid_gpu_type', 'disk_unavailable', 'model_too_large', 'insufficient_balance', 'quota_exceeded', 'rate_limited', 'internal_error', 'operation_failed')")
+        if value not in set(['unauthenticated', 'invalid_api_key', 'insufficient_scope', 'not_found', 'idempotency_conflict', 'idempotency_mismatch', 'validation_failed', 'invalid_gpu_type', 'disk_unavailable', 'disk_exceeds_offering', 'model_too_large', 'insufficient_balance', 'quota_exceeded', 'rate_limited', 'internal_error', 'operation_failed']):
+            raise ValueError("must be one of enum values ('unauthenticated', 'invalid_api_key', 'insufficient_scope', 'not_found', 'idempotency_conflict', 'idempotency_mismatch', 'validation_failed', 'invalid_gpu_type', 'disk_unavailable', 'disk_exceeds_offering', 'model_too_large', 'insufficient_balance', 'quota_exceeded', 'rate_limited', 'internal_error', 'operation_failed')")
         return value
 
     model_config = ConfigDict(
