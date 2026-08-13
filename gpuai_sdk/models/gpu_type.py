@@ -30,7 +30,7 @@ class GPUType(BaseModel):
     """ # noqa: E501
     gpu_type: StrictStr
     vram_gb: StrictInt
-    cpu_cores: Optional[StrictInt] = Field(default=None, description="Representative host vCPU count for this GPU model. Unlike vram_gb (the minimum across the model's current offerings — the value every launch of the model can honor) this varies per offering, so it is the first-sighting/typical value; GET /v1/pricing carries the exact per-offering spec. 0 marks a spec the upstream did not report.")
+    cpu_cores: Optional[StrictInt] = Field(default=None, description="Representative host vCPU count for this GPU model. Unlike vram_gb (the card's nameplate VRAM; a model spanning capacity variants advertises the smallest currently offered, so it is the value every launch of the model can honor) this varies per offering, so it is the first-sighting/typical value; GET /v1/pricing carries the exact per-offering spec. 0 marks a spec the upstream did not report.")
     ram_gb: Optional[StrictInt] = Field(default=None, description="Representative host RAM (GB) for this GPU model; varies per offering — see cpu_cores. 0 marks an unreported spec.")
     storage_gb: Optional[StrictInt] = Field(default=None, description="Representative host storage (GB) for this GPU model; varies per offering — see cpu_cores. 0 marks an unreported spec.")
     instance_disk_gb: Optional[StrictInt] = Field(default=None, description="Representative instance filesystem size (GB) a launch of this model receives — the platform default where the upstream honors a configured size, otherwise the machine's reported disk; varies per offering — see cpu_cores. 0 marks an unreported disk (unknown, not zero). GET /v1/pricing carries the exact per-offering value.")
