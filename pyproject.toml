@@ -6,7 +6,7 @@ name = "gpuai-sdk"
 # injected tree. This file is ignore-protected (see .openapi-generator-ignore)
 # so the placeholder survives regeneration; sdk/release/assert-placeholder.sh
 # fails CI if a real version ever lands here.
-version = "0.2.5"
+version = "0.3.0"
 description = "GPU.ai Public Developer API"
 authors = [
   {name = "GPU.ai Support",email = "support@gpu.ai"},

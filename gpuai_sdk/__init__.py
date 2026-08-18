@@ -15,7 +15,7 @@
 """  # noqa: E501
 
 
-__version__ = "0.2.5"
+__version__ = "0.3.0"
 
 # Define package exports
 __all__ = [
@@ -46,12 +46,11 @@ __all__ = [
     "ChatCompletionRequest",
     "ChatCompletionResponse",
     "ChatMessage",
-    "CommunityEarnings",
-    "CommunityEarningsEntry",
     "CommunityMachine",
     "CommunityMachineDelistResult",
     "CommunityMachineRegistration",
     "CommunitySupplier",
+    "CreateCryptoDepositRequest",
     "CreateFineTuningJobRequest",
     "CreateFineTuningJobRequestGpuai",
     "CreateFineTuningJobRequestMethod",
@@ -59,6 +58,7 @@ __all__ = [
     "CreateInstanceRequest",
     "CreateSshKeyRequest",
     "CreateWebhookEndpointRequest",
+    "CryptoDeposit",
     "Environments",
     "FileObject",
     "FineTuningJob",
@@ -80,6 +80,7 @@ __all__ = [
     "InstanceConnection",
     "InstancePage",
     "ListCommunityMachines200Response",
+    "ListDeposits200Response",
     "Model",
     "ModelList",
     "ModelParametersInner",
@@ -102,7 +103,6 @@ __all__ = [
     "TemplateEnvInner",
     "TemplateList",
     "TemplatePortsInner",
-    "UpdateCommunityMachineRequest",
     "UpdateInstanceRequest",
     "UpdateSpendingLimitRequest",
     "Usage",
@@ -148,12 +148,11 @@ from gpuai_sdk.models.chat_choice import ChatChoice as ChatChoice
 from gpuai_sdk.models.chat_completion_request import ChatCompletionRequest as ChatCompletionRequest
 from gpuai_sdk.models.chat_completion_response import ChatCompletionResponse as ChatCompletionResponse
 from gpuai_sdk.models.chat_message import ChatMessage as ChatMessage
-from gpuai_sdk.models.community_earnings import CommunityEarnings as CommunityEarnings
-from gpuai_sdk.models.community_earnings_entry import CommunityEarningsEntry as CommunityEarningsEntry
 from gpuai_sdk.models.community_machine import CommunityMachine as CommunityMachine
 from gpuai_sdk.models.community_machine_delist_result import CommunityMachineDelistResult as CommunityMachineDelistResult
 from gpuai_sdk.models.community_machine_registration import CommunityMachineRegistration as CommunityMachineRegistration
 from gpuai_sdk.models.community_supplier import CommunitySupplier as CommunitySupplier
+from gpuai_sdk.models.create_crypto_deposit_request import CreateCryptoDepositRequest as CreateCryptoDepositRequest
 from gpuai_sdk.models.create_fine_tuning_job_request import CreateFineTuningJobRequest as CreateFineTuningJobRequest
 from gpuai_sdk.models.create_fine_tuning_job_request_gpuai import CreateFineTuningJobRequestGpuai as CreateFineTuningJobRequestGpuai
 from gpuai_sdk.models.create_fine_tuning_job_request_method import CreateFineTuningJobRequestMethod as CreateFineTuningJobRequestMethod
@@ -161,6 +160,7 @@ from gpuai_sdk.models.create_fine_tuning_job_request_method_lora import CreateFi
 from gpuai_sdk.models.create_instance_request import CreateInstanceRequest as CreateInstanceRequest
 from gpuai_sdk.models.create_ssh_key_request import CreateSshKeyRequest as CreateSshKeyRequest
 from gpuai_sdk.models.create_webhook_endpoint_request import CreateWebhookEndpointRequest as CreateWebhookEndpointRequest
+from gpuai_sdk.models.crypto_deposit import CryptoDeposit as CryptoDeposit
 from gpuai_sdk.models.environments import Environments as Environments
 from gpuai_sdk.models.file_object import FileObject as FileObject
 from gpuai_sdk.models.fine_tuning_job import FineTuningJob as FineTuningJob
@@ -182,6 +182,7 @@ from gpuai_sdk.models.instance import Instance as Instance
 from gpuai_sdk.models.instance_connection import InstanceConnection as InstanceConnection
 from gpuai_sdk.models.instance_page import InstancePage as InstancePage
 from gpuai_sdk.models.list_community_machines200_response import ListCommunityMachines200Response as ListCommunityMachines200Response
+from gpuai_sdk.models.list_deposits200_response import ListDeposits200Response as ListDeposits200Response
 from gpuai_sdk.models.model import Model as Model
 from gpuai_sdk.models.model_list import ModelList as ModelList
 from gpuai_sdk.models.model_parameters_inner import ModelParametersInner as ModelParametersInner
@@ -204,7 +205,6 @@ from gpuai_sdk.models.template import Template as Template
 from gpuai_sdk.models.template_env_inner import TemplateEnvInner as TemplateEnvInner
 from gpuai_sdk.models.template_list import TemplateList as TemplateList
 from gpuai_sdk.models.template_ports_inner import TemplatePortsInner as TemplatePortsInner
-from gpuai_sdk.models.update_community_machine_request import UpdateCommunityMachineRequest as UpdateCommunityMachineRequest
 from gpuai_sdk.models.update_instance_request import UpdateInstanceRequest as UpdateInstanceRequest
 from gpuai_sdk.models.update_spending_limit_request import UpdateSpendingLimitRequest as UpdateSpendingLimitRequest
 from gpuai_sdk.models.usage import Usage as Usage

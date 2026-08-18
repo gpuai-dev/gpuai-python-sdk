@@ -6,12 +6,11 @@ docs/ChatCompletionRequest.md
 docs/ChatCompletionResponse.md
 docs/ChatMessage.md
 docs/CommunityApi.md
-docs/CommunityEarnings.md
-docs/CommunityEarningsEntry.md
 docs/CommunityMachine.md
 docs/CommunityMachineDelistResult.md
 docs/CommunityMachineRegistration.md
 docs/CommunitySupplier.md
+docs/CreateCryptoDepositRequest.md
 docs/CreateFineTuningJobRequest.md
 docs/CreateFineTuningJobRequestGpuai.md
 docs/CreateFineTuningJobRequestMethod.md
@@ -19,6 +18,7 @@ docs/CreateFineTuningJobRequestMethodLora.md
 docs/CreateInstanceRequest.md
 docs/CreateSshKeyRequest.md
 docs/CreateWebhookEndpointRequest.md
+docs/CryptoDeposit.md
 docs/Environments.md
 docs/EnvironmentsApi.md
 docs/FileObject.md
@@ -45,6 +45,7 @@ docs/InstanceConnection.md
 docs/InstancePage.md
 docs/InstancesApi.md
 docs/ListCommunityMachines200Response.md
+docs/ListDeposits200Response.md
 docs/MetaApi.md
 docs/Model.md
 docs/ModelList.md
@@ -72,7 +73,6 @@ docs/TemplateEnvInner.md
 docs/TemplateList.md
 docs/TemplatePortsInner.md
 docs/TemplatesApi.md
-docs/UpdateCommunityMachineRequest.md
 docs/UpdateInstanceRequest.md
 docs/UpdateSpendingLimitRequest.md
 docs/Usage.md
@@ -111,12 +111,11 @@ gpuai_sdk/models/chat_choice.py
 gpuai_sdk/models/chat_completion_request.py
 gpuai_sdk/models/chat_completion_response.py
 gpuai_sdk/models/chat_message.py
-gpuai_sdk/models/community_earnings.py
-gpuai_sdk/models/community_earnings_entry.py
 gpuai_sdk/models/community_machine.py
 gpuai_sdk/models/community_machine_delist_result.py
 gpuai_sdk/models/community_machine_registration.py
 gpuai_sdk/models/community_supplier.py
+gpuai_sdk/models/create_crypto_deposit_request.py
 gpuai_sdk/models/create_fine_tuning_job_request.py
 gpuai_sdk/models/create_fine_tuning_job_request_gpuai.py
 gpuai_sdk/models/create_fine_tuning_job_request_method.py
@@ -124,6 +123,7 @@ gpuai_sdk/models/create_fine_tuning_job_request_method_lora.py
 gpuai_sdk/models/create_instance_request.py
 gpuai_sdk/models/create_ssh_key_request.py
 gpuai_sdk/models/create_webhook_endpoint_request.py
+gpuai_sdk/models/crypto_deposit.py
 gpuai_sdk/models/environments.py
 gpuai_sdk/models/file_object.py
 gpuai_sdk/models/fine_tuning_job.py
@@ -145,6 +145,7 @@ gpuai_sdk/models/instance.py
 gpuai_sdk/models/instance_connection.py
 gpuai_sdk/models/instance_page.py
 gpuai_sdk/models/list_community_machines200_response.py
+gpuai_sdk/models/list_deposits200_response.py
 gpuai_sdk/models/model.py
 gpuai_sdk/models/model_list.py
 gpuai_sdk/models/model_parameters_inner.py
@@ -167,7 +168,6 @@ gpuai_sdk/models/template.py
 gpuai_sdk/models/template_env_inner.py
 gpuai_sdk/models/template_list.py
 gpuai_sdk/models/template_ports_inner.py
-gpuai_sdk/models/update_community_machine_request.py
 gpuai_sdk/models/update_instance_request.py
 gpuai_sdk/models/update_spending_limit_request.py
 gpuai_sdk/models/usage.py
