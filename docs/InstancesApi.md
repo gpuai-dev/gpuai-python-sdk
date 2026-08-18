@@ -177,7 +177,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_instance**
-> Instance get_instance(id)
+> Instance get_instance(id, include=include)
 
 Get an instance
 
@@ -212,10 +212,11 @@ with gpuai_sdk.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = gpuai_sdk.InstancesApi(api_client)
     id = 'id_example' # str | 
+    include = 'include_example' # str | Opt-in expansion. `credentials` restores connection.app_password on this single-instance read — the only surface that returns the web-console basic-auth password. Omitted by default so bare reads can be logged without leaking the secret. Any other value is a 400 validation_failed. The list endpoint and operation reads never return the password, with or without this parameter. (optional)
 
     try:
         # Get an instance
-        api_response = api_instance.get_instance(id)
+        api_response = api_instance.get_instance(id, include=include)
         print("The response of InstancesApi->get_instance:\n")
         pprint(api_response)
     except Exception as e:
@@ -230,6 +231,7 @@ with gpuai_sdk.ApiClient(configuration) as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **id** | **str**|  | 
+ **include** | **str**| Opt-in expansion. &#x60;credentials&#x60; restores connection.app_password on this single-instance read — the only surface that returns the web-console basic-auth password. Omitted by default so bare reads can be logged without leaking the secret. Any other value is a 400 validation_failed. The list endpoint and operation reads never return the password, with or without this parameter. | [optional] 
 
 ### Return type
 

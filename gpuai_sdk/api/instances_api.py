@@ -629,6 +629,7 @@ class InstancesApi:
     def get_instance(
         self,
         id: StrictStr,
+        include: Annotated[Optional[StrictStr], Field(description="Opt-in expansion. `credentials` restores connection.app_password on this single-instance read — the only surface that returns the web-console basic-auth password. Omitted by default so bare reads can be logged without leaking the secret. Any other value is a 400 validation_failed. The list endpoint and operation reads never return the password, with or without this parameter.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -647,6 +648,8 @@ class InstancesApi:
 
         :param id: (required)
         :type id: str
+        :param include: Opt-in expansion. `credentials` restores connection.app_password on this single-instance read — the only surface that returns the web-console basic-auth password. Omitted by default so bare reads can be logged without leaking the secret. Any other value is a 400 validation_failed. The list endpoint and operation reads never return the password, with or without this parameter.
+        :type include: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -671,6 +674,7 @@ class InstancesApi:
 
         _param = self._get_instance_serialize(
             id=id,
+            include=include,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -697,6 +701,7 @@ class InstancesApi:
     def get_instance_with_http_info(
         self,
         id: StrictStr,
+        include: Annotated[Optional[StrictStr], Field(description="Opt-in expansion. `credentials` restores connection.app_password on this single-instance read — the only surface that returns the web-console basic-auth password. Omitted by default so bare reads can be logged without leaking the secret. Any other value is a 400 validation_failed. The list endpoint and operation reads never return the password, with or without this parameter.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -715,6 +720,8 @@ class InstancesApi:
 
         :param id: (required)
         :type id: str
+        :param include: Opt-in expansion. `credentials` restores connection.app_password on this single-instance read — the only surface that returns the web-console basic-auth password. Omitted by default so bare reads can be logged without leaking the secret. Any other value is a 400 validation_failed. The list endpoint and operation reads never return the password, with or without this parameter.
+        :type include: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -739,6 +746,7 @@ class InstancesApi:
 
         _param = self._get_instance_serialize(
             id=id,
+            include=include,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -765,6 +773,7 @@ class InstancesApi:
     def get_instance_without_preload_content(
         self,
         id: StrictStr,
+        include: Annotated[Optional[StrictStr], Field(description="Opt-in expansion. `credentials` restores connection.app_password on this single-instance read — the only surface that returns the web-console basic-auth password. Omitted by default so bare reads can be logged without leaking the secret. Any other value is a 400 validation_failed. The list endpoint and operation reads never return the password, with or without this parameter.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -783,6 +792,8 @@ class InstancesApi:
 
         :param id: (required)
         :type id: str
+        :param include: Opt-in expansion. `credentials` restores connection.app_password on this single-instance read — the only surface that returns the web-console basic-auth password. Omitted by default so bare reads can be logged without leaking the secret. Any other value is a 400 validation_failed. The list endpoint and operation reads never return the password, with or without this parameter.
+        :type include: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -807,6 +818,7 @@ class InstancesApi:
 
         _param = self._get_instance_serialize(
             id=id,
+            include=include,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -828,6 +840,7 @@ class InstancesApi:
     def _get_instance_serialize(
         self,
         id,
+        include,
         _request_auth,
         _content_type,
         _headers,
@@ -852,6 +865,10 @@ class InstancesApi:
         if id is not None:
             _path_params['id'] = id
         # process the query parameters
+        if include is not None:
+            
+            _query_params.append(('include', include))
+            
         # process the header parameters
         # process the form parameters
         # process the body parameter

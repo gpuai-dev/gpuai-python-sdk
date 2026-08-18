@@ -26,13 +26,12 @@ from pydantic_core import to_jsonable_python
 
 class OperationResult(BaseModel):
     """
-    Terminal-success payload. Carries the per-instance web-access credential — app_url for template deploys, terminal_url for instances provisioned with the browser web console, and the shared basic-auth login for both. The credential is also re-readable via connection.app_user/app_password on the org-scoped instance reads.
+    Terminal-success payload. Carries the per-instance web-access coordinates — app_url for template deploys, terminal_url for instances provisioned with the browser web console, and the basic-auth username shared by both. The basic-auth PASSWORD is never included here — retrieve it via GET /instances/{id}?include=credentials (connection.app_password).
     """ # noqa: E501
     app_url: Optional[StrictStr] = None
     terminal_url: Optional[StrictStr] = None
     app_basic_auth_user: Optional[StrictStr] = None
-    app_basic_auth_pass: Optional[StrictStr] = None
-    __properties: ClassVar[List[str]] = ["app_url", "terminal_url", "app_basic_auth_user", "app_basic_auth_pass"]
+    __properties: ClassVar[List[str]] = ["app_url", "terminal_url", "app_basic_auth_user"]
 
     model_config = ConfigDict(
         validate_by_name=True,
@@ -87,8 +86,7 @@ class OperationResult(BaseModel):
         _obj = cls.model_validate({
             "app_url": obj.get("app_url"),
             "terminal_url": obj.get("terminal_url"),
-            "app_basic_auth_user": obj.get("app_basic_auth_user"),
-            "app_basic_auth_pass": obj.get("app_basic_auth_pass")
+            "app_basic_auth_user": obj.get("app_basic_auth_user")
         })
         return _obj
 

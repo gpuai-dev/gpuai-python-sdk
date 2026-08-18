@@ -10,7 +10,7 @@ Name | Type | Description | Notes
 **ssh_command** | **str** |  | [optional] 
 **app_url** | **str** | HTTPS URL of the deployed application (template instances only), e.g. https://gpu-abcd1234.apps.gpu.ai. | [optional] 
 **app_user** | **str** | HTTP Basic Auth username for app_url and terminal_url. Present on instances provisioned after the credential-persistence change; older deploys omit it (their credential was only surfaced once at deploy time). | [optional] 
-**app_password** | **str** | HTTP Basic Auth password for app_url and terminal_url. Same availability as app_user. Treat as a secret. | [optional] 
+**app_password** | **str** | HTTP Basic Auth password for app_url and terminal_url. Treat as a secret. OMITTED by default from all reads — returned only on GET /instances/{id}?include&#x3D;credentials (same persistence availability as app_user); the list endpoint and operation results never include it. | [optional] 
 **terminal_url** | **str** | HTTPS URL of the browser web console (a shell on the instance, no SSH key required), e.g. https://gpu-abcd1234-term.apps.gpu.ai. Guarded by the same app_user/app_password login. Present only on running instances provisioned with the console. | [optional] 
 
 ## Example

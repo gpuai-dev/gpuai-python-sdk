@@ -1,6 +1,6 @@
 # OperationResult
 
-Terminal-success payload. Carries the per-instance web-access credential — app_url for template deploys, terminal_url for instances provisioned with the browser web console, and the shared basic-auth login for both. The credential is also re-readable via connection.app_user/app_password on the org-scoped instance reads.
+Terminal-success payload. Carries the per-instance web-access coordinates — app_url for template deploys, terminal_url for instances provisioned with the browser web console, and the basic-auth username shared by both. The basic-auth PASSWORD is never included here — retrieve it via GET /instances/{id}?include=credentials (connection.app_password).
 
 ## Properties
 
@@ -9,7 +9,6 @@ Name | Type | Description | Notes
 **app_url** | **str** |  | [optional] 
 **terminal_url** | **str** |  | [optional] 
 **app_basic_auth_user** | **str** |  | [optional] 
-**app_basic_auth_pass** | **str** |  | [optional] 
 
 ## Example
 
