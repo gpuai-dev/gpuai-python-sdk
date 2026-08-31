@@ -295,7 +295,7 @@ with gpuai_sdk.ApiClient(configuration) as api_client:
     api_instance = gpuai_sdk.InstancesApi(api_client)
     cursor = 'cursor_example' # str |  (optional)
     limit = 50 # int |  (optional) (default to 50)
-    status = 'status_example' # str | Filter by customer-facing status (default = all non-terminated) (optional)
+    status = 'status_example' # str | Filter by customer-facing status (default = all non-terminated). There is no \"unreachable\" filter value: an unreachable instance is a running instance with a dead tunnel, so it is listed under status=running and reads \"unreachable\" in the response body. (optional)
 
     try:
         # List instances
@@ -315,7 +315,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **cursor** | **str**|  | [optional] 
  **limit** | **int**|  | [optional] [default to 50]
- **status** | **str**| Filter by customer-facing status (default &#x3D; all non-terminated) | [optional] 
+ **status** | **str**| Filter by customer-facing status (default &#x3D; all non-terminated). There is no \&quot;unreachable\&quot; filter value: an unreachable instance is a running instance with a dead tunnel, so it is listed under status&#x3D;running and reads \&quot;unreachable\&quot; in the response body. | [optional] 
 
 ### Return type
 

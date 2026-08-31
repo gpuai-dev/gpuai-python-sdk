@@ -912,7 +912,7 @@ class InstancesApi:
         self,
         cursor: Optional[StrictStr] = None,
         limit: Optional[Annotated[int, Field(le=200, strict=True, ge=1)]] = None,
-        status: Annotated[Optional[StrictStr], Field(description="Filter by customer-facing status (default = all non-terminated)")] = None,
+        status: Annotated[Optional[StrictStr], Field(description="Filter by customer-facing status (default = all non-terminated). There is no \"unreachable\" filter value: an unreachable instance is a running instance with a dead tunnel, so it is listed under status=running and reads \"unreachable\" in the response body.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -934,7 +934,7 @@ class InstancesApi:
         :type cursor: str
         :param limit:
         :type limit: int
-        :param status: Filter by customer-facing status (default = all non-terminated)
+        :param status: Filter by customer-facing status (default = all non-terminated). There is no \"unreachable\" filter value: an unreachable instance is a running instance with a dead tunnel, so it is listed under status=running and reads \"unreachable\" in the response body.
         :type status: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
@@ -989,7 +989,7 @@ class InstancesApi:
         self,
         cursor: Optional[StrictStr] = None,
         limit: Optional[Annotated[int, Field(le=200, strict=True, ge=1)]] = None,
-        status: Annotated[Optional[StrictStr], Field(description="Filter by customer-facing status (default = all non-terminated)")] = None,
+        status: Annotated[Optional[StrictStr], Field(description="Filter by customer-facing status (default = all non-terminated). There is no \"unreachable\" filter value: an unreachable instance is a running instance with a dead tunnel, so it is listed under status=running and reads \"unreachable\" in the response body.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -1011,7 +1011,7 @@ class InstancesApi:
         :type cursor: str
         :param limit:
         :type limit: int
-        :param status: Filter by customer-facing status (default = all non-terminated)
+        :param status: Filter by customer-facing status (default = all non-terminated). There is no \"unreachable\" filter value: an unreachable instance is a running instance with a dead tunnel, so it is listed under status=running and reads \"unreachable\" in the response body.
         :type status: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
@@ -1066,7 +1066,7 @@ class InstancesApi:
         self,
         cursor: Optional[StrictStr] = None,
         limit: Optional[Annotated[int, Field(le=200, strict=True, ge=1)]] = None,
-        status: Annotated[Optional[StrictStr], Field(description="Filter by customer-facing status (default = all non-terminated)")] = None,
+        status: Annotated[Optional[StrictStr], Field(description="Filter by customer-facing status (default = all non-terminated). There is no \"unreachable\" filter value: an unreachable instance is a running instance with a dead tunnel, so it is listed under status=running and reads \"unreachable\" in the response body.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -1088,7 +1088,7 @@ class InstancesApi:
         :type cursor: str
         :param limit:
         :type limit: int
-        :param status: Filter by customer-facing status (default = all non-terminated)
+        :param status: Filter by customer-facing status (default = all non-terminated). There is no \"unreachable\" filter value: an unreachable instance is a running instance with a dead tunnel, so it is listed under status=running and reads \"unreachable\" in the response body.
         :type status: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request

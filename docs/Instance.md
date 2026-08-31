@@ -7,7 +7,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | **str** |  | 
 **name** | **str** |  | [optional] 
-**status** | **str** | Customer-facing lifecycle status. \&quot;allocating\&quot; &#x3D; the GPU is still being acquired from the provider (slow-boot capacity such as baremetal can take ~15 min); \&quot;starting\&quot; &#x3D; the node exists and is booting; \&quot;running\&quot; &#x3D; ready to use. | 
+**status** | **str** | Customer-facing lifecycle status. \&quot;allocating\&quot; &#x3D; the GPU is still being acquired from the provider (slow-boot capacity such as baremetal can take ~15 min); \&quot;starting\&quot; &#x3D; the node exists and is booting; \&quot;running\&quot; &#x3D; ready to use. \&quot;unreachable\&quot; &#x3D; the platform&#39;s tunnel probe has confirmed the SSH path is down while the machine may still be up: the instance is NOT usable right now, billing for the confirmed-dead window is auto-credited back, and the instance either recovers to \&quot;running\&quot; on its own or is failed after a grace window. It is a degraded reading of a running instance, not a separate lifecycle state — see unreachable_since. | 
 **gpu_type** | **str** |  | 
 **gpu_count** | **int** |  | 
 **region** | **str** |  | 
@@ -20,6 +20,7 @@ Name | Type | Description | Notes
 **ready_at** | **datetime** |  | [optional] 
 **terminated_at** | **datetime** |  | [optional] 
 **last_reachable_at** | **datetime** | Last time the platform verified the SSH path to this instance end-to-end through the tunnel. Absent means the instance has not been probed yet (freshly launched, or no tunnel) — it does NOT mean unreachable. An instance whose status is still \&quot;running\&quot; while this timestamp stops advancing is one whose SSH has died even though the machine is up. | [optional] 
+**unreachable_since** | **datetime** | Start of the confirmed tunnel outage the instance is currently in. Present exactly when status is \&quot;unreachable\&quot;, absent otherwise. It is the timestamp the auto-credit for the dead window is computed from, so a ledger credit can be reconciled against it. | [optional] 
 
 ## Example
 

@@ -33,7 +33,7 @@ class Instance(BaseModel):
     """ # noqa: E501
     id: StrictStr
     name: Optional[StrictStr] = None
-    status: StrictStr = Field(description="Customer-facing lifecycle status. \"allocating\" = the GPU is still being acquired from the provider (slow-boot capacity such as baremetal can take ~15 min); \"starting\" = the node exists and is booting; \"running\" = ready to use.")
+    status: StrictStr = Field(description="Customer-facing lifecycle status. \"allocating\" = the GPU is still being acquired from the provider (slow-boot capacity such as baremetal can take ~15 min); \"starting\" = the node exists and is booting; \"running\" = ready to use. \"unreachable\" = the platform's tunnel probe has confirmed the SSH path is down while the machine may still be up: the instance is NOT usable right now, billing for the confirmed-dead window is auto-credited back, and the instance either recovers to \"running\" on its own or is failed after a grace window. It is a degraded reading of a running instance, not a separate lifecycle state — see unreachable_since.")
     gpu_type: StrictStr
     gpu_count: Annotated[int, Field(le=8, strict=True, ge=1)]
     region: StrictStr
@@ -46,13 +46,14 @@ class Instance(BaseModel):
     ready_at: Optional[datetime] = None
     terminated_at: Optional[datetime] = None
     last_reachable_at: Optional[datetime] = Field(default=None, description="Last time the platform verified the SSH path to this instance end-to-end through the tunnel. Absent means the instance has not been probed yet (freshly launched, or no tunnel) — it does NOT mean unreachable. An instance whose status is still \"running\" while this timestamp stops advancing is one whose SSH has died even though the machine is up.")
-    __properties: ClassVar[List[str]] = ["id", "name", "status", "gpu_type", "gpu_count", "region", "tier", "price_per_hour", "connection", "disk_gb", "status_reason", "created_at", "ready_at", "terminated_at", "last_reachable_at"]
+    unreachable_since: Optional[datetime] = Field(default=None, description="Start of the confirmed tunnel outage the instance is currently in. Present exactly when status is \"unreachable\", absent otherwise. It is the timestamp the auto-credit for the dead window is computed from, so a ledger credit can be reconciled against it.")
+    __properties: ClassVar[List[str]] = ["id", "name", "status", "gpu_type", "gpu_count", "region", "tier", "price_per_hour", "connection", "disk_gb", "status_reason", "created_at", "ready_at", "terminated_at", "last_reachable_at", "unreachable_since"]
 
     @field_validator('status')
     def status_validate_enum(cls, value):
         """Validates the enum"""
-        if value not in set(['allocating', 'starting', 'running', 'stopping', 'stopped', 'terminated', 'error']):
-            raise ValueError("must be one of enum values ('allocating', 'starting', 'running', 'stopping', 'stopped', 'terminated', 'error')")
+        if value not in set(['allocating', 'starting', 'running', 'stopping', 'stopped', 'terminated', 'unreachable', 'error']):
+            raise ValueError("must be one of enum values ('allocating', 'starting', 'running', 'stopping', 'stopped', 'terminated', 'unreachable', 'error')")
         return value
 
     @field_validator('tier')
@@ -130,7 +131,8 @@ class Instance(BaseModel):
             "created_at": obj.get("created_at"),
             "ready_at": obj.get("ready_at"),
             "terminated_at": obj.get("terminated_at"),
-            "last_reachable_at": obj.get("last_reachable_at")
+            "last_reachable_at": obj.get("last_reachable_at"),
+            "unreachable_since": obj.get("unreachable_since")
         })
         return _obj
 
