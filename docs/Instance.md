@@ -15,6 +15,7 @@ Name | Type | Description | Notes
 **price_per_hour** | **float** | hourly rate for the whole instance — covers all gpu_count GPUs | 
 **connection** | [**InstanceConnection**](InstanceConnection.md) |  | [optional] 
 **disk_gb** | **int** | Instance filesystem size in GB that the platform configured for this launch. Present only where the placed capacity honors a configured disk size; absent means the machine&#39;s disk is provider-determined (its own flavor volume). | [optional] 
+**image** | **str** | The customer-supplied container image this instance was launched from, digest-pinned at verification time (e.g. &#x60;ghcr.io/acme/trainer:v1@sha256:…&#x60;). Present only on custom-image launches; template and certified launches never expose their images here. | [optional] 
 **status_reason** | **str** | Why the instance is in the error state, e.g. \&quot;provisioning stalled: the instance started but never became reachable\&quot;. Present only on errored instances. | [optional] 
 **created_at** | **datetime** |  | 
 **ready_at** | **datetime** |  | [optional] 
