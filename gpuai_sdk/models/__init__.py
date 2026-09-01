@@ -28,6 +28,8 @@ from gpuai_sdk.models.create_fine_tuning_job_request_gpuai import CreateFineTuni
 from gpuai_sdk.models.create_fine_tuning_job_request_method import CreateFineTuningJobRequestMethod
 from gpuai_sdk.models.create_fine_tuning_job_request_method_lora import CreateFineTuningJobRequestMethodLora
 from gpuai_sdk.models.create_instance_request import CreateInstanceRequest
+from gpuai_sdk.models.create_instance_request_ports_inner import CreateInstanceRequestPortsInner
+from gpuai_sdk.models.create_registry_credential_request import CreateRegistryCredentialRequest
 from gpuai_sdk.models.create_ssh_key_request import CreateSshKeyRequest
 from gpuai_sdk.models.create_webhook_endpoint_request import CreateWebhookEndpointRequest
 from gpuai_sdk.models.crypto_deposit import CryptoDeposit
@@ -53,6 +55,7 @@ from gpuai_sdk.models.instance_connection import InstanceConnection
 from gpuai_sdk.models.instance_page import InstancePage
 from gpuai_sdk.models.list_community_machines200_response import ListCommunityMachines200Response
 from gpuai_sdk.models.list_deposits200_response import ListDeposits200Response
+from gpuai_sdk.models.list_registry_credentials200_response import ListRegistryCredentials200Response
 from gpuai_sdk.models.model import Model
 from gpuai_sdk.models.model_list import ModelList
 from gpuai_sdk.models.model_parameters_inner import ModelParametersInner
@@ -66,6 +69,7 @@ from gpuai_sdk.models.pricing import Pricing
 from gpuai_sdk.models.pricing_page import PricingPage
 from gpuai_sdk.models.problem import Problem
 from gpuai_sdk.models.register_community_machine_request import RegisterCommunityMachineRequest
+from gpuai_sdk.models.registry_credential import RegistryCredential
 from gpuai_sdk.models.ssh_key import SSHKey
 from gpuai_sdk.models.ssh_key_page import SSHKeyPage
 from gpuai_sdk.models.spending_limit import SpendingLimit

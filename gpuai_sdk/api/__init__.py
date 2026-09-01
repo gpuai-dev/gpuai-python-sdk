@@ -11,6 +11,7 @@ from gpuai_sdk.api.instances_api import InstancesApi
 from gpuai_sdk.api.meta_api import MetaApi
 from gpuai_sdk.api.operations_api import OperationsApi
 from gpuai_sdk.api.pricing_api import PricingApi
+from gpuai_sdk.api.registry_credentials_api import RegistryCredentialsApi
 from gpuai_sdk.api.ssh_keys_api import SshKeysApi
 from gpuai_sdk.api.templates_api import TemplatesApi
 from gpuai_sdk.api.usage_api import UsageApi

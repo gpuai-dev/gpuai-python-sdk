@@ -15,7 +15,7 @@
 """  # noqa: E501
 
 
-__version__ = "0.3.4"
+__version__ = "0.3.5"
 
 # Define package exports
 __all__ = [
@@ -29,6 +29,7 @@ __all__ = [
     "MetaApi",
     "OperationsApi",
     "PricingApi",
+    "RegistryCredentialsApi",
     "SshKeysApi",
     "TemplatesApi",
     "UsageApi",
@@ -56,6 +57,8 @@ __all__ = [
     "CreateFineTuningJobRequestMethod",
     "CreateFineTuningJobRequestMethodLora",
     "CreateInstanceRequest",
+    "CreateInstanceRequestPortsInner",
+    "CreateRegistryCredentialRequest",
     "CreateSshKeyRequest",
     "CreateWebhookEndpointRequest",
     "CryptoDeposit",
@@ -81,6 +84,7 @@ __all__ = [
     "InstancePage",
     "ListCommunityMachines200Response",
     "ListDeposits200Response",
+    "ListRegistryCredentials200Response",
     "Model",
     "ModelList",
     "ModelParametersInner",
@@ -94,6 +98,7 @@ __all__ = [
     "PricingPage",
     "Problem",
     "RegisterCommunityMachineRequest",
+    "RegistryCredential",
     "SSHKey",
     "SSHKeyPage",
     "SpendingLimit",
@@ -127,6 +132,7 @@ from gpuai_sdk.api.instances_api import InstancesApi as InstancesApi
 from gpuai_sdk.api.meta_api import MetaApi as MetaApi
 from gpuai_sdk.api.operations_api import OperationsApi as OperationsApi
 from gpuai_sdk.api.pricing_api import PricingApi as PricingApi
+from gpuai_sdk.api.registry_credentials_api import RegistryCredentialsApi as RegistryCredentialsApi
 from gpuai_sdk.api.ssh_keys_api import SshKeysApi as SshKeysApi
 from gpuai_sdk.api.templates_api import TemplatesApi as TemplatesApi
 from gpuai_sdk.api.usage_api import UsageApi as UsageApi
@@ -158,6 +164,8 @@ from gpuai_sdk.models.create_fine_tuning_job_request_gpuai import CreateFineTuni
 from gpuai_sdk.models.create_fine_tuning_job_request_method import CreateFineTuningJobRequestMethod as CreateFineTuningJobRequestMethod
 from gpuai_sdk.models.create_fine_tuning_job_request_method_lora import CreateFineTuningJobRequestMethodLora as CreateFineTuningJobRequestMethodLora
 from gpuai_sdk.models.create_instance_request import CreateInstanceRequest as CreateInstanceRequest
+from gpuai_sdk.models.create_instance_request_ports_inner import CreateInstanceRequestPortsInner as CreateInstanceRequestPortsInner
+from gpuai_sdk.models.create_registry_credential_request import CreateRegistryCredentialRequest as CreateRegistryCredentialRequest
 from gpuai_sdk.models.create_ssh_key_request import CreateSshKeyRequest as CreateSshKeyRequest
 from gpuai_sdk.models.create_webhook_endpoint_request import CreateWebhookEndpointRequest as CreateWebhookEndpointRequest
 from gpuai_sdk.models.crypto_deposit import CryptoDeposit as CryptoDeposit
@@ -183,6 +191,7 @@ from gpuai_sdk.models.instance_connection import InstanceConnection as InstanceC
 from gpuai_sdk.models.instance_page import InstancePage as InstancePage
 from gpuai_sdk.models.list_community_machines200_response import ListCommunityMachines200Response as ListCommunityMachines200Response
 from gpuai_sdk.models.list_deposits200_response import ListDeposits200Response as ListDeposits200Response
+from gpuai_sdk.models.list_registry_credentials200_response import ListRegistryCredentials200Response as ListRegistryCredentials200Response
 from gpuai_sdk.models.model import Model as Model
 from gpuai_sdk.models.model_list import ModelList as ModelList
 from gpuai_sdk.models.model_parameters_inner import ModelParametersInner as ModelParametersInner
@@ -196,6 +205,7 @@ from gpuai_sdk.models.pricing import Pricing as Pricing
 from gpuai_sdk.models.pricing_page import PricingPage as PricingPage
 from gpuai_sdk.models.problem import Problem as Problem
 from gpuai_sdk.models.register_community_machine_request import RegisterCommunityMachineRequest as RegisterCommunityMachineRequest
+from gpuai_sdk.models.registry_credential import RegistryCredential as RegistryCredential
 from gpuai_sdk.models.ssh_key import SSHKey as SSHKey
 from gpuai_sdk.models.ssh_key_page import SSHKeyPage as SSHKeyPage
 from gpuai_sdk.models.spending_limit import SpendingLimit as SpendingLimit

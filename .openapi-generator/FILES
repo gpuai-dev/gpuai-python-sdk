@@ -16,6 +16,8 @@ docs/CreateFineTuningJobRequestGpuai.md
 docs/CreateFineTuningJobRequestMethod.md
 docs/CreateFineTuningJobRequestMethodLora.md
 docs/CreateInstanceRequest.md
+docs/CreateInstanceRequestPortsInner.md
+docs/CreateRegistryCredentialRequest.md
 docs/CreateSshKeyRequest.md
 docs/CreateWebhookEndpointRequest.md
 docs/CryptoDeposit.md
@@ -46,6 +48,7 @@ docs/InstancePage.md
 docs/InstancesApi.md
 docs/ListCommunityMachines200Response.md
 docs/ListDeposits200Response.md
+docs/ListRegistryCredentials200Response.md
 docs/MetaApi.md
 docs/Model.md
 docs/ModelList.md
@@ -62,6 +65,8 @@ docs/PricingApi.md
 docs/PricingPage.md
 docs/Problem.md
 docs/RegisterCommunityMachineRequest.md
+docs/RegistryCredential.md
+docs/RegistryCredentialsApi.md
 docs/SSHKey.md
 docs/SSHKeyPage.md
 docs/SpendingLimit.md
@@ -98,6 +103,7 @@ gpuai_sdk/api/instances_api.py
 gpuai_sdk/api/meta_api.py
 gpuai_sdk/api/operations_api.py
 gpuai_sdk/api/pricing_api.py
+gpuai_sdk/api/registry_credentials_api.py
 gpuai_sdk/api/ssh_keys_api.py
 gpuai_sdk/api/templates_api.py
 gpuai_sdk/api/usage_api.py
@@ -121,6 +127,8 @@ gpuai_sdk/models/create_fine_tuning_job_request_gpuai.py
 gpuai_sdk/models/create_fine_tuning_job_request_method.py
 gpuai_sdk/models/create_fine_tuning_job_request_method_lora.py
 gpuai_sdk/models/create_instance_request.py
+gpuai_sdk/models/create_instance_request_ports_inner.py
+gpuai_sdk/models/create_registry_credential_request.py
 gpuai_sdk/models/create_ssh_key_request.py
 gpuai_sdk/models/create_webhook_endpoint_request.py
 gpuai_sdk/models/crypto_deposit.py
@@ -146,6 +154,7 @@ gpuai_sdk/models/instance_connection.py
 gpuai_sdk/models/instance_page.py
 gpuai_sdk/models/list_community_machines200_response.py
 gpuai_sdk/models/list_deposits200_response.py
+gpuai_sdk/models/list_registry_credentials200_response.py
 gpuai_sdk/models/model.py
 gpuai_sdk/models/model_list.py
 gpuai_sdk/models/model_parameters_inner.py
@@ -159,6 +168,7 @@ gpuai_sdk/models/pricing.py
 gpuai_sdk/models/pricing_page.py
 gpuai_sdk/models/problem.py
 gpuai_sdk/models/register_community_machine_request.py
+gpuai_sdk/models/registry_credential.py
 gpuai_sdk/models/spending_limit.py
 gpuai_sdk/models/ssh_key.py
 gpuai_sdk/models/ssh_key_page.py
