@@ -16,7 +16,9 @@ Name | Type | Description | Notes
 **connection** | [**InstanceConnection**](InstanceConnection.md) |  | [optional] 
 **disk_gb** | **int** | Instance filesystem size in GB that the platform configured for this launch. Present only where the placed capacity honors a configured disk size; absent means the machine&#39;s disk is provider-determined (its own flavor volume). | [optional] 
 **image** | **str** | The customer-supplied container image this instance was launched from, digest-pinned at verification time (e.g. &#x60;ghcr.io/acme/trainer:v1@sha256:…&#x60;). Present only on custom-image launches; template and certified launches never expose their images here. | [optional] 
-**status_reason** | **str** | Why the instance is in the error state, e.g. \&quot;provisioning stalled: the instance started but never became reachable\&quot;. Present only on errored instances. | [optional] 
+**auto_terminate_hours** | **int** | The runtime limit this instance was launched with, in hours (the &#x60;auto_terminate_hours&#x60; you sent). Absent means the instance runs until something stops it. It stays present after the limit has fired, so a terminated instance still explains itself. | [optional] 
+**auto_terminate_at** | **datetime** | When the runtime limit expires and the platform terminates this instance. Computed when the instance became running (ready_at + auto_terminate_hours), so the countdown covers usable runtime, not the time spent provisioning. Absent when no limit was set, when the instance is not running yet, or once the platform has begun acting on an elapsed limit. | [optional] 
+**status_reason** | **str** | Why the instance stopped or failed, e.g. \&quot;provisioning stalled: the instance started but never became reachable\&quot;, or — when a runtime limit fired — \&quot;Terminated: this instance reached the 8-hour runtime limit set at launch\&quot;. Present only when the platform has something to explain. | [optional] 
 **created_at** | **datetime** |  | 
 **ready_at** | **datetime** |  | [optional] 
 **terminated_at** | **datetime** |  | [optional] 

@@ -42,13 +42,15 @@ class Instance(BaseModel):
     connection: Optional[InstanceConnection] = None
     disk_gb: Optional[StrictInt] = Field(default=None, description="Instance filesystem size in GB that the platform configured for this launch. Present only where the placed capacity honors a configured disk size; absent means the machine's disk is provider-determined (its own flavor volume).")
     image: Optional[StrictStr] = Field(default=None, description="The customer-supplied container image this instance was launched from, digest-pinned at verification time (e.g. `ghcr.io/acme/trainer:v1@sha256:…`). Present only on custom-image launches; template and certified launches never expose their images here.")
-    status_reason: Optional[StrictStr] = Field(default=None, description="Why the instance is in the error state, e.g. \"provisioning stalled: the instance started but never became reachable\". Present only on errored instances.")
+    auto_terminate_hours: Optional[StrictInt] = Field(default=None, description="The runtime limit this instance was launched with, in hours (the `auto_terminate_hours` you sent). Absent means the instance runs until something stops it. It stays present after the limit has fired, so a terminated instance still explains itself.", json_schema_extra={"examples": [8]})
+    auto_terminate_at: Optional[datetime] = Field(default=None, description="When the runtime limit expires and the platform terminates this instance. Computed when the instance became running (ready_at + auto_terminate_hours), so the countdown covers usable runtime, not the time spent provisioning. Absent when no limit was set, when the instance is not running yet, or once the platform has begun acting on an elapsed limit.")
+    status_reason: Optional[StrictStr] = Field(default=None, description="Why the instance stopped or failed, e.g. \"provisioning stalled: the instance started but never became reachable\", or — when a runtime limit fired — \"Terminated: this instance reached the 8-hour runtime limit set at launch\". Present only when the platform has something to explain.")
     created_at: datetime
     ready_at: Optional[datetime] = None
     terminated_at: Optional[datetime] = None
     last_reachable_at: Optional[datetime] = Field(default=None, description="Last time the platform verified the SSH path to this instance end-to-end through the tunnel. Absent means the instance has not been probed yet (freshly launched, or no tunnel) — it does NOT mean unreachable. An instance whose status is still \"running\" while this timestamp stops advancing is one whose SSH has died even though the machine is up.")
     unreachable_since: Optional[datetime] = Field(default=None, description="Start of the confirmed tunnel outage the instance is currently in. Present exactly when status is \"unreachable\", absent otherwise. It is the timestamp the auto-credit for the dead window is computed from, so a ledger credit can be reconciled against it.")
-    __properties: ClassVar[List[str]] = ["id", "name", "status", "gpu_type", "gpu_count", "region", "tier", "price_per_hour", "connection", "disk_gb", "image", "status_reason", "created_at", "ready_at", "terminated_at", "last_reachable_at", "unreachable_since"]
+    __properties: ClassVar[List[str]] = ["id", "name", "status", "gpu_type", "gpu_count", "region", "tier", "price_per_hour", "connection", "disk_gb", "image", "auto_terminate_hours", "auto_terminate_at", "status_reason", "created_at", "ready_at", "terminated_at", "last_reachable_at", "unreachable_since"]
 
     @field_validator('status')
     def status_validate_enum(cls, value):
@@ -129,6 +131,8 @@ class Instance(BaseModel):
             "connection": InstanceConnection.from_dict(obj["connection"]) if obj.get("connection") is not None else None,
             "disk_gb": obj.get("disk_gb"),
             "image": obj.get("image"),
+            "auto_terminate_hours": obj.get("auto_terminate_hours"),
+            "auto_terminate_at": obj.get("auto_terminate_at"),
             "status_reason": obj.get("status_reason"),
             "created_at": obj.get("created_at"),
             "ready_at": obj.get("ready_at"),
