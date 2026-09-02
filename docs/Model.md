@@ -17,6 +17,8 @@ Name | Type | Description | Notes
 **parameters** | [**List[ModelParametersInner]**](ModelParametersInner.md) | Typed parameter descriptors for media (image/video) models — name, type, enum/bounds/default. Playgrounds render input forms from these. | [optional] 
 **pricing** | [**ModelPricing**](ModelPricing.md) |  | 
 **aliases** | **List[str]** |  | [optional] 
+**fine_tunable** | **bool** | Whether this model can be used as the base of a managed fine-tuning job. The tunable allowlist is operator-curated and much narrower than the serving catalog, so this is false for almost every model. Absent means false. | [optional] 
+**fine_tune_base_model** | **str** | The exact id to send as &#x60;model&#x60; when creating a fine-tuning job for this entry. Present only when &#x60;fine_tunable&#x60; is true, and deliberately distinct from &#x60;id&#x60;: the allowlist matches the customer-facing base id (e.g. &#x60;qwen2.5-7b-instruct&#x60;), which a served model normally carries as an alias rather than as its namespaced catalog id. | [optional] 
 **status** | **str** |  | 
 
 ## Example
