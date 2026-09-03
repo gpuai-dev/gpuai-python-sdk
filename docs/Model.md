@@ -11,7 +11,7 @@ Name | Type | Description | Notes
 **owned_by** | **str** |  | 
 **author** | **str** | Model creator/organization (e.g. \&quot;Meta\&quot;, \&quot;Qwen\&quot;, \&quot;Black Forest Labs\&quot;). | [optional] 
 **modality** | **str** |  | 
-**category** | **str** | Browse-facing category; mirrors modality (chat/image/video). | [optional] 
+**category** | **str** | Browse-facing category; mirrors modality (chat/image/video/embedding). | [optional] 
 **context_length** | **int** |  | [optional] 
 **supported_parameters** | **List[str]** |  | [optional] 
 **parameters** | [**List[ModelParametersInner]**](ModelParametersInner.md) | Typed parameter descriptors for media (image/video) models — name, type, enum/bounds/default. Playgrounds render input forms from these. | [optional] 

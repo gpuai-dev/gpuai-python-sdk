@@ -36,7 +36,7 @@ class Model(BaseModel):
     owned_by: StrictStr
     author: Optional[StrictStr] = Field(default=None, description="Model creator/organization (e.g. \"Meta\", \"Qwen\", \"Black Forest Labs\").")
     modality: StrictStr
-    category: Optional[StrictStr] = Field(default=None, description="Browse-facing category; mirrors modality (chat/image/video).")
+    category: Optional[StrictStr] = Field(default=None, description="Browse-facing category; mirrors modality (chat/image/video/embedding).")
     context_length: Optional[StrictInt] = None
     supported_parameters: Optional[List[StrictStr]] = None
     parameters: Optional[List[ModelParametersInner]] = Field(default=None, description="Typed parameter descriptors for media (image/video) models — name, type, enum/bounds/default. Playgrounds render input forms from these.")
@@ -57,8 +57,8 @@ class Model(BaseModel):
     @field_validator('modality')
     def modality_validate_enum(cls, value):
         """Validates the enum"""
-        if value not in set(['chat', 'image', 'video']):
-            raise ValueError("must be one of enum values ('chat', 'image', 'video')")
+        if value not in set(['chat', 'image', 'video', 'embedding']):
+            raise ValueError("must be one of enum values ('chat', 'image', 'video', 'embedding')")
         return value
 
     @field_validator('status')
