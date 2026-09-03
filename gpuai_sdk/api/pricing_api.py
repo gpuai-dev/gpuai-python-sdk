@@ -46,7 +46,7 @@ class PricingApi:
         limit: Optional[Annotated[int, Field(le=200, strict=True, ge=1)]] = None,
         gpu_type: Annotated[Optional[StrictStr], Field(description="Exact-match filter on gpu_type")] = None,
         region: Annotated[Optional[StrictStr], Field(description="Exact-match filter on canonical region code")] = None,
-        tier: Annotated[Optional[StrictStr], Field(description="Exact-match filter on tier")] = None,
+        tier: Annotated[Optional[StrictStr], Field(description="Exact-match filter on tier. `spot` is soft-deprecated: spot capacity is currently unavailable sitewide (requests with tier=spot return no offerings); use on_demand.")] = None,
         include_unavailable: Annotated[Optional[StrictBool], Field(description="Include offers whose current availability is zero")] = None,
         _request_timeout: Union[
             None,
@@ -73,7 +73,7 @@ class PricingApi:
         :type gpu_type: str
         :param region: Exact-match filter on canonical region code
         :type region: str
-        :param tier: Exact-match filter on tier
+        :param tier: Exact-match filter on tier. `spot` is soft-deprecated: spot capacity is currently unavailable sitewide (requests with tier=spot return no offerings); use on_demand.
         :type tier: str
         :param include_unavailable: Include offers whose current availability is zero
         :type include_unavailable: bool
@@ -134,7 +134,7 @@ class PricingApi:
         limit: Optional[Annotated[int, Field(le=200, strict=True, ge=1)]] = None,
         gpu_type: Annotated[Optional[StrictStr], Field(description="Exact-match filter on gpu_type")] = None,
         region: Annotated[Optional[StrictStr], Field(description="Exact-match filter on canonical region code")] = None,
-        tier: Annotated[Optional[StrictStr], Field(description="Exact-match filter on tier")] = None,
+        tier: Annotated[Optional[StrictStr], Field(description="Exact-match filter on tier. `spot` is soft-deprecated: spot capacity is currently unavailable sitewide (requests with tier=spot return no offerings); use on_demand.")] = None,
         include_unavailable: Annotated[Optional[StrictBool], Field(description="Include offers whose current availability is zero")] = None,
         _request_timeout: Union[
             None,
@@ -161,7 +161,7 @@ class PricingApi:
         :type gpu_type: str
         :param region: Exact-match filter on canonical region code
         :type region: str
-        :param tier: Exact-match filter on tier
+        :param tier: Exact-match filter on tier. `spot` is soft-deprecated: spot capacity is currently unavailable sitewide (requests with tier=spot return no offerings); use on_demand.
         :type tier: str
         :param include_unavailable: Include offers whose current availability is zero
         :type include_unavailable: bool
@@ -222,7 +222,7 @@ class PricingApi:
         limit: Optional[Annotated[int, Field(le=200, strict=True, ge=1)]] = None,
         gpu_type: Annotated[Optional[StrictStr], Field(description="Exact-match filter on gpu_type")] = None,
         region: Annotated[Optional[StrictStr], Field(description="Exact-match filter on canonical region code")] = None,
-        tier: Annotated[Optional[StrictStr], Field(description="Exact-match filter on tier")] = None,
+        tier: Annotated[Optional[StrictStr], Field(description="Exact-match filter on tier. `spot` is soft-deprecated: spot capacity is currently unavailable sitewide (requests with tier=spot return no offerings); use on_demand.")] = None,
         include_unavailable: Annotated[Optional[StrictBool], Field(description="Include offers whose current availability is zero")] = None,
         _request_timeout: Union[
             None,
@@ -249,7 +249,7 @@ class PricingApi:
         :type gpu_type: str
         :param region: Exact-match filter on canonical region code
         :type region: str
-        :param tier: Exact-match filter on tier
+        :param tier: Exact-match filter on tier. `spot` is soft-deprecated: spot capacity is currently unavailable sitewide (requests with tier=spot return no offerings); use on_demand.
         :type tier: str
         :param include_unavailable: Include offers whose current availability is zero
         :type include_unavailable: bool

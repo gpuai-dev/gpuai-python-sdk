@@ -33,7 +33,7 @@ class CreateInstanceRequest(BaseModel):
     gpu_type: StrictStr
     gpu_count: Annotated[int, Field(le=8, strict=True, ge=1)]
     region: Optional[StrictStr] = None
-    tier: StrictStr
+    tier: StrictStr = Field(description="`spot` is soft-deprecated: spot capacity is currently unavailable sitewide (requests with tier=spot return no offerings); use on_demand.")
     ssh_key_ids: Optional[List[StrictStr]] = None
     name: Optional[StrictStr] = None
     max_price_per_hour: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="maximum acceptable whole-instance hourly price (catalog price)")

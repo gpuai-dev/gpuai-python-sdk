@@ -8,7 +8,7 @@ Name | Type | Description | Notes
 **gpu_type** | **str** |  | 
 **gpu_count** | **int** |  | 
 **region** | **str** |  | [optional] 
-**tier** | **str** |  | 
+**tier** | **str** | &#x60;spot&#x60; is soft-deprecated: spot capacity is currently unavailable sitewide (requests with tier&#x3D;spot return no offerings); use on_demand. | 
 **ssh_key_ids** | **List[str]** |  | [optional] 
 **name** | **str** |  | [optional] 
 **max_price_per_hour** | **float** | maximum acceptable whole-instance hourly price (catalog price) | [optional] 

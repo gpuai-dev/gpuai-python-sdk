@@ -38,7 +38,7 @@ with gpuai_sdk.ApiClient(configuration) as api_client:
     limit = 50 # int |  (optional) (default to 50)
     gpu_type = 'gpu_type_example' # str | Exact-match filter on gpu_type (optional)
     region = 'region_example' # str | Exact-match filter on canonical region code (optional)
-    tier = 'tier_example' # str | Exact-match filter on tier (optional)
+    tier = 'tier_example' # str | Exact-match filter on tier. `spot` is soft-deprecated: spot capacity is currently unavailable sitewide (requests with tier=spot return no offerings); use on_demand. (optional)
     include_unavailable = False # bool | Include offers whose current availability is zero (optional) (default to False)
 
     try:
@@ -61,7 +61,7 @@ Name | Type | Description  | Notes
  **limit** | **int**|  | [optional] [default to 50]
  **gpu_type** | **str**| Exact-match filter on gpu_type | [optional] 
  **region** | **str**| Exact-match filter on canonical region code | [optional] 
- **tier** | **str**| Exact-match filter on tier | [optional] 
+ **tier** | **str**| Exact-match filter on tier. &#x60;spot&#x60; is soft-deprecated: spot capacity is currently unavailable sitewide (requests with tier&#x3D;spot return no offerings); use on_demand. | [optional] 
  **include_unavailable** | **bool**| Include offers whose current availability is zero | [optional] [default to False]
 
 ### Return type

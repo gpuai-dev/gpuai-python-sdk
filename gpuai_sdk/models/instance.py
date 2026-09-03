@@ -37,7 +37,7 @@ class Instance(BaseModel):
     gpu_type: StrictStr
     gpu_count: Annotated[int, Field(le=8, strict=True, ge=1)]
     region: StrictStr
-    tier: StrictStr
+    tier: StrictStr = Field(description="`spot` is soft-deprecated: spot capacity is currently unavailable sitewide (requests with tier=spot return no offerings); use on_demand.")
     price_per_hour: Union[StrictFloat, StrictInt] = Field(description="hourly rate for the whole instance — covers all gpu_count GPUs")
     connection: Optional[InstanceConnection] = None
     disk_gb: Optional[StrictInt] = Field(default=None, description="Instance filesystem size in GB that the platform configured for this launch. Present only where the placed capacity honors a configured disk size; absent means the machine's disk is provider-determined (its own flavor volume).")

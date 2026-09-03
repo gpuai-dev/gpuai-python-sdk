@@ -11,7 +11,7 @@ Name | Type | Description | Notes
 **ram_gb** | **int** | host RAM (GB) for this offering, tied to the shown price. 0 marks an unreported spec. | [optional] 
 **storage_gb** | **int** | host storage (GB) for this offering, tied to the shown price. 0 marks an unreported spec. | [optional] 
 **region** | **str** |  | 
-**tier** | **str** |  | 
+**tier** | **str** | &#x60;spot&#x60; is soft-deprecated: spot capacity is currently unavailable sitewide (requests with tier&#x3D;spot return no offerings); use on_demand. | 
 **price_per_hour** | **float** | hourly price for the whole listed configuration — covers all gpu_count GPUs | 
 **available** | **int** | count of available units, summed across merged identical offers | 
 **instant_boot** | **bool** | true when instances of this offering are typically reachable within about a minute of launch; false for capacity with longer provisioning times (~3-5 minutes) | 

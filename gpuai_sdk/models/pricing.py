@@ -34,7 +34,7 @@ class Pricing(BaseModel):
     ram_gb: Optional[StrictInt] = Field(default=None, description="host RAM (GB) for this offering, tied to the shown price. 0 marks an unreported spec.")
     storage_gb: Optional[StrictInt] = Field(default=None, description="host storage (GB) for this offering, tied to the shown price. 0 marks an unreported spec.")
     region: StrictStr
-    tier: StrictStr
+    tier: StrictStr = Field(description="`spot` is soft-deprecated: spot capacity is currently unavailable sitewide (requests with tier=spot return no offerings); use on_demand.")
     price_per_hour: Union[StrictFloat, StrictInt] = Field(description="hourly price for the whole listed configuration — covers all gpu_count GPUs")
     available: StrictInt = Field(description="count of available units, summed across merged identical offers")
     instant_boot: StrictBool = Field(description="true when instances of this offering are typically reachable within about a minute of launch; false for capacity with longer provisioning times (~3-5 minutes)")
