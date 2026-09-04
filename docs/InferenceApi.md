@@ -6,6 +6,7 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**cancel_video**](InferenceApi.md#cancel_video) | **POST** /videos/{id}/cancel | Cancel a video generation job
 [**create_chat_completion**](InferenceApi.md#create_chat_completion) | **POST** /chat/completions | Create a chat completion (OpenAI-compatible)
+[**create_embeddings**](InferenceApi.md#create_embeddings) | **POST** /embeddings | Create embeddings (OpenAI-compatible)
 [**create_image**](InferenceApi.md#create_image) | **POST** /images/generations | Create image (OpenAI-compatible)
 [**create_video**](InferenceApi.md#create_video) | **POST** /videos | Create a video generation job (async)
 [**get_model**](InferenceApi.md#get_model) | **GET** /models/{id} | Get a specific model (OpenAI-compatible)
@@ -179,6 +180,96 @@ Name | Type | Description  | Notes
 **429** | Rate limit exceeded (OpenAI error envelope). Retry-After header indicates seconds to wait. |  * Retry-After - Seconds the client should wait before retrying. <br>  |
 **500** | Internal server error (OpenAI error envelope). |  -  |
 **503** | Upstream provider unavailable (OpenAI error envelope). Retry-After header may indicate seconds to wait. |  * Retry-After - Seconds the client should wait before retrying. <br>  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **create_embeddings**
+> EmbeddingsResponse create_embeddings(embeddings_request)
+
+Create embeddings (OpenAI-compatible)
+
+Synchronous text embeddings. Accepts a single string or an array of up to 2048 strings, bounded so the response stays under 64 MiB (about 680 inputs at 4096 dimensions; fewer at a larger `dimensions` value) — over-limit requests are rejected with 400 before any processing. Returns one float vector per input, in request order. Billed on the upstream's reported prompt tokens at the model's listed input rate, rounded up to the next whole cent per request; an embeddings call emits no completion tokens, so `usage` carries `prompt_tokens` and `total_tokens` only. `encoding_format` accepts only `float` — a value of `base64` is rejected with `unsupported_parameter`. A chat model id on this route returns 404 `model_not_found`: the id is valid, but not on this surface.
+
+### Example
+
+* Bearer (gpuai_live_<24-base62>) Authentication (bearerAuth):
+
+```python
+import gpuai_sdk
+from gpuai_sdk.models.embeddings_request import EmbeddingsRequest
+from gpuai_sdk.models.embeddings_response import EmbeddingsResponse
+from gpuai_sdk.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to https://api.gpu.ai/v1
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gpuai_sdk.Configuration(
+    host = "https://api.gpu.ai/v1"
+)
+
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (gpuai_live_<24-base62>): bearerAuth
+configuration = gpuai_sdk.Configuration(
+    access_token = os.environ["BEARER_TOKEN"]
+)
+
+# Enter a context with an instance of the API client
+with gpuai_sdk.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = gpuai_sdk.InferenceApi(api_client)
+    embeddings_request = gpuai_sdk.EmbeddingsRequest() # EmbeddingsRequest | 
+
+    try:
+        # Create embeddings (OpenAI-compatible)
+        api_response = api_instance.create_embeddings(embeddings_request)
+        print("The response of InferenceApi->create_embeddings:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling InferenceApi->create_embeddings: %s\n" % e)
+```
+
+
+
+### Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **embeddings_request** | [**EmbeddingsRequest**](EmbeddingsRequest.md)|  | 
+
+### Return type
+
+[**EmbeddingsResponse**](EmbeddingsResponse.md)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | One embedding vector per input, in request order. |  -  |
+**400** | Invalid request (OpenAI error envelope). |  -  |
+**401** | Missing or invalid API key (OpenAI error envelope). |  -  |
+**402** | Insufficient balance (OpenAI error envelope, SERV-06). |  -  |
+**403** | API key lacks the required scope (OpenAI error envelope). |  -  |
+**404** | Model or resource not found (OpenAI error envelope). |  -  |
+**413** | Request body too large (OpenAI error envelope, code request_too_large). |  -  |
+**429** | Rate limit exceeded (OpenAI error envelope). Retry-After header indicates seconds to wait. |  * Retry-After - Seconds the client should wait before retrying. <br>  |
+**500** | Internal server error (OpenAI error envelope). |  -  |
+**502** | The upstream answered but its response could not be used (OpenAI error envelope): code upstream_response_too_large when the vector payload exceeded the per-request size limit, or upstream_error for a malformed / misaligned response. Not retryable as-is for upstream_response_too_large — send fewer inputs. |  -  |
+**503** | Upstream provider unavailable (OpenAI error envelope). Retry-After header may indicate seconds to wait. |  * Retry-After - Seconds the client should wait before retrying. <br>  |
+**504** | Upstream provider exceeded the synchronous per-attempt deadline (OpenAI error envelope). 504 semantic — distinct from 503 OpenAIUpstreamUnavailable which signals a connection or routing failure rather than a timeout.  |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

@@ -15,7 +15,7 @@
 """  # noqa: E501
 
 
-__version__ = "0.3.12"
+__version__ = "0.3.13"
 
 # Define package exports
 __all__ = [
@@ -62,6 +62,11 @@ __all__ = [
     "CreateSshKeyRequest",
     "CreateWebhookEndpointRequest",
     "CryptoDeposit",
+    "Embedding",
+    "EmbeddingsRequest",
+    "EmbeddingsRequestInput",
+    "EmbeddingsResponse",
+    "EmbeddingsUsage",
     "Environments",
     "FileObject",
     "FineTuningJob",
@@ -169,6 +174,11 @@ from gpuai_sdk.models.create_registry_credential_request import CreateRegistryCr
 from gpuai_sdk.models.create_ssh_key_request import CreateSshKeyRequest as CreateSshKeyRequest
 from gpuai_sdk.models.create_webhook_endpoint_request import CreateWebhookEndpointRequest as CreateWebhookEndpointRequest
 from gpuai_sdk.models.crypto_deposit import CryptoDeposit as CryptoDeposit
+from gpuai_sdk.models.embedding import Embedding as Embedding
+from gpuai_sdk.models.embeddings_request import EmbeddingsRequest as EmbeddingsRequest
+from gpuai_sdk.models.embeddings_request_input import EmbeddingsRequestInput as EmbeddingsRequestInput
+from gpuai_sdk.models.embeddings_response import EmbeddingsResponse as EmbeddingsResponse
+from gpuai_sdk.models.embeddings_usage import EmbeddingsUsage as EmbeddingsUsage
 from gpuai_sdk.models.environments import Environments as Environments
 from gpuai_sdk.models.file_object import FileObject as FileObject
 from gpuai_sdk.models.fine_tuning_job import FineTuningJob as FineTuningJob

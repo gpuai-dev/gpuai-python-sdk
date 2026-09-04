@@ -21,6 +21,11 @@ docs/CreateRegistryCredentialRequest.md
 docs/CreateSshKeyRequest.md
 docs/CreateWebhookEndpointRequest.md
 docs/CryptoDeposit.md
+docs/Embedding.md
+docs/EmbeddingsRequest.md
+docs/EmbeddingsRequestInput.md
+docs/EmbeddingsResponse.md
+docs/EmbeddingsUsage.md
 docs/Environments.md
 docs/EnvironmentsApi.md
 docs/FileObject.md
@@ -132,6 +137,11 @@ gpuai_sdk/models/create_registry_credential_request.py
 gpuai_sdk/models/create_ssh_key_request.py
 gpuai_sdk/models/create_webhook_endpoint_request.py
 gpuai_sdk/models/crypto_deposit.py
+gpuai_sdk/models/embedding.py
+gpuai_sdk/models/embeddings_request.py
+gpuai_sdk/models/embeddings_request_input.py
+gpuai_sdk/models/embeddings_response.py
+gpuai_sdk/models/embeddings_usage.py
 gpuai_sdk/models/environments.py
 gpuai_sdk/models/file_object.py
 gpuai_sdk/models/fine_tuning_job.py

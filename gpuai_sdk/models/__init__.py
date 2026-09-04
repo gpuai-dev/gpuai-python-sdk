@@ -33,6 +33,11 @@ from gpuai_sdk.models.create_registry_credential_request import CreateRegistryCr
 from gpuai_sdk.models.create_ssh_key_request import CreateSshKeyRequest
 from gpuai_sdk.models.create_webhook_endpoint_request import CreateWebhookEndpointRequest
 from gpuai_sdk.models.crypto_deposit import CryptoDeposit
+from gpuai_sdk.models.embedding import Embedding
+from gpuai_sdk.models.embeddings_request import EmbeddingsRequest
+from gpuai_sdk.models.embeddings_request_input import EmbeddingsRequestInput
+from gpuai_sdk.models.embeddings_response import EmbeddingsResponse
+from gpuai_sdk.models.embeddings_usage import EmbeddingsUsage
 from gpuai_sdk.models.environments import Environments
 from gpuai_sdk.models.file_object import FileObject
 from gpuai_sdk.models.fine_tuning_job import FineTuningJob
