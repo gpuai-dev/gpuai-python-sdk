@@ -15,10 +15,11 @@
 """  # noqa: E501
 
 
-__version__ = "0.3.13"
+__version__ = "0.3.14"
 
 # Define package exports
 __all__ = [
+    "AutolaunchApi",
     "BillingApi",
     "CommunityApi",
     "EnvironmentsApi",
@@ -26,6 +27,7 @@ __all__ = [
     "GpuTypesApi",
     "InferenceApi",
     "InstancesApi",
+    "MarketApi",
     "MetaApi",
     "OperationsApi",
     "PricingApi",
@@ -33,6 +35,7 @@ __all__ = [
     "SshKeysApi",
     "TemplatesApi",
     "UsageApi",
+    "WatchApi",
     "WebhooksApi",
     "ApiResponse",
     "ApiClient",
@@ -43,6 +46,10 @@ __all__ = [
     "ApiKeyError",
     "ApiAttributeError",
     "ApiException",
+    "AutolaunchRule",
+    "AutolaunchRuleCreate",
+    "AutolaunchRuleDisarm",
+    "AutolaunchRulePage",
     "ChatChoice",
     "ChatCompletionRequest",
     "ChatCompletionResponse",
@@ -90,6 +97,8 @@ __all__ = [
     "ListCommunityMachines200Response",
     "ListDeposits200Response",
     "ListRegistryCredentials200Response",
+    "MarketHistoryPoint",
+    "MarketHistoryResponse",
     "Model",
     "ModelList",
     "ModelParametersInner",
@@ -122,11 +131,16 @@ __all__ = [
     "VideoCreateRequest",
     "VideoJob",
     "VideoList",
+    "WatchRule",
+    "WatchRuleCreate",
+    "WatchRulePage",
+    "WatchRuleUpdate",
     "WebhookEndpoint",
     "WebhookEndpointPage",
 ]
 
 # import apis into sdk package
+from gpuai_sdk.api.autolaunch_api import AutolaunchApi as AutolaunchApi
 from gpuai_sdk.api.billing_api import BillingApi as BillingApi
 from gpuai_sdk.api.community_api import CommunityApi as CommunityApi
 from gpuai_sdk.api.environments_api import EnvironmentsApi as EnvironmentsApi
@@ -134,6 +148,7 @@ from gpuai_sdk.api.fine_tuning_api import FineTuningApi as FineTuningApi
 from gpuai_sdk.api.gpu_types_api import GpuTypesApi as GpuTypesApi
 from gpuai_sdk.api.inference_api import InferenceApi as InferenceApi
 from gpuai_sdk.api.instances_api import InstancesApi as InstancesApi
+from gpuai_sdk.api.market_api import MarketApi as MarketApi
 from gpuai_sdk.api.meta_api import MetaApi as MetaApi
 from gpuai_sdk.api.operations_api import OperationsApi as OperationsApi
 from gpuai_sdk.api.pricing_api import PricingApi as PricingApi
@@ -141,6 +156,7 @@ from gpuai_sdk.api.registry_credentials_api import RegistryCredentialsApi as Reg
 from gpuai_sdk.api.ssh_keys_api import SshKeysApi as SshKeysApi
 from gpuai_sdk.api.templates_api import TemplatesApi as TemplatesApi
 from gpuai_sdk.api.usage_api import UsageApi as UsageApi
+from gpuai_sdk.api.watch_api import WatchApi as WatchApi
 from gpuai_sdk.api.webhooks_api import WebhooksApi as WebhooksApi
 
 # import ApiClient
@@ -155,6 +171,10 @@ from gpuai_sdk.exceptions import ApiAttributeError as ApiAttributeError
 from gpuai_sdk.exceptions import ApiException as ApiException
 
 # import models into sdk package
+from gpuai_sdk.models.autolaunch_rule import AutolaunchRule as AutolaunchRule
+from gpuai_sdk.models.autolaunch_rule_create import AutolaunchRuleCreate as AutolaunchRuleCreate
+from gpuai_sdk.models.autolaunch_rule_disarm import AutolaunchRuleDisarm as AutolaunchRuleDisarm
+from gpuai_sdk.models.autolaunch_rule_page import AutolaunchRulePage as AutolaunchRulePage
 from gpuai_sdk.models.chat_choice import ChatChoice as ChatChoice
 from gpuai_sdk.models.chat_completion_request import ChatCompletionRequest as ChatCompletionRequest
 from gpuai_sdk.models.chat_completion_response import ChatCompletionResponse as ChatCompletionResponse
@@ -202,6 +222,8 @@ from gpuai_sdk.models.instance_page import InstancePage as InstancePage
 from gpuai_sdk.models.list_community_machines200_response import ListCommunityMachines200Response as ListCommunityMachines200Response
 from gpuai_sdk.models.list_deposits200_response import ListDeposits200Response as ListDeposits200Response
 from gpuai_sdk.models.list_registry_credentials200_response import ListRegistryCredentials200Response as ListRegistryCredentials200Response
+from gpuai_sdk.models.market_history_point import MarketHistoryPoint as MarketHistoryPoint
+from gpuai_sdk.models.market_history_response import MarketHistoryResponse as MarketHistoryResponse
 from gpuai_sdk.models.model import Model as Model
 from gpuai_sdk.models.model_list import ModelList as ModelList
 from gpuai_sdk.models.model_parameters_inner import ModelParametersInner as ModelParametersInner
@@ -234,6 +256,10 @@ from gpuai_sdk.models.vm_image import VMImage as VMImage
 from gpuai_sdk.models.video_create_request import VideoCreateRequest as VideoCreateRequest
 from gpuai_sdk.models.video_job import VideoJob as VideoJob
 from gpuai_sdk.models.video_list import VideoList as VideoList
+from gpuai_sdk.models.watch_rule import WatchRule as WatchRule
+from gpuai_sdk.models.watch_rule_create import WatchRuleCreate as WatchRuleCreate
+from gpuai_sdk.models.watch_rule_page import WatchRulePage as WatchRulePage
+from gpuai_sdk.models.watch_rule_update import WatchRuleUpdate as WatchRuleUpdate
 from gpuai_sdk.models.webhook_endpoint import WebhookEndpoint as WebhookEndpoint
 from gpuai_sdk.models.webhook_endpoint_page import WebhookEndpointPage as WebhookEndpointPage
 

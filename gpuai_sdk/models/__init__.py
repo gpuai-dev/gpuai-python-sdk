@@ -14,6 +14,10 @@
 """  # noqa: E501
 
 # import models into model package
+from gpuai_sdk.models.autolaunch_rule import AutolaunchRule
+from gpuai_sdk.models.autolaunch_rule_create import AutolaunchRuleCreate
+from gpuai_sdk.models.autolaunch_rule_disarm import AutolaunchRuleDisarm
+from gpuai_sdk.models.autolaunch_rule_page import AutolaunchRulePage
 from gpuai_sdk.models.chat_choice import ChatChoice
 from gpuai_sdk.models.chat_completion_request import ChatCompletionRequest
 from gpuai_sdk.models.chat_completion_response import ChatCompletionResponse
@@ -61,6 +65,8 @@ from gpuai_sdk.models.instance_page import InstancePage
 from gpuai_sdk.models.list_community_machines200_response import ListCommunityMachines200Response
 from gpuai_sdk.models.list_deposits200_response import ListDeposits200Response
 from gpuai_sdk.models.list_registry_credentials200_response import ListRegistryCredentials200Response
+from gpuai_sdk.models.market_history_point import MarketHistoryPoint
+from gpuai_sdk.models.market_history_response import MarketHistoryResponse
 from gpuai_sdk.models.model import Model
 from gpuai_sdk.models.model_list import ModelList
 from gpuai_sdk.models.model_parameters_inner import ModelParametersInner
@@ -93,6 +99,10 @@ from gpuai_sdk.models.vm_image import VMImage
 from gpuai_sdk.models.video_create_request import VideoCreateRequest
 from gpuai_sdk.models.video_job import VideoJob
 from gpuai_sdk.models.video_list import VideoList
+from gpuai_sdk.models.watch_rule import WatchRule
+from gpuai_sdk.models.watch_rule_create import WatchRuleCreate
+from gpuai_sdk.models.watch_rule_page import WatchRulePage
+from gpuai_sdk.models.watch_rule_update import WatchRuleUpdate
 from gpuai_sdk.models.webhook_endpoint import WebhookEndpoint
 from gpuai_sdk.models.webhook_endpoint_page import WebhookEndpointPage
 
