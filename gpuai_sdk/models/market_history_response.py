@@ -32,9 +32,11 @@ class MarketHistoryResponse(BaseModel):
     gpu_model: StrictStr
     region: StrictStr = Field(description="Echoes the request. Empty means the series is MERGED across every region, the same thing it meant on the way in.")
     capacity_class: StrictStr = Field(description="Echoes the request. Empty means the series is merged across both classes.")
+    cluster_size: StrictInt = Field(description="Echoes the request. 0 means the series is MERGED across every node shape, the same thing an omitted parameter meant on the way in.")
+    available_cluster_sizes: List[StrictInt] = Field(description="The node shapes that actually have rows in this window, for this gpu_model / region / capacity_class — what a size picker may honestly offer.  This is what we SAMPLED, not what we may ever sell: offering a shape a model was never listed at draws an empty chart a caller reads as a stockout. An empty array means we looked and found none. It is unaffected by the cluster_size parameter, so a picker's options never depend on which option is currently selected.")
     bucket_seconds: StrictInt = Field(description="Resolution the server actually answered at. Echoed because the wide views downsample at query time, so a client must never assume 900.")
     points: List[MarketHistoryPoint]
-    __properties: ClassVar[List[str]] = ["gpu_model", "region", "capacity_class", "bucket_seconds", "points"]
+    __properties: ClassVar[List[str]] = ["gpu_model", "region", "capacity_class", "cluster_size", "available_cluster_sizes", "bucket_seconds", "points"]
 
     model_config = ConfigDict(
         validate_by_name=True,
@@ -97,6 +99,8 @@ class MarketHistoryResponse(BaseModel):
             "gpu_model": obj.get("gpu_model"),
             "region": obj.get("region"),
             "capacity_class": obj.get("capacity_class"),
+            "cluster_size": obj.get("cluster_size"),
+            "available_cluster_sizes": obj.get("available_cluster_sizes"),
             "bucket_seconds": obj.get("bucket_seconds"),
             "points": [MarketHistoryPoint.from_dict(_item) for _item in obj["points"]] if obj.get("points") is not None else None
         })

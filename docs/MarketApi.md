@@ -8,7 +8,7 @@ Method | HTTP request | Description
 
 
 # **get_market_history**
-> MarketHistoryResponse get_market_history(gpu_model, region=region, capacity_class=capacity_class, bucket=bucket, var_from=var_from, to=to)
+> MarketHistoryResponse get_market_history(gpu_model, region=region, capacity_class=capacity_class, cluster_size=cluster_size, bucket=bucket, var_from=var_from, to=to)
 
 Get a GPU's price and availability over time
 
@@ -58,16 +58,17 @@ configuration = gpuai_sdk.Configuration(
 with gpuai_sdk.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = gpuai_sdk.MarketApi(api_client)
-    gpu_model = 'gpu_model_example' # str | GPU model to chart, e.g. \"H100\". Required — it is the leading column of the lookup index.
+    gpu_model = 'gpu_model_example' # str | GPU model id to chart, e.g. \"h100_sxm\". Required — it is the leading column of the lookup index.
     region = 'region_example' # str | Canonical region to narrow the series to. Omit to MERGE every region rather than to filter on the empty string. (optional)
     capacity_class = 'capacity_class_example' # str | Capacity class to narrow the series to. Omit to merge both. (optional)
+    cluster_size = 56 # int | Node shape to narrow the series to — 8 means 8-GPU nodes. Omit to MERGE every shape, which is the default and the only view that rows recorded before the per-size split can honestly appear in.  A 1-GPU box and an 8-GPU node are different products at different per-GPU rates, so this is a real dimension of the series and not a display filter. Only shapes we actually sell are accepted: an arbitrary integer would return an empty series indistinguishable from a genuine gap, and this surface exists so \"no data\" and \"nothing to have data about\" are never the same answer. Use available_cluster_sizes from the response to populate a picker — it reports what this GPU was actually listed as in this window, which is narrower than what we may ever sell. (optional)
     bucket = '15m' # str | Resolution. Only these two values are accepted: the series cannot be returned finer than it was stored. (optional) (default to '15m')
     var_from = '2013-10-20T19:20:30+01:00' # datetime | Start of the window (RFC3339). Defaults to 7 days before `to`. (optional)
     to = '2013-10-20T19:20:30+01:00' # datetime | End of the window (RFC3339). Defaults to now; a future value is clamped to now, since no bucket can exist for a time that has not happened. (optional)
 
     try:
         # Get a GPU's price and availability over time
-        api_response = api_instance.get_market_history(gpu_model, region=region, capacity_class=capacity_class, bucket=bucket, var_from=var_from, to=to)
+        api_response = api_instance.get_market_history(gpu_model, region=region, capacity_class=capacity_class, cluster_size=cluster_size, bucket=bucket, var_from=var_from, to=to)
         print("The response of MarketApi->get_market_history:\n")
         pprint(api_response)
     except Exception as e:
@@ -81,9 +82,10 @@ with gpuai_sdk.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **gpu_model** | **str**| GPU model to chart, e.g. \&quot;H100\&quot;. Required — it is the leading column of the lookup index. | 
+ **gpu_model** | **str**| GPU model id to chart, e.g. \&quot;h100_sxm\&quot;. Required — it is the leading column of the lookup index. | 
  **region** | **str**| Canonical region to narrow the series to. Omit to MERGE every region rather than to filter on the empty string. | [optional] 
  **capacity_class** | **str**| Capacity class to narrow the series to. Omit to merge both. | [optional] 
+ **cluster_size** | **int**| Node shape to narrow the series to — 8 means 8-GPU nodes. Omit to MERGE every shape, which is the default and the only view that rows recorded before the per-size split can honestly appear in.  A 1-GPU box and an 8-GPU node are different products at different per-GPU rates, so this is a real dimension of the series and not a display filter. Only shapes we actually sell are accepted: an arbitrary integer would return an empty series indistinguishable from a genuine gap, and this surface exists so \&quot;no data\&quot; and \&quot;nothing to have data about\&quot; are never the same answer. Use available_cluster_sizes from the response to populate a picker — it reports what this GPU was actually listed as in this window, which is narrower than what we may ever sell. | [optional] 
  **bucket** | **str**| Resolution. Only these two values are accepted: the series cannot be returned finer than it was stored. | [optional] [default to &#39;15m&#39;]
  **var_from** | **datetime**| Start of the window (RFC3339). Defaults to 7 days before &#x60;to&#x60;. | [optional] 
  **to** | **datetime**| End of the window (RFC3339). Defaults to now; a future value is clamped to now, since no bucket can exist for a time that has not happened. | [optional] 

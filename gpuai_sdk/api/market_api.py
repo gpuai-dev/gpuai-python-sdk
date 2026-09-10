@@ -17,7 +17,7 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 from typing_extensions import Annotated
 
 from datetime import datetime
-from pydantic import Field, StrictStr, field_validator
+from pydantic import Field, StrictInt, StrictStr, field_validator
 from typing import Optional
 from typing_extensions import Annotated
 from gpuai_sdk.models.market_history_response import MarketHistoryResponse
@@ -43,9 +43,10 @@ class MarketApi:
     @validate_call
     def get_market_history(
         self,
-        gpu_model: Annotated[StrictStr, Field(description="GPU model to chart, e.g. \"H100\". Required — it is the leading column of the lookup index.")],
+        gpu_model: Annotated[StrictStr, Field(description="GPU model id to chart, e.g. \"h100_sxm\". Required — it is the leading column of the lookup index.")],
         region: Annotated[Optional[StrictStr], Field(description="Canonical region to narrow the series to. Omit to MERGE every region rather than to filter on the empty string.")] = None,
         capacity_class: Annotated[Optional[StrictStr], Field(description="Capacity class to narrow the series to. Omit to merge both.")] = None,
+        cluster_size: Annotated[Optional[StrictInt], Field(description="Node shape to narrow the series to — 8 means 8-GPU nodes. Omit to MERGE every shape, which is the default and the only view that rows recorded before the per-size split can honestly appear in.  A 1-GPU box and an 8-GPU node are different products at different per-GPU rates, so this is a real dimension of the series and not a display filter. Only shapes we actually sell are accepted: an arbitrary integer would return an empty series indistinguishable from a genuine gap, and this surface exists so \"no data\" and \"nothing to have data about\" are never the same answer. Use available_cluster_sizes from the response to populate a picker — it reports what this GPU was actually listed as in this window, which is narrower than what we may ever sell.")] = None,
         bucket: Annotated[Optional[StrictStr], Field(description="Resolution. Only these two values are accepted: the series cannot be returned finer than it was stored.")] = None,
         var_from: Annotated[Optional[datetime], Field(description="Start of the window (RFC3339). Defaults to 7 days before `to`.")] = None,
         to: Annotated[Optional[datetime], Field(description="End of the window (RFC3339). Defaults to now; a future value is clamped to now, since no bucket can exist for a time that has not happened.")] = None,
@@ -66,12 +67,14 @@ class MarketApi:
 
         Returns GPU.ai's own price and obtainable capacity for one GPU model over a window, at 15-minute or daily resolution. Requires the `market:read` scope (or `full_access`).  THE NULL CONTRACT. `price_per_gpu_hour` and `available_count` are nullable, and the two states are different facts that must not be collapsed:  * a real `0` means we sampled that bucket and the market was sold out; * `null` means we did NOT sample that bucket — a failed poll, a skipped cycle, an incident on our side. It says nothing about supply.  The response materializes the full bucket grid across the window, so a gap has visible width. Do not interpolate across a null: that asserts a continuity the data does not have, and reading one as a zero reports our own outages as supplier stockouts.  PER-GPU NORMALIZATION. `price_per_gpu_hour` is always a per-GPU rate. When it was divided out of a whole-node price, `node_price_per_hour` and `gpu_count` are present and describe that derivation; they are absent for single-GPU capacity. A per-GPU figure presented without that context implies single-GPU rentability that whole-node capacity does not offer.  WINDOW CAPS. `bucket=1d` is capped at 365 days (the retention window). `bucket=15m` is capped at 90 days when BOTH `region` and `capacity_class` are supplied, and at 31 days when either is omitted, because an unscoped 15-minute series scans every region and class in every bucket. An over-wide window is a 400 naming the cap and both escapes, never a silent truncation.  This series carries no upstream supplier identity of any kind: the price is GPU.ai's own floor and the count is an aggregate. 
 
-        :param gpu_model: GPU model to chart, e.g. \"H100\". Required — it is the leading column of the lookup index. (required)
+        :param gpu_model: GPU model id to chart, e.g. \"h100_sxm\". Required — it is the leading column of the lookup index. (required)
         :type gpu_model: str
         :param region: Canonical region to narrow the series to. Omit to MERGE every region rather than to filter on the empty string.
         :type region: str
         :param capacity_class: Capacity class to narrow the series to. Omit to merge both.
         :type capacity_class: str
+        :param cluster_size: Node shape to narrow the series to — 8 means 8-GPU nodes. Omit to MERGE every shape, which is the default and the only view that rows recorded before the per-size split can honestly appear in.  A 1-GPU box and an 8-GPU node are different products at different per-GPU rates, so this is a real dimension of the series and not a display filter. Only shapes we actually sell are accepted: an arbitrary integer would return an empty series indistinguishable from a genuine gap, and this surface exists so \"no data\" and \"nothing to have data about\" are never the same answer. Use available_cluster_sizes from the response to populate a picker — it reports what this GPU was actually listed as in this window, which is narrower than what we may ever sell.
+        :type cluster_size: int
         :param bucket: Resolution. Only these two values are accepted: the series cannot be returned finer than it was stored.
         :type bucket: str
         :param var_from: Start of the window (RFC3339). Defaults to 7 days before `to`.
@@ -104,6 +107,7 @@ class MarketApi:
             gpu_model=gpu_model,
             region=region,
             capacity_class=capacity_class,
+            cluster_size=cluster_size,
             bucket=bucket,
             var_from=var_from,
             to=to,
@@ -133,9 +137,10 @@ class MarketApi:
     @validate_call
     def get_market_history_with_http_info(
         self,
-        gpu_model: Annotated[StrictStr, Field(description="GPU model to chart, e.g. \"H100\". Required — it is the leading column of the lookup index.")],
+        gpu_model: Annotated[StrictStr, Field(description="GPU model id to chart, e.g. \"h100_sxm\". Required — it is the leading column of the lookup index.")],
         region: Annotated[Optional[StrictStr], Field(description="Canonical region to narrow the series to. Omit to MERGE every region rather than to filter on the empty string.")] = None,
         capacity_class: Annotated[Optional[StrictStr], Field(description="Capacity class to narrow the series to. Omit to merge both.")] = None,
+        cluster_size: Annotated[Optional[StrictInt], Field(description="Node shape to narrow the series to — 8 means 8-GPU nodes. Omit to MERGE every shape, which is the default and the only view that rows recorded before the per-size split can honestly appear in.  A 1-GPU box and an 8-GPU node are different products at different per-GPU rates, so this is a real dimension of the series and not a display filter. Only shapes we actually sell are accepted: an arbitrary integer would return an empty series indistinguishable from a genuine gap, and this surface exists so \"no data\" and \"nothing to have data about\" are never the same answer. Use available_cluster_sizes from the response to populate a picker — it reports what this GPU was actually listed as in this window, which is narrower than what we may ever sell.")] = None,
         bucket: Annotated[Optional[StrictStr], Field(description="Resolution. Only these two values are accepted: the series cannot be returned finer than it was stored.")] = None,
         var_from: Annotated[Optional[datetime], Field(description="Start of the window (RFC3339). Defaults to 7 days before `to`.")] = None,
         to: Annotated[Optional[datetime], Field(description="End of the window (RFC3339). Defaults to now; a future value is clamped to now, since no bucket can exist for a time that has not happened.")] = None,
@@ -156,12 +161,14 @@ class MarketApi:
 
         Returns GPU.ai's own price and obtainable capacity for one GPU model over a window, at 15-minute or daily resolution. Requires the `market:read` scope (or `full_access`).  THE NULL CONTRACT. `price_per_gpu_hour` and `available_count` are nullable, and the two states are different facts that must not be collapsed:  * a real `0` means we sampled that bucket and the market was sold out; * `null` means we did NOT sample that bucket — a failed poll, a skipped cycle, an incident on our side. It says nothing about supply.  The response materializes the full bucket grid across the window, so a gap has visible width. Do not interpolate across a null: that asserts a continuity the data does not have, and reading one as a zero reports our own outages as supplier stockouts.  PER-GPU NORMALIZATION. `price_per_gpu_hour` is always a per-GPU rate. When it was divided out of a whole-node price, `node_price_per_hour` and `gpu_count` are present and describe that derivation; they are absent for single-GPU capacity. A per-GPU figure presented without that context implies single-GPU rentability that whole-node capacity does not offer.  WINDOW CAPS. `bucket=1d` is capped at 365 days (the retention window). `bucket=15m` is capped at 90 days when BOTH `region` and `capacity_class` are supplied, and at 31 days when either is omitted, because an unscoped 15-minute series scans every region and class in every bucket. An over-wide window is a 400 naming the cap and both escapes, never a silent truncation.  This series carries no upstream supplier identity of any kind: the price is GPU.ai's own floor and the count is an aggregate. 
 
-        :param gpu_model: GPU model to chart, e.g. \"H100\". Required — it is the leading column of the lookup index. (required)
+        :param gpu_model: GPU model id to chart, e.g. \"h100_sxm\". Required — it is the leading column of the lookup index. (required)
         :type gpu_model: str
         :param region: Canonical region to narrow the series to. Omit to MERGE every region rather than to filter on the empty string.
         :type region: str
         :param capacity_class: Capacity class to narrow the series to. Omit to merge both.
         :type capacity_class: str
+        :param cluster_size: Node shape to narrow the series to — 8 means 8-GPU nodes. Omit to MERGE every shape, which is the default and the only view that rows recorded before the per-size split can honestly appear in.  A 1-GPU box and an 8-GPU node are different products at different per-GPU rates, so this is a real dimension of the series and not a display filter. Only shapes we actually sell are accepted: an arbitrary integer would return an empty series indistinguishable from a genuine gap, and this surface exists so \"no data\" and \"nothing to have data about\" are never the same answer. Use available_cluster_sizes from the response to populate a picker — it reports what this GPU was actually listed as in this window, which is narrower than what we may ever sell.
+        :type cluster_size: int
         :param bucket: Resolution. Only these two values are accepted: the series cannot be returned finer than it was stored.
         :type bucket: str
         :param var_from: Start of the window (RFC3339). Defaults to 7 days before `to`.
@@ -194,6 +201,7 @@ class MarketApi:
             gpu_model=gpu_model,
             region=region,
             capacity_class=capacity_class,
+            cluster_size=cluster_size,
             bucket=bucket,
             var_from=var_from,
             to=to,
@@ -223,9 +231,10 @@ class MarketApi:
     @validate_call
     def get_market_history_without_preload_content(
         self,
-        gpu_model: Annotated[StrictStr, Field(description="GPU model to chart, e.g. \"H100\". Required — it is the leading column of the lookup index.")],
+        gpu_model: Annotated[StrictStr, Field(description="GPU model id to chart, e.g. \"h100_sxm\". Required — it is the leading column of the lookup index.")],
         region: Annotated[Optional[StrictStr], Field(description="Canonical region to narrow the series to. Omit to MERGE every region rather than to filter on the empty string.")] = None,
         capacity_class: Annotated[Optional[StrictStr], Field(description="Capacity class to narrow the series to. Omit to merge both.")] = None,
+        cluster_size: Annotated[Optional[StrictInt], Field(description="Node shape to narrow the series to — 8 means 8-GPU nodes. Omit to MERGE every shape, which is the default and the only view that rows recorded before the per-size split can honestly appear in.  A 1-GPU box and an 8-GPU node are different products at different per-GPU rates, so this is a real dimension of the series and not a display filter. Only shapes we actually sell are accepted: an arbitrary integer would return an empty series indistinguishable from a genuine gap, and this surface exists so \"no data\" and \"nothing to have data about\" are never the same answer. Use available_cluster_sizes from the response to populate a picker — it reports what this GPU was actually listed as in this window, which is narrower than what we may ever sell.")] = None,
         bucket: Annotated[Optional[StrictStr], Field(description="Resolution. Only these two values are accepted: the series cannot be returned finer than it was stored.")] = None,
         var_from: Annotated[Optional[datetime], Field(description="Start of the window (RFC3339). Defaults to 7 days before `to`.")] = None,
         to: Annotated[Optional[datetime], Field(description="End of the window (RFC3339). Defaults to now; a future value is clamped to now, since no bucket can exist for a time that has not happened.")] = None,
@@ -246,12 +255,14 @@ class MarketApi:
 
         Returns GPU.ai's own price and obtainable capacity for one GPU model over a window, at 15-minute or daily resolution. Requires the `market:read` scope (or `full_access`).  THE NULL CONTRACT. `price_per_gpu_hour` and `available_count` are nullable, and the two states are different facts that must not be collapsed:  * a real `0` means we sampled that bucket and the market was sold out; * `null` means we did NOT sample that bucket — a failed poll, a skipped cycle, an incident on our side. It says nothing about supply.  The response materializes the full bucket grid across the window, so a gap has visible width. Do not interpolate across a null: that asserts a continuity the data does not have, and reading one as a zero reports our own outages as supplier stockouts.  PER-GPU NORMALIZATION. `price_per_gpu_hour` is always a per-GPU rate. When it was divided out of a whole-node price, `node_price_per_hour` and `gpu_count` are present and describe that derivation; they are absent for single-GPU capacity. A per-GPU figure presented without that context implies single-GPU rentability that whole-node capacity does not offer.  WINDOW CAPS. `bucket=1d` is capped at 365 days (the retention window). `bucket=15m` is capped at 90 days when BOTH `region` and `capacity_class` are supplied, and at 31 days when either is omitted, because an unscoped 15-minute series scans every region and class in every bucket. An over-wide window is a 400 naming the cap and both escapes, never a silent truncation.  This series carries no upstream supplier identity of any kind: the price is GPU.ai's own floor and the count is an aggregate. 
 
-        :param gpu_model: GPU model to chart, e.g. \"H100\". Required — it is the leading column of the lookup index. (required)
+        :param gpu_model: GPU model id to chart, e.g. \"h100_sxm\". Required — it is the leading column of the lookup index. (required)
         :type gpu_model: str
         :param region: Canonical region to narrow the series to. Omit to MERGE every region rather than to filter on the empty string.
         :type region: str
         :param capacity_class: Capacity class to narrow the series to. Omit to merge both.
         :type capacity_class: str
+        :param cluster_size: Node shape to narrow the series to — 8 means 8-GPU nodes. Omit to MERGE every shape, which is the default and the only view that rows recorded before the per-size split can honestly appear in.  A 1-GPU box and an 8-GPU node are different products at different per-GPU rates, so this is a real dimension of the series and not a display filter. Only shapes we actually sell are accepted: an arbitrary integer would return an empty series indistinguishable from a genuine gap, and this surface exists so \"no data\" and \"nothing to have data about\" are never the same answer. Use available_cluster_sizes from the response to populate a picker — it reports what this GPU was actually listed as in this window, which is narrower than what we may ever sell.
+        :type cluster_size: int
         :param bucket: Resolution. Only these two values are accepted: the series cannot be returned finer than it was stored.
         :type bucket: str
         :param var_from: Start of the window (RFC3339). Defaults to 7 days before `to`.
@@ -284,6 +295,7 @@ class MarketApi:
             gpu_model=gpu_model,
             region=region,
             capacity_class=capacity_class,
+            cluster_size=cluster_size,
             bucket=bucket,
             var_from=var_from,
             to=to,
@@ -311,6 +323,7 @@ class MarketApi:
         gpu_model,
         region,
         capacity_class,
+        cluster_size,
         bucket,
         var_from,
         to,
@@ -347,6 +360,10 @@ class MarketApi:
         if capacity_class is not None:
             
             _query_params.append(('capacity_class', capacity_class))
+            
+        if cluster_size is not None:
+            
+            _query_params.append(('cluster_size', cluster_size))
             
         if bucket is not None:
             
