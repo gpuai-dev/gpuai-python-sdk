@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**gpu_model** | **str** |  | 
+**gpu_model** | **str** | The canonical GPU model id the rule watches, e.g. \&quot;h100_sxm\&quot; — a MODEL, not a generation. Alerts match the live catalog exactly, so a rule for a model we do not list could never fire and is refused rather than stored. Case and punctuation are forgiving (\&quot;H100-SXM\&quot; resolves to \&quot;h100_sxm\&quot;), and the canonical id is what is stored and returned. GET /v1/gpu-types lists the models currently on offer; a model with no stock right now is still watchable, which is the point of watching it.  | 
 **region** | **str** | Omit or send null to watch every region. | [optional] 
 **capacity_class** | **str** | Omit or send null to watch both capacity classes. | [optional] 
 **condition_kind** | **str** |  | 

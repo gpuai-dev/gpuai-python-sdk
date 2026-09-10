@@ -29,7 +29,7 @@ class WatchRuleCreate(BaseModel):
     """
     WatchRuleCreate
     """ # noqa: E501
-    gpu_model: StrictStr
+    gpu_model: StrictStr = Field(description="The canonical GPU model id the rule watches, e.g. \"h100_sxm\" — a MODEL, not a generation. Alerts match the live catalog exactly, so a rule for a model we do not list could never fire and is refused rather than stored. Case and punctuation are forgiving (\"H100-SXM\" resolves to \"h100_sxm\"), and the canonical id is what is stored and returned. GET /v1/gpu-types lists the models currently on offer; a model with no stock right now is still watchable, which is the point of watching it. ")
     region: Optional[StrictStr] = Field(default=None, description="Omit or send null to watch every region.")
     capacity_class: Optional[StrictStr] = Field(default=None, description="Omit or send null to watch both capacity classes.")
     condition_kind: StrictStr
