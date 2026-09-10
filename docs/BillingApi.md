@@ -5,6 +5,7 @@ All URIs are relative to *https://api.gpu.ai/v1*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**create_crypto_deposit**](BillingApi.md#create_crypto_deposit) | **POST** /billing/deposits/crypto | Create a stablecoin deposit
+[**get_balance**](BillingApi.md#get_balance) | **GET** /billing/balance | Get the org credit balance
 [**get_deposit**](BillingApi.md#get_deposit) | **GET** /billing/deposits/{id} | Get one stablecoin deposit
 [**get_spending_limit**](BillingApi.md#get_spending_limit) | **GET** /billing/spending-limit | Get the org spending limit
 [**list_deposits**](BillingApi.md#list_deposits) | **GET** /billing/deposits | List stablecoin deposits
@@ -93,6 +94,87 @@ Name | Type | Description  | Notes
 **404** | Error response (RFC 7807) |  -  |
 **429** | Rate limit exceeded (RFC 7807). Retry-After header indicates seconds to wait. |  * Retry-After - Seconds the client should wait before retrying. <br>  |
 **503** | &#x60;payment-source-unavailable&#x60; — deposits are temporarily unavailable; retry shortly. |  -  |
+**0** | Error response (RFC 7807) |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_balance**
+> Balance get_balance()
+
+Get the org credit balance
+
+Returns the organization's credit balance, its auto-pay configuration, and the live burn rate. Requires the `billing:read` scope. The organization is taken from the authenticated API key, never from a parameter.
+
+Divide `balance_cents` by `burn_cents_per_hour` for the remaining runway in hours. The quotient is undefined in three cases a caller must keep apart: `burn_cents_per_hour` is 0 (nothing running, so the balance funds unbounded idle time), it is `null` (the burn rate could not be determined — NOT the same as idle), or the balance is already at or below zero.
+
+This is the balance itself — for spend against a configured cap see `/billing/spending-limit`, and for past consumption see `/usage`.
+
+
+### Example
+
+* Bearer (gpuai_live_<24-base62>) Authentication (bearerAuth):
+
+```python
+import gpuai_sdk
+from gpuai_sdk.models.balance import Balance
+from gpuai_sdk.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to https://api.gpu.ai/v1
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gpuai_sdk.Configuration(
+    host = "https://api.gpu.ai/v1"
+)
+
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (gpuai_live_<24-base62>): bearerAuth
+configuration = gpuai_sdk.Configuration(
+    access_token = os.environ["BEARER_TOKEN"]
+)
+
+# Enter a context with an instance of the API client
+with gpuai_sdk.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = gpuai_sdk.BillingApi(api_client)
+
+    try:
+        # Get the org credit balance
+        api_response = api_instance.get_balance()
+        print("The response of BillingApi->get_balance:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling BillingApi->get_balance: %s\n" % e)
+```
+
+
+
+### Parameters
+
+This endpoint does not need any parameter.
+
+### Return type
+
+[**Balance**](Balance.md)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json, application/problem+json
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+**429** | Rate limit exceeded (RFC 7807). Retry-After header indicates seconds to wait. |  * Retry-After - Seconds the client should wait before retrying. <br>  |
 **0** | Error response (RFC 7807) |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

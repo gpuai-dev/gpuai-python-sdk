@@ -5,6 +5,7 @@ docs/AutolaunchRule.md
 docs/AutolaunchRuleCreate.md
 docs/AutolaunchRuleDisarm.md
 docs/AutolaunchRulePage.md
+docs/Balance.md
 docs/BillingApi.md
 docs/ChatChoice.md
 docs/ChatCompletionRequest.md
@@ -138,6 +139,7 @@ gpuai_sdk/models/autolaunch_rule.py
 gpuai_sdk/models/autolaunch_rule_create.py
 gpuai_sdk/models/autolaunch_rule_disarm.py
 gpuai_sdk/models/autolaunch_rule_page.py
+gpuai_sdk/models/balance.py
 gpuai_sdk/models/chat_choice.py
 gpuai_sdk/models/chat_completion_request.py
 gpuai_sdk/models/chat_completion_response.py

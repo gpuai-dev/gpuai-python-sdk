@@ -15,7 +15,7 @@
 """  # noqa: E501
 
 
-__version__ = "0.3.14"
+__version__ = "0.3.15"
 
 # Define package exports
 __all__ = [
@@ -50,6 +50,7 @@ __all__ = [
     "AutolaunchRuleCreate",
     "AutolaunchRuleDisarm",
     "AutolaunchRulePage",
+    "Balance",
     "ChatChoice",
     "ChatCompletionRequest",
     "ChatCompletionResponse",
@@ -175,6 +176,7 @@ from gpuai_sdk.models.autolaunch_rule import AutolaunchRule as AutolaunchRule
 from gpuai_sdk.models.autolaunch_rule_create import AutolaunchRuleCreate as AutolaunchRuleCreate
 from gpuai_sdk.models.autolaunch_rule_disarm import AutolaunchRuleDisarm as AutolaunchRuleDisarm
 from gpuai_sdk.models.autolaunch_rule_page import AutolaunchRulePage as AutolaunchRulePage
+from gpuai_sdk.models.balance import Balance as Balance
 from gpuai_sdk.models.chat_choice import ChatChoice as ChatChoice
 from gpuai_sdk.models.chat_completion_request import ChatCompletionRequest as ChatCompletionRequest
 from gpuai_sdk.models.chat_completion_response import ChatCompletionResponse as ChatCompletionResponse

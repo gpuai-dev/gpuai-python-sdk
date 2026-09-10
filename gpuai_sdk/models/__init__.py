@@ -18,6 +18,7 @@ from gpuai_sdk.models.autolaunch_rule import AutolaunchRule
 from gpuai_sdk.models.autolaunch_rule_create import AutolaunchRuleCreate
 from gpuai_sdk.models.autolaunch_rule_disarm import AutolaunchRuleDisarm
 from gpuai_sdk.models.autolaunch_rule_page import AutolaunchRulePage
+from gpuai_sdk.models.balance import Balance
 from gpuai_sdk.models.chat_choice import ChatChoice
 from gpuai_sdk.models.chat_completion_request import ChatCompletionRequest
 from gpuai_sdk.models.chat_completion_response import ChatCompletionResponse
