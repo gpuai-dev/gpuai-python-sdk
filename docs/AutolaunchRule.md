@@ -7,7 +7,7 @@ A standing, pre-approved purchase order. It carries no upstream supplier identit
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | **UUID** |  | 
-**gpu_model** | **str** | The GPU model the rule watches and launches, e.g. \&quot;H100\&quot;. | 
+**gpu_model** | **str** | The canonical GPU model id the rule targets and launches, e.g. \&quot;h100_sxm\&quot; — a MODEL, not a generation. \&quot;H100\&quot; names three differently priced SKUs, matches nothing in the catalog, and is refused: a rule that can never fire is a standing purchase order the customer believes is armed. Case and punctuation are forgiving (\&quot;RTX-A4000\&quot; resolves to \&quot;rtx_a4000\&quot;) and the canonical id is what is stored. It must also match spec.gpu_type, or the rule would wait on one market and buy from another.  | 
 **region** | **str** | Canonical region the rule is narrowed to, or null for every region. | 
 **capacity_class** | **str** | Capacity class the rule is narrowed to, or null for both. | 
 **condition_kind** | **str** |  | 

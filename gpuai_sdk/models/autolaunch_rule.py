@@ -32,7 +32,7 @@ class AutolaunchRule(BaseModel):
     A standing, pre-approved purchase order. It carries no upstream supplier identity, no org id, and no identifier of the API key that consented — the consenting principal is recorded in storage for the fire-time re-check, and a credential identifier has no business in a rule listing. 
     """ # noqa: E501
     id: UUID
-    gpu_model: StrictStr = Field(description="The GPU model the rule watches and launches, e.g. \"H100\".")
+    gpu_model: StrictStr = Field(description="The canonical GPU model id the rule targets and launches, e.g. \"h100_sxm\" — a MODEL, not a generation. \"H100\" names three differently priced SKUs, matches nothing in the catalog, and is refused: a rule that can never fire is a standing purchase order the customer believes is armed. Case and punctuation are forgiving (\"RTX-A4000\" resolves to \"rtx_a4000\") and the canonical id is what is stored. It must also match spec.gpu_type, or the rule would wait on one market and buy from another. ")
     region: Optional[StrictStr] = Field(description="Canonical region the rule is narrowed to, or null for every region.")
     capacity_class: Optional[StrictStr] = Field(description="Capacity class the rule is narrowed to, or null for both.")
     condition_kind: StrictStr
