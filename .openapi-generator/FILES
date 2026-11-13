@@ -61,6 +61,9 @@ docs/FunctionsApi.md
 docs/GPUType.md
 docs/GPUTypePage.md
 docs/GetHealth200Response.md
+docs/GpuSuggestion.md
+docs/GpuSuggestionCheaper.md
+docs/GpuSuggestionGpu.md
 docs/GpuTypesApi.md
 docs/ImagesGenerationsRequest.md
 docs/ImagesResponse.md
@@ -70,6 +73,7 @@ docs/IncludeItem.md
 docs/InferenceApi.md
 docs/Instance.md
 docs/InstanceConnection.md
+docs/InstanceGpuMemory.md
 docs/InstancePage.md
 docs/InstancesApi.md
 docs/Invoice.md
@@ -209,6 +213,9 @@ gpuai_sdk/models/function_run_logs.py
 gpuai_sdk/models/function_upload.py
 gpuai_sdk/models/function_version.py
 gpuai_sdk/models/get_health200_response.py
+gpuai_sdk/models/gpu_suggestion.py
+gpuai_sdk/models/gpu_suggestion_cheaper.py
+gpuai_sdk/models/gpu_suggestion_gpu.py
 gpuai_sdk/models/gpu_type.py
 gpuai_sdk/models/gpu_type_page.py
 gpuai_sdk/models/images_generations_request.py
@@ -218,6 +225,7 @@ gpuai_sdk/models/images_response_usage.py
 gpuai_sdk/models/include_item.py
 gpuai_sdk/models/instance.py
 gpuai_sdk/models/instance_connection.py
+gpuai_sdk/models/instance_gpu_memory.py
 gpuai_sdk/models/instance_page.py
 gpuai_sdk/models/invoice.py
 gpuai_sdk/models/invoice_list.py

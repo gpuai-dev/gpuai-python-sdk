@@ -15,7 +15,7 @@
 """  # noqa: E501
 
 
-__version__ = "0.4.1"
+__version__ = "0.4.2"
 
 # Define package exports
 __all__ = [
@@ -102,6 +102,9 @@ __all__ = [
     "GPUType",
     "GPUTypePage",
     "GetHealth200Response",
+    "GpuSuggestion",
+    "GpuSuggestionCheaper",
+    "GpuSuggestionGpu",
     "ImagesGenerationsRequest",
     "ImagesResponse",
     "ImagesResponseDataInner",
@@ -109,6 +112,7 @@ __all__ = [
     "IncludeItem",
     "Instance",
     "InstanceConnection",
+    "InstanceGpuMemory",
     "InstancePage",
     "Invoice",
     "InvoiceList",
@@ -248,6 +252,9 @@ from gpuai_sdk.models.function_version import FunctionVersion as FunctionVersion
 from gpuai_sdk.models.gpu_type import GPUType as GPUType
 from gpuai_sdk.models.gpu_type_page import GPUTypePage as GPUTypePage
 from gpuai_sdk.models.get_health200_response import GetHealth200Response as GetHealth200Response
+from gpuai_sdk.models.gpu_suggestion import GpuSuggestion as GpuSuggestion
+from gpuai_sdk.models.gpu_suggestion_cheaper import GpuSuggestionCheaper as GpuSuggestionCheaper
+from gpuai_sdk.models.gpu_suggestion_gpu import GpuSuggestionGpu as GpuSuggestionGpu
 from gpuai_sdk.models.images_generations_request import ImagesGenerationsRequest as ImagesGenerationsRequest
 from gpuai_sdk.models.images_response import ImagesResponse as ImagesResponse
 from gpuai_sdk.models.images_response_data_inner import ImagesResponseDataInner as ImagesResponseDataInner
@@ -255,6 +262,7 @@ from gpuai_sdk.models.images_response_usage import ImagesResponseUsage as Images
 from gpuai_sdk.models.include_item import IncludeItem as IncludeItem
 from gpuai_sdk.models.instance import Instance as Instance
 from gpuai_sdk.models.instance_connection import InstanceConnection as InstanceConnection
+from gpuai_sdk.models.instance_gpu_memory import InstanceGpuMemory as InstanceGpuMemory
 from gpuai_sdk.models.instance_page import InstancePage as InstancePage
 from gpuai_sdk.models.invoice import Invoice as Invoice
 from gpuai_sdk.models.invoice_list import InvoiceList as InvoiceList

@@ -23,6 +23,7 @@ from pydantic import BaseModel, ConfigDict, Field, StrictFloat, StrictInt, Stric
 from typing import Any, ClassVar, Dict, List, Optional, Union
 from typing_extensions import Annotated
 from gpuai_sdk.models.instance_connection import InstanceConnection
+from gpuai_sdk.models.instance_gpu_memory import InstanceGpuMemory
 from typing import Optional, Set
 from typing_extensions import Self
 from pydantic_core import to_jsonable_python
@@ -39,6 +40,7 @@ class Instance(BaseModel):
     region: StrictStr
     tier: StrictStr = Field(description="`spot` is soft-deprecated: spot capacity is currently unavailable sitewide (requests with tier=spot return no offerings); use on_demand.")
     price_per_hour: Union[StrictFloat, StrictInt] = Field(description="hourly rate for the whole instance — covers all gpu_count GPUs")
+    gpu_memory: Optional[InstanceGpuMemory] = None
     connection: Optional[InstanceConnection] = None
     disk_gb: Optional[StrictInt] = Field(default=None, description="Instance filesystem size in GB that the platform configured for this launch. Present only where the placed capacity honors a configured disk size; absent means the machine's disk is provider-determined (its own flavor volume).")
     image: Optional[StrictStr] = Field(default=None, description="The customer-supplied container image this instance was launched from, digest-pinned at verification time (e.g. `ghcr.io/acme/trainer:v1@sha256:…`). Present only on custom-image launches; template and certified launches never expose their images here.")
@@ -50,7 +52,7 @@ class Instance(BaseModel):
     terminated_at: Optional[datetime] = None
     last_reachable_at: Optional[datetime] = Field(default=None, description="Last time the platform verified the SSH path to this instance end-to-end through the tunnel. Absent means the instance has not been probed yet (freshly launched, or no tunnel) — it does NOT mean unreachable. An instance whose status is still \"running\" while this timestamp stops advancing is one whose SSH has died even though the machine is up.")
     unreachable_since: Optional[datetime] = Field(default=None, description="Start of the confirmed tunnel outage the instance is currently in. Present exactly when status is \"unreachable\", absent otherwise. It is the timestamp the auto-credit for the dead window is computed from, so a ledger credit can be reconciled against it.")
-    __properties: ClassVar[List[str]] = ["id", "name", "status", "gpu_type", "gpu_count", "region", "tier", "price_per_hour", "connection", "disk_gb", "image", "auto_terminate_hours", "auto_terminate_at", "status_reason", "created_at", "ready_at", "terminated_at", "last_reachable_at", "unreachable_since"]
+    __properties: ClassVar[List[str]] = ["id", "name", "status", "gpu_type", "gpu_count", "region", "tier", "price_per_hour", "gpu_memory", "connection", "disk_gb", "image", "auto_terminate_hours", "auto_terminate_at", "status_reason", "created_at", "ready_at", "terminated_at", "last_reachable_at", "unreachable_since"]
 
     @field_validator('status')
     def status_validate_enum(cls, value):
@@ -105,6 +107,9 @@ class Instance(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of gpu_memory
+        if self.gpu_memory:
+            _dict['gpu_memory'] = self.gpu_memory.to_dict()
         # override the default output from pydantic by calling `to_dict()` of connection
         if self.connection:
             _dict['connection'] = self.connection.to_dict()
@@ -128,6 +133,7 @@ class Instance(BaseModel):
             "region": obj.get("region"),
             "tier": obj.get("tier"),
             "price_per_hour": obj.get("price_per_hour"),
+            "gpu_memory": InstanceGpuMemory.from_dict(obj["gpu_memory"]) if obj.get("gpu_memory") is not None else None,
             "connection": InstanceConnection.from_dict(obj["connection"]) if obj.get("connection") is not None else None,
             "disk_gb": obj.get("disk_gb"),
             "image": obj.get("image"),
