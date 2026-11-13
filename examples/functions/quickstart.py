@@ -4,7 +4,7 @@
     export GPUAI_API_KEY=gpuai_...
     python quickstart.py
 
-The first call starts a machine, usually in 1 to 2 minutes. The second call
+The first call starts a machine, usually in 2 to 4 minutes. The second call
 reuses it and returns in about 2 seconds.
 """
 
