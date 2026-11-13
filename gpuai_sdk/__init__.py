@@ -15,7 +15,7 @@
 """  # noqa: E501
 
 
-__version__ = "0.3.18"
+__version__ = "0.4.0"
 
 # Define package exports
 __all__ = [
@@ -24,6 +24,7 @@ __all__ = [
     "CommunityApi",
     "EnvironmentsApi",
     "FineTuningApi",
+    "FunctionsApi",
     "GpuTypesApi",
     "InferenceApi",
     "InstancesApi",
@@ -51,6 +52,7 @@ __all__ = [
     "AutolaunchRuleDisarm",
     "AutolaunchRulePage",
     "Balance",
+    "BillingDetails",
     "ChatChoice",
     "ChatCompletionRequest",
     "ChatCompletionResponse",
@@ -64,6 +66,9 @@ __all__ = [
     "CreateFineTuningJobRequestGpuai",
     "CreateFineTuningJobRequestMethod",
     "CreateFineTuningJobRequestMethodLora",
+    "CreateFunctionRequest",
+    "CreateFunctionRunRequest",
+    "CreateFunctionVersionRequest",
     "CreateInstanceRequest",
     "CreateInstanceRequestPortsInner",
     "CreateRegistryCredentialRequest",
@@ -84,6 +89,16 @@ __all__ = [
     "FineTuningJobList",
     "FineTuningJobMethod",
     "FrameworkVersion",
+    "Function",
+    "FunctionList",
+    "FunctionReplicaCounts",
+    "FunctionRun",
+    "FunctionRunError",
+    "FunctionRunList",
+    "FunctionRunLogChunk",
+    "FunctionRunLogs",
+    "FunctionUpload",
+    "FunctionVersion",
     "GPUType",
     "GPUTypePage",
     "GetHealth200Response",
@@ -95,6 +110,8 @@ __all__ = [
     "Instance",
     "InstanceConnection",
     "InstancePage",
+    "Invoice",
+    "InvoiceList",
     "ListCommunityMachines200Response",
     "ListDeposits200Response",
     "ListRegistryCredentials200Response",
@@ -104,11 +121,13 @@ __all__ = [
     "ModelList",
     "ModelParametersInner",
     "ModelPricing",
+    "ModelRate",
     "OpenAIErrorEnvelope",
     "OpenAIErrorEnvelopeError",
     "Operation",
     "OperationError",
     "OperationResult",
+    "PeakWindow",
     "Pricing",
     "PricingPage",
     "Problem",
@@ -123,6 +142,7 @@ __all__ = [
     "TemplateEnvInner",
     "TemplateList",
     "TemplatePortsInner",
+    "UpdateBillingDetailsRequest",
     "UpdateInstanceRequest",
     "UpdateSpendingLimitRequest",
     "Usage",
@@ -146,6 +166,7 @@ from gpuai_sdk.api.billing_api import BillingApi as BillingApi
 from gpuai_sdk.api.community_api import CommunityApi as CommunityApi
 from gpuai_sdk.api.environments_api import EnvironmentsApi as EnvironmentsApi
 from gpuai_sdk.api.fine_tuning_api import FineTuningApi as FineTuningApi
+from gpuai_sdk.api.functions_api import FunctionsApi as FunctionsApi
 from gpuai_sdk.api.gpu_types_api import GpuTypesApi as GpuTypesApi
 from gpuai_sdk.api.inference_api import InferenceApi as InferenceApi
 from gpuai_sdk.api.instances_api import InstancesApi as InstancesApi
@@ -177,6 +198,7 @@ from gpuai_sdk.models.autolaunch_rule_create import AutolaunchRuleCreate as Auto
 from gpuai_sdk.models.autolaunch_rule_disarm import AutolaunchRuleDisarm as AutolaunchRuleDisarm
 from gpuai_sdk.models.autolaunch_rule_page import AutolaunchRulePage as AutolaunchRulePage
 from gpuai_sdk.models.balance import Balance as Balance
+from gpuai_sdk.models.billing_details import BillingDetails as BillingDetails
 from gpuai_sdk.models.chat_choice import ChatChoice as ChatChoice
 from gpuai_sdk.models.chat_completion_request import ChatCompletionRequest as ChatCompletionRequest
 from gpuai_sdk.models.chat_completion_response import ChatCompletionResponse as ChatCompletionResponse
@@ -190,6 +212,9 @@ from gpuai_sdk.models.create_fine_tuning_job_request import CreateFineTuningJobR
 from gpuai_sdk.models.create_fine_tuning_job_request_gpuai import CreateFineTuningJobRequestGpuai as CreateFineTuningJobRequestGpuai
 from gpuai_sdk.models.create_fine_tuning_job_request_method import CreateFineTuningJobRequestMethod as CreateFineTuningJobRequestMethod
 from gpuai_sdk.models.create_fine_tuning_job_request_method_lora import CreateFineTuningJobRequestMethodLora as CreateFineTuningJobRequestMethodLora
+from gpuai_sdk.models.create_function_request import CreateFunctionRequest as CreateFunctionRequest
+from gpuai_sdk.models.create_function_run_request import CreateFunctionRunRequest as CreateFunctionRunRequest
+from gpuai_sdk.models.create_function_version_request import CreateFunctionVersionRequest as CreateFunctionVersionRequest
 from gpuai_sdk.models.create_instance_request import CreateInstanceRequest as CreateInstanceRequest
 from gpuai_sdk.models.create_instance_request_ports_inner import CreateInstanceRequestPortsInner as CreateInstanceRequestPortsInner
 from gpuai_sdk.models.create_registry_credential_request import CreateRegistryCredentialRequest as CreateRegistryCredentialRequest
@@ -210,6 +235,16 @@ from gpuai_sdk.models.fine_tuning_job_event_list import FineTuningJobEventList a
 from gpuai_sdk.models.fine_tuning_job_list import FineTuningJobList as FineTuningJobList
 from gpuai_sdk.models.fine_tuning_job_method import FineTuningJobMethod as FineTuningJobMethod
 from gpuai_sdk.models.framework_version import FrameworkVersion as FrameworkVersion
+from gpuai_sdk.models.function import Function as Function
+from gpuai_sdk.models.function_list import FunctionList as FunctionList
+from gpuai_sdk.models.function_replica_counts import FunctionReplicaCounts as FunctionReplicaCounts
+from gpuai_sdk.models.function_run import FunctionRun as FunctionRun
+from gpuai_sdk.models.function_run_error import FunctionRunError as FunctionRunError
+from gpuai_sdk.models.function_run_list import FunctionRunList as FunctionRunList
+from gpuai_sdk.models.function_run_log_chunk import FunctionRunLogChunk as FunctionRunLogChunk
+from gpuai_sdk.models.function_run_logs import FunctionRunLogs as FunctionRunLogs
+from gpuai_sdk.models.function_upload import FunctionUpload as FunctionUpload
+from gpuai_sdk.models.function_version import FunctionVersion as FunctionVersion
 from gpuai_sdk.models.gpu_type import GPUType as GPUType
 from gpuai_sdk.models.gpu_type_page import GPUTypePage as GPUTypePage
 from gpuai_sdk.models.get_health200_response import GetHealth200Response as GetHealth200Response
@@ -221,6 +256,8 @@ from gpuai_sdk.models.include_item import IncludeItem as IncludeItem
 from gpuai_sdk.models.instance import Instance as Instance
 from gpuai_sdk.models.instance_connection import InstanceConnection as InstanceConnection
 from gpuai_sdk.models.instance_page import InstancePage as InstancePage
+from gpuai_sdk.models.invoice import Invoice as Invoice
+from gpuai_sdk.models.invoice_list import InvoiceList as InvoiceList
 from gpuai_sdk.models.list_community_machines200_response import ListCommunityMachines200Response as ListCommunityMachines200Response
 from gpuai_sdk.models.list_deposits200_response import ListDeposits200Response as ListDeposits200Response
 from gpuai_sdk.models.list_registry_credentials200_response import ListRegistryCredentials200Response as ListRegistryCredentials200Response
@@ -230,11 +267,13 @@ from gpuai_sdk.models.model import Model as Model
 from gpuai_sdk.models.model_list import ModelList as ModelList
 from gpuai_sdk.models.model_parameters_inner import ModelParametersInner as ModelParametersInner
 from gpuai_sdk.models.model_pricing import ModelPricing as ModelPricing
+from gpuai_sdk.models.model_rate import ModelRate as ModelRate
 from gpuai_sdk.models.open_ai_error_envelope import OpenAIErrorEnvelope as OpenAIErrorEnvelope
 from gpuai_sdk.models.open_ai_error_envelope_error import OpenAIErrorEnvelopeError as OpenAIErrorEnvelopeError
 from gpuai_sdk.models.operation import Operation as Operation
 from gpuai_sdk.models.operation_error import OperationError as OperationError
 from gpuai_sdk.models.operation_result import OperationResult as OperationResult
+from gpuai_sdk.models.peak_window import PeakWindow as PeakWindow
 from gpuai_sdk.models.pricing import Pricing as Pricing
 from gpuai_sdk.models.pricing_page import PricingPage as PricingPage
 from gpuai_sdk.models.problem import Problem as Problem
@@ -249,6 +288,7 @@ from gpuai_sdk.models.template import Template as Template
 from gpuai_sdk.models.template_env_inner import TemplateEnvInner as TemplateEnvInner
 from gpuai_sdk.models.template_list import TemplateList as TemplateList
 from gpuai_sdk.models.template_ports_inner import TemplatePortsInner as TemplatePortsInner
+from gpuai_sdk.models.update_billing_details_request import UpdateBillingDetailsRequest as UpdateBillingDetailsRequest
 from gpuai_sdk.models.update_instance_request import UpdateInstanceRequest as UpdateInstanceRequest
 from gpuai_sdk.models.update_spending_limit_request import UpdateSpendingLimitRequest as UpdateSpendingLimitRequest
 from gpuai_sdk.models.usage import Usage as Usage

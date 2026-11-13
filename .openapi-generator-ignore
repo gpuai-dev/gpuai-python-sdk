@@ -43,3 +43,12 @@ git_push.sh
 # exception mechanism, not a silent hand-edit (Phase 77-06, flagged to Adi).
 pyproject.toml
 LICENSE
+
+# WHY: hand-written, not generated. gpuai_sdk.functions is the Functions client
+# (decorate a Python function, call it on a GPU.ai GPU). It talks to the
+# /v1/functions endpoints with pickled payloads the generated client cannot
+# model, so it is maintained by hand and must survive every regeneration. Its
+# unit tests and examples live beside it for the same reason.
+gpuai_sdk/functions/**
+tests/**
+examples/**

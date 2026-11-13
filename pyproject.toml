@@ -6,7 +6,7 @@ name = "gpuai-sdk"
 # injected tree. This file is ignore-protected (see .openapi-generator-ignore)
 # so the placeholder survives regeneration; sdk/release/assert-placeholder.sh
 # fails CI if a real version ever lands here.
-version = "0.3.18"
+version = "0.4.0"
 description = "GPU.ai Public Developer API"
 authors = [
   {name = "GPU.ai Support",email = "support@gpu.ai"},
@@ -25,6 +25,9 @@ dependencies = [
   "python-dateutil (>=2.8.2)",
   "pydantic (>=2.11)",
   "typing-extensions (>=4.7.1)",
+  # gpuai_sdk.functions (hand-written, see .openapi-generator-ignore): pickles
+  # the caller's function by value. Pure Python, no dependencies of its own.
+  "cloudpickle (>=3.0)",
 ]
 
 [project.urls]

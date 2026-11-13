@@ -19,7 +19,7 @@ Name | Type | Description | Notes
 **state** | **str** | armed &#x3D; waiting for the condition. launching &#x3D; an attempt is in flight. fired &#x3D; a successful launch consumed the rule&#39;s one shot. expired &#x3D; the per-edge attempt budget ran out. A lost capacity race costs nothing and does NOT consume the shot.  | 
 **attempts_this_edge** | **int** | Launch attempts made since the current condition edge began. | 
 **last_failure_reason** | **str** | Why the last attempt did not buy anything: over_ceiling, capacity_race, stale_reference, key_revoked, authority_revoked or validation_failed, optionally with a colon-separated detail. Match the leading token. It never carries API key material.  | 
-**launched_instance_id** | **UUID** | The instance this rule launched, once it has fired. | 
+**launched_instance_id** | **str** | The instance this rule launched, once it has fired — an instance id of the form \&quot;gpu-\&quot; + 8 lowercase hex, the same string /v1/instances returns. Not a uuid, and deliberately carries no format or pattern: no other instance-id field in this document constrains its shape, and a generated client-side assertion on an id grammar turns a server-side widening into a client-side outage.  | 
 **created_by_surface** | **str** | Which entrance consented. A dashboard rule has no API key behind it, which is why its fire-time revocation failure is &#x60;authority_revoked&#x60; (the approving admin was demoted) rather than &#x60;key_revoked&#x60;.  | 
 **enabled** | **bool** | False once disarmed or cancelled. A disarmed rule cannot be re-armed. | 
 **created_at** | **datetime** |  | 

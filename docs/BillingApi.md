@@ -5,10 +5,14 @@ All URIs are relative to *https://api.gpu.ai/v1*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**create_crypto_deposit**](BillingApi.md#create_crypto_deposit) | **POST** /billing/deposits/crypto | Create a stablecoin deposit
+[**download_invoice_pdf**](BillingApi.md#download_invoice_pdf) | **GET** /billing/invoices/{id}/pdf | Download an invoice PDF
 [**get_balance**](BillingApi.md#get_balance) | **GET** /billing/balance | Get the org credit balance
+[**get_billing_details**](BillingApi.md#get_billing_details) | **GET** /billing/details | Get billing details
 [**get_deposit**](BillingApi.md#get_deposit) | **GET** /billing/deposits/{id} | Get one stablecoin deposit
 [**get_spending_limit**](BillingApi.md#get_spending_limit) | **GET** /billing/spending-limit | Get the org spending limit
 [**list_deposits**](BillingApi.md#list_deposits) | **GET** /billing/deposits | List stablecoin deposits
+[**list_invoices**](BillingApi.md#list_invoices) | **GET** /billing/invoices | List invoices
+[**update_billing_details**](BillingApi.md#update_billing_details) | **PATCH** /billing/details | Update billing details
 [**update_spending_limit**](BillingApi.md#update_spending_limit) | **PUT** /billing/spending-limit | Set the org spending limit
 
 
@@ -98,6 +102,87 @@ Name | Type | Description  | Notes
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **download_invoice_pdf**
+> bytes download_invoice_pdf(id)
+
+Download an invoice PDF
+
+Returns one invoice as a PDF, including the organization's billing details and full Tax ID. Requires the `billing:read` scope. An invoice belonging to another organization returns the same 404 as one that does not exist.
+
+
+### Example
+
+* Bearer (gpuai_live_<24-base62>) Authentication (bearerAuth):
+
+```python
+import gpuai_sdk
+from gpuai_sdk.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to https://api.gpu.ai/v1
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gpuai_sdk.Configuration(
+    host = "https://api.gpu.ai/v1"
+)
+
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (gpuai_live_<24-base62>): bearerAuth
+configuration = gpuai_sdk.Configuration(
+    access_token = os.environ["BEARER_TOKEN"]
+)
+
+# Enter a context with an instance of the API client
+with gpuai_sdk.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = gpuai_sdk.BillingApi(api_client)
+    id = 'id_example' # str | The invoice id.
+
+    try:
+        # Download an invoice PDF
+        api_response = api_instance.download_invoice_pdf(id)
+        print("The response of BillingApi->download_invoice_pdf:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling BillingApi->download_invoice_pdf: %s\n" % e)
+```
+
+
+
+### Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **str**| The invoice id. | 
+
+### Return type
+
+**bytes**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/pdf, application/problem+json
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | The invoice PDF. |  -  |
+**404** | Error response (RFC 7807) |  -  |
+**429** | Rate limit exceeded (RFC 7807). Retry-After header indicates seconds to wait. |  * Retry-After - Seconds the client should wait before retrying. <br>  |
+**0** | Error response (RFC 7807) |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **get_balance**
 > Balance get_balance()
 
@@ -159,6 +244,83 @@ This endpoint does not need any parameter.
 ### Return type
 
 [**Balance**](Balance.md)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json, application/problem+json
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+**429** | Rate limit exceeded (RFC 7807). Retry-After header indicates seconds to wait. |  * Retry-After - Seconds the client should wait before retrying. <br>  |
+**0** | Error response (RFC 7807) |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_billing_details**
+> BillingDetails get_billing_details()
+
+Get billing details
+
+Returns the company name, address and Tax ID printed on the organization's invoices. Requires the `billing:read` scope. The Tax ID is stored encrypted and is only ever returned masked (`tax_id_masked`); the full value is printed on the organization's own invoice PDFs and nowhere else.
+
+
+### Example
+
+* Bearer (gpuai_live_<24-base62>) Authentication (bearerAuth):
+
+```python
+import gpuai_sdk
+from gpuai_sdk.models.billing_details import BillingDetails
+from gpuai_sdk.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to https://api.gpu.ai/v1
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gpuai_sdk.Configuration(
+    host = "https://api.gpu.ai/v1"
+)
+
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (gpuai_live_<24-base62>): bearerAuth
+configuration = gpuai_sdk.Configuration(
+    access_token = os.environ["BEARER_TOKEN"]
+)
+
+# Enter a context with an instance of the API client
+with gpuai_sdk.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = gpuai_sdk.BillingApi(api_client)
+
+    try:
+        # Get billing details
+        api_response = api_instance.get_billing_details()
+        print("The response of BillingApi->get_billing_details:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling BillingApi->get_billing_details: %s\n" % e)
+```
+
+
+
+### Parameters
+
+This endpoint does not need any parameter.
+
+### Return type
+
+[**BillingDetails**](BillingDetails.md)
 
 ### Authorization
 
@@ -413,6 +575,177 @@ This endpoint does not need any parameter.
 **200** | OK |  -  |
 **404** | Error response (RFC 7807) |  -  |
 **429** | Rate limit exceeded (RFC 7807). Retry-After header indicates seconds to wait. |  * Retry-After - Seconds the client should wait before retrying. <br>  |
+**0** | Error response (RFC 7807) |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **list_invoices**
+> InvoiceList list_invoices(limit=limit, cursor=cursor)
+
+List invoices
+
+Returns the organization's invoices, newest first. Every payment (card purchase, auto-pay top up, stablecoin deposit) has one; promotional credit does not. Requires the `billing:read` scope.
+
+
+### Example
+
+* Bearer (gpuai_live_<24-base62>) Authentication (bearerAuth):
+
+```python
+import gpuai_sdk
+from gpuai_sdk.models.invoice_list import InvoiceList
+from gpuai_sdk.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to https://api.gpu.ai/v1
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gpuai_sdk.Configuration(
+    host = "https://api.gpu.ai/v1"
+)
+
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (gpuai_live_<24-base62>): bearerAuth
+configuration = gpuai_sdk.Configuration(
+    access_token = os.environ["BEARER_TOKEN"]
+)
+
+# Enter a context with an instance of the API client
+with gpuai_sdk.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = gpuai_sdk.BillingApi(api_client)
+    limit = 25 # int |  (optional) (default to 25)
+    cursor = 'cursor_example' # str | The `next_cursor` from the previous page. (optional)
+
+    try:
+        # List invoices
+        api_response = api_instance.list_invoices(limit=limit, cursor=cursor)
+        print("The response of BillingApi->list_invoices:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling BillingApi->list_invoices: %s\n" % e)
+```
+
+
+
+### Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **limit** | **int**|  | [optional] [default to 25]
+ **cursor** | **str**| The &#x60;next_cursor&#x60; from the previous page. | [optional] 
+
+### Return type
+
+[**InvoiceList**](InvoiceList.md)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json, application/problem+json
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+**400** | Error response (RFC 7807) |  -  |
+**429** | Rate limit exceeded (RFC 7807). Retry-After header indicates seconds to wait. |  * Retry-After - Seconds the client should wait before retrying. <br>  |
+**0** | Error response (RFC 7807) |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **update_billing_details**
+> BillingDetails update_billing_details(update_billing_details_request, idempotency_key=idempotency_key)
+
+Update billing details
+
+Updates the billing details printed on invoices. Requires the `billing:write` scope and an org admin's key. Omitted fields keep their value. `tax_id` replaces the stored Tax ID (and needs `tax_id_type` unless one is already stored); an empty `tax_id` removes it. Returns 503 `tax-id-unavailable` when this deployment cannot store a Tax ID.
+
+
+### Example
+
+* Bearer (gpuai_live_<24-base62>) Authentication (bearerAuth):
+
+```python
+import gpuai_sdk
+from gpuai_sdk.models.billing_details import BillingDetails
+from gpuai_sdk.models.update_billing_details_request import UpdateBillingDetailsRequest
+from gpuai_sdk.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to https://api.gpu.ai/v1
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gpuai_sdk.Configuration(
+    host = "https://api.gpu.ai/v1"
+)
+
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (gpuai_live_<24-base62>): bearerAuth
+configuration = gpuai_sdk.Configuration(
+    access_token = os.environ["BEARER_TOKEN"]
+)
+
+# Enter a context with an instance of the API client
+with gpuai_sdk.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = gpuai_sdk.BillingApi(api_client)
+    update_billing_details_request = gpuai_sdk.UpdateBillingDetailsRequest() # UpdateBillingDetailsRequest | 
+    idempotency_key = 'idempotency_key_example' # str |  (optional)
+
+    try:
+        # Update billing details
+        api_response = api_instance.update_billing_details(update_billing_details_request, idempotency_key=idempotency_key)
+        print("The response of BillingApi->update_billing_details:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling BillingApi->update_billing_details: %s\n" % e)
+```
+
+
+
+### Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **update_billing_details_request** | [**UpdateBillingDetailsRequest**](UpdateBillingDetailsRequest.md)|  | 
+ **idempotency_key** | **str**|  | [optional] 
+
+### Return type
+
+[**BillingDetails**](BillingDetails.md)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json, application/problem+json
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+**400** | Error response (RFC 7807) |  -  |
+**403** | Error response (RFC 7807) |  -  |
+**429** | Rate limit exceeded (RFC 7807). Retry-After header indicates seconds to wait. |  * Retry-After - Seconds the client should wait before retrying. <br>  |
+**503** | Error response (RFC 7807) |  -  |
 **0** | Error response (RFC 7807) |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

@@ -6,6 +6,7 @@ from gpuai_sdk.api.billing_api import BillingApi
 from gpuai_sdk.api.community_api import CommunityApi
 from gpuai_sdk.api.environments_api import EnvironmentsApi
 from gpuai_sdk.api.fine_tuning_api import FineTuningApi
+from gpuai_sdk.api.functions_api import FunctionsApi
 from gpuai_sdk.api.gpu_types_api import GpuTypesApi
 from gpuai_sdk.api.inference_api import InferenceApi
 from gpuai_sdk.api.instances_api import InstancesApi

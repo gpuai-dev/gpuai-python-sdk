@@ -18,8 +18,10 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional
+from gpuai_sdk.models.model_rate import ModelRate
+from gpuai_sdk.models.peak_window import PeakWindow
 from typing import Optional, Set
 from typing_extensions import Self
 from pydantic_core import to_jsonable_python
@@ -31,13 +33,29 @@ class ModelPricing(BaseModel):
     currency: Optional[StrictStr] = None
     input_per_1m_tokens_cents: Optional[StrictInt] = None
     output_per_1m_tokens_cents: Optional[StrictInt] = None
+    cached_input_per_1m_tokens_microcents: Optional[StrictInt] = Field(default=None, description="Exact per-1M-token rate in micro-cents (1e-6 cent) for the cache-HIT part of a chat prompt (usage.prompt_tokens_details.cached_tokens). Present only on models with a published cached-input rate; absent means no discount — every prompt token bills at input_per_1m_tokens_cents. Treat this field as the presence signal: cached rates are routinely sub-cent, so the rounded cents field below is often omitted.")
+    cached_input_per_1m_tokens_cents: Optional[StrictInt] = Field(default=None, description="cached_input_per_1m_tokens_microcents rounded to whole cents; omitted when the exact rate rounds below half a cent.")
     per_image_cents: Optional[StrictInt] = None
     per_image_microcents: Optional[StrictInt] = Field(default=None, description="Exact per-image rate in micro-cents (1e-6 cent). Prefer this for image models — per_image_cents rounds sub-cent prices to 0.")
     per_mpxl_microcents: Optional[StrictInt] = Field(default=None, description="Price per output megapixel in micro-cents (1e-6 cent) for image models metered per megapixel. Mutually exclusive with the per-image fields.")
     per_video_microcents: Optional[StrictInt] = Field(default=None, description="Representative per-clip price in micro-cents (1e-6 cent) for video models — a \"from\" price taken from the provider's published example rate.")
     per_video_second_cents: Optional[StrictInt] = None
     per_video_second_microcents: Optional[StrictInt] = Field(default=None, description="Exact per-second-of-output-video rate in micro-cents (1e-6 cent). Prefer this for video models.")
-    __properties: ClassVar[List[str]] = ["currency", "input_per_1m_tokens_cents", "output_per_1m_tokens_cents", "per_image_cents", "per_image_microcents", "per_mpxl_microcents", "per_video_microcents", "per_video_second_cents", "per_video_second_microcents"]
+    period: Optional[StrictStr] = Field(default=None, description="Present only on a model priced by time of day. Which side of the peak schedule the instant this response was rendered falls on; the flat rate fields above are the rates in effect at that instant. A request is billed at the rate in effect when it ARRIVES (UTC), so a caller planning a call for later should price it from `peak` / `off_peak` and `peak_windows_utc`.")
+    peak_windows_utc: Optional[List[PeakWindow]] = Field(default=None, description="The daily UTC ranges during which the `peak` rates apply, start inclusive and end exclusive (\"24:00\" is a valid end; a range whose end sorts before its start wraps midnight). Present only on a model priced by time of day.")
+    peak: Optional[ModelRate] = None
+    off_peak: Optional[ModelRate] = None
+    __properties: ClassVar[List[str]] = ["currency", "input_per_1m_tokens_cents", "output_per_1m_tokens_cents", "cached_input_per_1m_tokens_microcents", "cached_input_per_1m_tokens_cents", "per_image_cents", "per_image_microcents", "per_mpxl_microcents", "per_video_microcents", "per_video_second_cents", "per_video_second_microcents", "period", "peak_windows_utc", "peak", "off_peak"]
+
+    @field_validator('period')
+    def period_validate_enum(cls, value):
+        """Validates the enum"""
+        if value is None:
+            return value
+
+        if value not in set(['peak', 'off_peak']):
+            raise ValueError("must be one of enum values ('peak', 'off_peak')")
+        return value
 
     model_config = ConfigDict(
         validate_by_name=True,
@@ -78,6 +96,19 @@ class ModelPricing(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of each item in peak_windows_utc (list)
+        _items = []
+        if self.peak_windows_utc:
+            for _item_peak_windows_utc in self.peak_windows_utc:
+                if _item_peak_windows_utc:
+                    _items.append(_item_peak_windows_utc.to_dict())
+            _dict['peak_windows_utc'] = _items
+        # override the default output from pydantic by calling `to_dict()` of peak
+        if self.peak:
+            _dict['peak'] = self.peak.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of off_peak
+        if self.off_peak:
+            _dict['off_peak'] = self.off_peak.to_dict()
         return _dict
 
     @classmethod
@@ -93,12 +124,18 @@ class ModelPricing(BaseModel):
             "currency": obj.get("currency"),
             "input_per_1m_tokens_cents": obj.get("input_per_1m_tokens_cents"),
             "output_per_1m_tokens_cents": obj.get("output_per_1m_tokens_cents"),
+            "cached_input_per_1m_tokens_microcents": obj.get("cached_input_per_1m_tokens_microcents"),
+            "cached_input_per_1m_tokens_cents": obj.get("cached_input_per_1m_tokens_cents"),
             "per_image_cents": obj.get("per_image_cents"),
             "per_image_microcents": obj.get("per_image_microcents"),
             "per_mpxl_microcents": obj.get("per_mpxl_microcents"),
             "per_video_microcents": obj.get("per_video_microcents"),
             "per_video_second_cents": obj.get("per_video_second_cents"),
-            "per_video_second_microcents": obj.get("per_video_second_microcents")
+            "per_video_second_microcents": obj.get("per_video_second_microcents"),
+            "period": obj.get("period"),
+            "peak_windows_utc": [PeakWindow.from_dict(_item) for _item in obj["peak_windows_utc"]] if obj.get("peak_windows_utc") is not None else None,
+            "peak": ModelRate.from_dict(obj["peak"]) if obj.get("peak") is not None else None,
+            "off_peak": ModelRate.from_dict(obj["off_peak"]) if obj.get("off_peak") is not None else None
         })
         return _obj
 

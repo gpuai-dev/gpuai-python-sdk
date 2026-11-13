@@ -19,6 +19,7 @@ from gpuai_sdk.models.autolaunch_rule_create import AutolaunchRuleCreate
 from gpuai_sdk.models.autolaunch_rule_disarm import AutolaunchRuleDisarm
 from gpuai_sdk.models.autolaunch_rule_page import AutolaunchRulePage
 from gpuai_sdk.models.balance import Balance
+from gpuai_sdk.models.billing_details import BillingDetails
 from gpuai_sdk.models.chat_choice import ChatChoice
 from gpuai_sdk.models.chat_completion_request import ChatCompletionRequest
 from gpuai_sdk.models.chat_completion_response import ChatCompletionResponse
@@ -32,6 +33,9 @@ from gpuai_sdk.models.create_fine_tuning_job_request import CreateFineTuningJobR
 from gpuai_sdk.models.create_fine_tuning_job_request_gpuai import CreateFineTuningJobRequestGpuai
 from gpuai_sdk.models.create_fine_tuning_job_request_method import CreateFineTuningJobRequestMethod
 from gpuai_sdk.models.create_fine_tuning_job_request_method_lora import CreateFineTuningJobRequestMethodLora
+from gpuai_sdk.models.create_function_request import CreateFunctionRequest
+from gpuai_sdk.models.create_function_run_request import CreateFunctionRunRequest
+from gpuai_sdk.models.create_function_version_request import CreateFunctionVersionRequest
 from gpuai_sdk.models.create_instance_request import CreateInstanceRequest
 from gpuai_sdk.models.create_instance_request_ports_inner import CreateInstanceRequestPortsInner
 from gpuai_sdk.models.create_registry_credential_request import CreateRegistryCredentialRequest
@@ -52,6 +56,16 @@ from gpuai_sdk.models.fine_tuning_job_event_list import FineTuningJobEventList
 from gpuai_sdk.models.fine_tuning_job_list import FineTuningJobList
 from gpuai_sdk.models.fine_tuning_job_method import FineTuningJobMethod
 from gpuai_sdk.models.framework_version import FrameworkVersion
+from gpuai_sdk.models.function import Function
+from gpuai_sdk.models.function_list import FunctionList
+from gpuai_sdk.models.function_replica_counts import FunctionReplicaCounts
+from gpuai_sdk.models.function_run import FunctionRun
+from gpuai_sdk.models.function_run_error import FunctionRunError
+from gpuai_sdk.models.function_run_list import FunctionRunList
+from gpuai_sdk.models.function_run_log_chunk import FunctionRunLogChunk
+from gpuai_sdk.models.function_run_logs import FunctionRunLogs
+from gpuai_sdk.models.function_upload import FunctionUpload
+from gpuai_sdk.models.function_version import FunctionVersion
 from gpuai_sdk.models.gpu_type import GPUType
 from gpuai_sdk.models.gpu_type_page import GPUTypePage
 from gpuai_sdk.models.get_health200_response import GetHealth200Response
@@ -63,6 +77,8 @@ from gpuai_sdk.models.include_item import IncludeItem
 from gpuai_sdk.models.instance import Instance
 from gpuai_sdk.models.instance_connection import InstanceConnection
 from gpuai_sdk.models.instance_page import InstancePage
+from gpuai_sdk.models.invoice import Invoice
+from gpuai_sdk.models.invoice_list import InvoiceList
 from gpuai_sdk.models.list_community_machines200_response import ListCommunityMachines200Response
 from gpuai_sdk.models.list_deposits200_response import ListDeposits200Response
 from gpuai_sdk.models.list_registry_credentials200_response import ListRegistryCredentials200Response
@@ -72,11 +88,13 @@ from gpuai_sdk.models.model import Model
 from gpuai_sdk.models.model_list import ModelList
 from gpuai_sdk.models.model_parameters_inner import ModelParametersInner
 from gpuai_sdk.models.model_pricing import ModelPricing
+from gpuai_sdk.models.model_rate import ModelRate
 from gpuai_sdk.models.open_ai_error_envelope import OpenAIErrorEnvelope
 from gpuai_sdk.models.open_ai_error_envelope_error import OpenAIErrorEnvelopeError
 from gpuai_sdk.models.operation import Operation
 from gpuai_sdk.models.operation_error import OperationError
 from gpuai_sdk.models.operation_result import OperationResult
+from gpuai_sdk.models.peak_window import PeakWindow
 from gpuai_sdk.models.pricing import Pricing
 from gpuai_sdk.models.pricing_page import PricingPage
 from gpuai_sdk.models.problem import Problem
@@ -91,6 +109,7 @@ from gpuai_sdk.models.template import Template
 from gpuai_sdk.models.template_env_inner import TemplateEnvInner
 from gpuai_sdk.models.template_list import TemplateList
 from gpuai_sdk.models.template_ports_inner import TemplatePortsInner
+from gpuai_sdk.models.update_billing_details_request import UpdateBillingDetailsRequest
 from gpuai_sdk.models.update_instance_request import UpdateInstanceRequest
 from gpuai_sdk.models.update_spending_limit_request import UpdateSpendingLimitRequest
 from gpuai_sdk.models.usage import Usage

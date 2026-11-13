@@ -44,7 +44,7 @@ class AutolaunchRule(BaseModel):
     state: StrictStr = Field(description="armed = waiting for the condition. launching = an attempt is in flight. fired = a successful launch consumed the rule's one shot. expired = the per-edge attempt budget ran out. A lost capacity race costs nothing and does NOT consume the shot. ")
     attempts_this_edge: StrictInt = Field(description="Launch attempts made since the current condition edge began.")
     last_failure_reason: Optional[StrictStr] = Field(description="Why the last attempt did not buy anything: over_ceiling, capacity_race, stale_reference, key_revoked, authority_revoked or validation_failed, optionally with a colon-separated detail. Match the leading token. It never carries API key material. ")
-    launched_instance_id: Optional[UUID] = Field(description="The instance this rule launched, once it has fired.")
+    launched_instance_id: Optional[StrictStr] = Field(description="The instance this rule launched, once it has fired — an instance id of the form \"gpu-\" + 8 lowercase hex, the same string /v1/instances returns. Not a uuid, and deliberately carries no format or pattern: no other instance-id field in this document constrains its shape, and a generated client-side assertion on an id grammar turns a server-side widening into a client-side outage. ")
     created_by_surface: StrictStr = Field(description="Which entrance consented. A dashboard rule has no API key behind it, which is why its fire-time revocation failure is `authority_revoked` (the approving admin was demoted) rather than `key_revoked`. ")
     enabled: StrictBool = Field(description="False once disarmed or cancelled. A disarmed rule cannot be re-armed.")
     created_at: datetime
