@@ -60,7 +60,7 @@ if __name__ == "__main__":
     # 3. A background call: watch it, read its output, cancel it.
     print("long_job(300) in the background:")
     handle = long_job.spawn(300)
-    while handle.status() == "queued":
+    while handle.status() in ("queued", "setting_up"):  # wait for the function body to start
         time.sleep(2)
     time.sleep(5)
     print("  status:", handle.status())
