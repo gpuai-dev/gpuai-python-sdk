@@ -25,6 +25,7 @@ Name | Type | Description | Notes
 **terminated_at** | **datetime** |  | [optional] 
 **last_reachable_at** | **datetime** | Last time the platform verified the SSH path to this instance end-to-end through the tunnel. Absent means the instance has not been probed yet (freshly launched, or no tunnel) — it does NOT mean unreachable. An instance whose status is still \&quot;running\&quot; while this timestamp stops advancing is one whose SSH has died even though the machine is up. | [optional] 
 **unreachable_since** | **datetime** | Start of the confirmed tunnel outage the instance is currently in. Present exactly when status is \&quot;unreachable\&quot;, absent otherwise. It is the timestamp the auto-credit for the dead window is computed from, so a ledger credit can be reconciled against it. | [optional] 
+**boot_phase** | **str** | How far a launch that is not ready yet has got. machine_requested means the machine was requested and no image download has been reported yet; pulling_image means the image is downloading or unpacking; setting_up means the container is up and the platform is finishing SSH and the GPU check. Present only while status is allocating or starting and the platform is following the boot; absent otherwise. Lets a client with a fixed timeout tell a launch that is still moving from one that is stuck. | [optional] 
 
 ## Example
 

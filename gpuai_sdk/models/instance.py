@@ -52,7 +52,8 @@ class Instance(BaseModel):
     terminated_at: Optional[datetime] = None
     last_reachable_at: Optional[datetime] = Field(default=None, description="Last time the platform verified the SSH path to this instance end-to-end through the tunnel. Absent means the instance has not been probed yet (freshly launched, or no tunnel) — it does NOT mean unreachable. An instance whose status is still \"running\" while this timestamp stops advancing is one whose SSH has died even though the machine is up.")
     unreachable_since: Optional[datetime] = Field(default=None, description="Start of the confirmed tunnel outage the instance is currently in. Present exactly when status is \"unreachable\", absent otherwise. It is the timestamp the auto-credit for the dead window is computed from, so a ledger credit can be reconciled against it.")
-    __properties: ClassVar[List[str]] = ["id", "name", "status", "gpu_type", "gpu_count", "region", "tier", "price_per_hour", "gpu_memory", "connection", "disk_gb", "image", "auto_terminate_hours", "auto_terminate_at", "status_reason", "created_at", "ready_at", "terminated_at", "last_reachable_at", "unreachable_since"]
+    boot_phase: Optional[StrictStr] = Field(default=None, description="How far a launch that is not ready yet has got. machine_requested means the machine was requested and no image download has been reported yet; pulling_image means the image is downloading or unpacking; setting_up means the container is up and the platform is finishing SSH and the GPU check. Present only while status is allocating or starting and the platform is following the boot; absent otherwise. Lets a client with a fixed timeout tell a launch that is still moving from one that is stuck.")
+    __properties: ClassVar[List[str]] = ["id", "name", "status", "gpu_type", "gpu_count", "region", "tier", "price_per_hour", "gpu_memory", "connection", "disk_gb", "image", "auto_terminate_hours", "auto_terminate_at", "status_reason", "created_at", "ready_at", "terminated_at", "last_reachable_at", "unreachable_since", "boot_phase"]
 
     @field_validator('status')
     def status_validate_enum(cls, value):
@@ -66,6 +67,16 @@ class Instance(BaseModel):
         """Validates the enum"""
         if value not in set(['spot', 'on_demand']):
             raise ValueError("must be one of enum values ('spot', 'on_demand')")
+        return value
+
+    @field_validator('boot_phase')
+    def boot_phase_validate_enum(cls, value):
+        """Validates the enum"""
+        if value is None:
+            return value
+
+        if value not in set(['machine_requested', 'pulling_image', 'setting_up']):
+            raise ValueError("must be one of enum values ('machine_requested', 'pulling_image', 'setting_up')")
         return value
 
     model_config = ConfigDict(
@@ -144,7 +155,8 @@ class Instance(BaseModel):
             "ready_at": obj.get("ready_at"),
             "terminated_at": obj.get("terminated_at"),
             "last_reachable_at": obj.get("last_reachable_at"),
-            "unreachable_since": obj.get("unreachable_since")
+            "unreachable_since": obj.get("unreachable_since"),
+            "boot_phase": obj.get("boot_phase")
         })
         return _obj
 
