@@ -18,8 +18,9 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, StrictStr
-from typing import Any, ClassVar, Dict, List, Optional
+from pydantic import BaseModel, ConfigDict, Field, StrictFloat, StrictInt, StrictStr
+from typing import Any, ClassVar, Dict, List, Optional, Union
+from gpuai_sdk.models.offering_alternative import OfferingAlternative
 from typing import Optional, Set
 from typing_extensions import Self
 from pydantic_core import to_jsonable_python
@@ -28,9 +29,12 @@ class OperationError(BaseModel):
     """
     OperationError
     """ # noqa: E501
-    code: Optional[StrictStr] = None
+    code: Optional[StrictStr] = Field(default=None, description="Stable machine-readable failure code (see Problem.code), for example operation_failed (retryable after a backoff), price_changed or offering_unavailable (not retryable as sent).")
     detail: Optional[StrictStr] = None
-    __properties: ClassVar[List[str]] = ["code", "detail"]
+    alternatives: Optional[List[OfferingAlternative]] = Field(default=None, description="Present only when code is offering_unavailable: up to three live catalog rows of the same GPU type, count and tier, cheapest first. Pass one's offering_id as the new pin.")
+    current_price_per_hour: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="Present only when code is price_changed: the live hourly price the launch found.")
+    max_price_per_hour: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="Present only when code is price_changed: the hourly price the launch was approved at (max_price_per_hour, or the viewed price). Relaunch with max_price_per_hour of at least current_price_per_hour to accept the new price.")
+    __properties: ClassVar[List[str]] = ["code", "detail", "alternatives", "current_price_per_hour", "max_price_per_hour"]
 
     model_config = ConfigDict(
         validate_by_name=True,
@@ -71,6 +75,13 @@ class OperationError(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of each item in alternatives (list)
+        _items = []
+        if self.alternatives:
+            for _item_alternatives in self.alternatives:
+                if _item_alternatives:
+                    _items.append(_item_alternatives.to_dict())
+            _dict['alternatives'] = _items
         return _dict
 
     @classmethod
@@ -84,7 +95,10 @@ class OperationError(BaseModel):
 
         _obj = cls.model_validate({
             "code": obj.get("code"),
-            "detail": obj.get("detail")
+            "detail": obj.get("detail"),
+            "alternatives": [OfferingAlternative.from_dict(_item) for _item in obj["alternatives"]] if obj.get("alternatives") is not None else None,
+            "current_price_per_hour": obj.get("current_price_per_hour"),
+            "max_price_per_hour": obj.get("max_price_per_hour")
         })
         return _obj
 

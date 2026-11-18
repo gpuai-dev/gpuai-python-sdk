@@ -104,6 +104,7 @@ from gpuai_sdk.models.model_list import ModelList
 from gpuai_sdk.models.model_parameters_inner import ModelParametersInner
 from gpuai_sdk.models.model_pricing import ModelPricing
 from gpuai_sdk.models.model_rate import ModelRate
+from gpuai_sdk.models.offering_alternative import OfferingAlternative
 from gpuai_sdk.models.open_ai_error_envelope import OpenAIErrorEnvelope
 from gpuai_sdk.models.open_ai_error_envelope_error import OpenAIErrorEnvelopeError
 from gpuai_sdk.models.operation import Operation

@@ -101,6 +101,7 @@ docs/ModelList.md
 docs/ModelParametersInner.md
 docs/ModelPricing.md
 docs/ModelRate.md
+docs/OfferingAlternative.md
 docs/OpenAIErrorEnvelope.md
 docs/OpenAIErrorEnvelopeError.md
 docs/Operation.md
@@ -261,6 +262,7 @@ gpuai_sdk/models/model_list.py
 gpuai_sdk/models/model_parameters_inner.py
 gpuai_sdk/models/model_pricing.py
 gpuai_sdk/models/model_rate.py
+gpuai_sdk/models/offering_alternative.py
 gpuai_sdk/models/open_ai_error_envelope.py
 gpuai_sdk/models/open_ai_error_envelope_error.py
 gpuai_sdk/models/operation.py

@@ -15,7 +15,7 @@
 """  # noqa: E501
 
 
-__version__ = "0.5.0"
+__version__ = "0.5.1"
 
 # Define package exports
 __all__ = [
@@ -137,6 +137,7 @@ __all__ = [
     "ModelParametersInner",
     "ModelPricing",
     "ModelRate",
+    "OfferingAlternative",
     "OpenAIErrorEnvelope",
     "OpenAIErrorEnvelopeError",
     "Operation",
@@ -298,6 +299,7 @@ from gpuai_sdk.models.model_list import ModelList as ModelList
 from gpuai_sdk.models.model_parameters_inner import ModelParametersInner as ModelParametersInner
 from gpuai_sdk.models.model_pricing import ModelPricing as ModelPricing
 from gpuai_sdk.models.model_rate import ModelRate as ModelRate
+from gpuai_sdk.models.offering_alternative import OfferingAlternative as OfferingAlternative
 from gpuai_sdk.models.open_ai_error_envelope import OpenAIErrorEnvelope as OpenAIErrorEnvelope
 from gpuai_sdk.models.open_ai_error_envelope_error import OpenAIErrorEnvelopeError as OpenAIErrorEnvelopeError
 from gpuai_sdk.models.operation import Operation as Operation

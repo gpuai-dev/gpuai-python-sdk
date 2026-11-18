@@ -5,8 +5,11 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**code** | **str** |  | [optional] 
+**code** | **str** | Stable machine-readable failure code (see Problem.code), for example operation_failed (retryable after a backoff), price_changed or offering_unavailable (not retryable as sent). | [optional] 
 **detail** | **str** |  | [optional] 
+**alternatives** | [**List[OfferingAlternative]**](OfferingAlternative.md) | Present only when code is offering_unavailable: up to three live catalog rows of the same GPU type, count and tier, cheapest first. Pass one&#39;s offering_id as the new pin. | [optional] 
+**current_price_per_hour** | **float** | Present only when code is price_changed: the live hourly price the launch found. | [optional] 
+**max_price_per_hour** | **float** | Present only when code is price_changed: the hourly price the launch was approved at (max_price_per_hour, or the viewed price). Relaunch with max_price_per_hour of at least current_price_per_hour to accept the new price. | [optional] 
 
 ## Example
 
