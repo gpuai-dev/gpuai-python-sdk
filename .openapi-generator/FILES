@@ -10,8 +10,17 @@ docs/BillingApi.md
 docs/BillingDetails.md
 docs/ChatChoice.md
 docs/ChatCompletionRequest.md
+docs/ChatCompletionRequestToolChoice.md
 docs/ChatCompletionResponse.md
+docs/ChatJSONSchemaFormat.md
 docs/ChatMessage.md
+docs/ChatNamedToolChoice.md
+docs/ChatNamedToolChoiceFunction.md
+docs/ChatResponseFormat.md
+docs/ChatTool.md
+docs/ChatToolCall.md
+docs/ChatToolCallFunction.md
+docs/ChatToolFunction.md
 docs/CommunityApi.md
 docs/CommunityMachine.md
 docs/CommunityMachineDelistResult.md
@@ -31,6 +40,7 @@ docs/CreateRegistryCredentialRequest.md
 docs/CreateSshKeyRequest.md
 docs/CreateWebhookEndpointRequest.md
 docs/CryptoDeposit.md
+docs/DedicatedIPRequest.md
 docs/Embedding.md
 docs/EmbeddingsRequest.md
 docs/EmbeddingsRequestInput.md
@@ -73,6 +83,7 @@ docs/IncludeItem.md
 docs/InferenceApi.md
 docs/Instance.md
 docs/InstanceConnection.md
+docs/InstanceDedicatedIP.md
 docs/InstanceGpuMemory.md
 docs/InstancePage.md
 docs/InstancesApi.md
@@ -168,8 +179,17 @@ gpuai_sdk/models/balance.py
 gpuai_sdk/models/billing_details.py
 gpuai_sdk/models/chat_choice.py
 gpuai_sdk/models/chat_completion_request.py
+gpuai_sdk/models/chat_completion_request_tool_choice.py
 gpuai_sdk/models/chat_completion_response.py
+gpuai_sdk/models/chat_json_schema_format.py
 gpuai_sdk/models/chat_message.py
+gpuai_sdk/models/chat_named_tool_choice.py
+gpuai_sdk/models/chat_named_tool_choice_function.py
+gpuai_sdk/models/chat_response_format.py
+gpuai_sdk/models/chat_tool.py
+gpuai_sdk/models/chat_tool_call.py
+gpuai_sdk/models/chat_tool_call_function.py
+gpuai_sdk/models/chat_tool_function.py
 gpuai_sdk/models/community_machine.py
 gpuai_sdk/models/community_machine_delist_result.py
 gpuai_sdk/models/community_machine_registration.py
@@ -188,6 +208,7 @@ gpuai_sdk/models/create_registry_credential_request.py
 gpuai_sdk/models/create_ssh_key_request.py
 gpuai_sdk/models/create_webhook_endpoint_request.py
 gpuai_sdk/models/crypto_deposit.py
+gpuai_sdk/models/dedicated_ip_request.py
 gpuai_sdk/models/embedding.py
 gpuai_sdk/models/embeddings_request.py
 gpuai_sdk/models/embeddings_request_input.py
@@ -225,6 +246,7 @@ gpuai_sdk/models/images_response_usage.py
 gpuai_sdk/models/include_item.py
 gpuai_sdk/models/instance.py
 gpuai_sdk/models/instance_connection.py
+gpuai_sdk/models/instance_dedicated_ip.py
 gpuai_sdk/models/instance_gpu_memory.py
 gpuai_sdk/models/instance_page.py
 gpuai_sdk/models/invoice.py

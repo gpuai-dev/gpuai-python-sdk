@@ -6,7 +6,10 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **role** | **str** |  | 
-**content** | **str** |  | 
+**content** | **str** | Message text. null on an assistant message that only calls tools. Requests may also send an array of content parts, passed through unchanged. | [optional] 
+**name** | **str** |  | [optional] 
+**tool_calls** | [**List[ChatToolCall]**](ChatToolCall.md) | Tool calls made by the assistant (assistant messages only). | [optional] 
+**tool_call_id** | **str** | The tool call this message answers (required on role \&quot;tool\&quot;). | [optional] 
 
 ## Example
 

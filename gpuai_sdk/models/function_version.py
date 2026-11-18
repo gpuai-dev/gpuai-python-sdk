@@ -46,8 +46,9 @@ class FunctionVersion(BaseModel):
     timeout: StrictInt
     idle_timeout: StrictInt
     max_concurrency: StrictInt
+    secrets: List[StrictStr] = Field(description="Names of the organization secrets each run receives. Empty when none.")
     created_at: datetime
-    __properties: ClassVar[List[str]] = ["id", "function_id", "status", "content_hash", "upload", "python_version", "cloudpickle_version", "pip", "gpu", "gpu_count", "min_vram_gb", "regions", "max_price_per_hour", "timeout", "idle_timeout", "max_concurrency", "created_at"]
+    __properties: ClassVar[List[str]] = ["id", "function_id", "status", "content_hash", "upload", "python_version", "cloudpickle_version", "pip", "gpu", "gpu_count", "min_vram_gb", "regions", "max_price_per_hour", "timeout", "idle_timeout", "max_concurrency", "secrets", "created_at"]
 
     @field_validator('status')
     def status_validate_enum(cls, value):
@@ -141,6 +142,7 @@ class FunctionVersion(BaseModel):
             "timeout": obj.get("timeout"),
             "idle_timeout": obj.get("idle_timeout"),
             "max_concurrency": obj.get("max_concurrency"),
+            "secrets": obj.get("secrets"),
             "created_at": obj.get("created_at")
         })
         return _obj

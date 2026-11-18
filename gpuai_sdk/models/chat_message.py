@@ -18,8 +18,9 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, StrictStr, field_validator
-from typing import Any, ClassVar, Dict, List
+from pydantic import BaseModel, ConfigDict, Field, StrictStr, field_validator
+from typing import Any, ClassVar, Dict, List, Optional
+from gpuai_sdk.models.chat_tool_call import ChatToolCall
 from typing import Optional, Set
 from typing_extensions import Self
 from pydantic_core import to_jsonable_python
@@ -29,14 +30,17 @@ class ChatMessage(BaseModel):
     ChatMessage
     """ # noqa: E501
     role: StrictStr
-    content: StrictStr
-    __properties: ClassVar[List[str]] = ["role", "content"]
+    content: Optional[StrictStr] = Field(default=None, description="Message text. null on an assistant message that only calls tools. Requests may also send an array of content parts, passed through unchanged.")
+    name: Optional[StrictStr] = None
+    tool_calls: Optional[List[ChatToolCall]] = Field(default=None, description="Tool calls made by the assistant (assistant messages only).")
+    tool_call_id: Optional[StrictStr] = Field(default=None, description="The tool call this message answers (required on role \"tool\").")
+    __properties: ClassVar[List[str]] = ["role", "content", "name", "tool_calls", "tool_call_id"]
 
     @field_validator('role')
     def role_validate_enum(cls, value):
         """Validates the enum"""
-        if value not in set(['system', 'user', 'assistant']):
-            raise ValueError("must be one of enum values ('system', 'user', 'assistant')")
+        if value not in set(['system', 'user', 'assistant', 'tool']):
+            raise ValueError("must be one of enum values ('system', 'user', 'assistant', 'tool')")
         return value
 
     model_config = ConfigDict(
@@ -78,6 +82,18 @@ class ChatMessage(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of each item in tool_calls (list)
+        _items = []
+        if self.tool_calls:
+            for _item_tool_calls in self.tool_calls:
+                if _item_tool_calls:
+                    _items.append(_item_tool_calls.to_dict())
+            _dict['tool_calls'] = _items
+        # set to None if content (nullable) is None
+        # and model_fields_set contains the field
+        if self.content is None and "content" in self.model_fields_set:
+            _dict['content'] = None
+
         return _dict
 
     @classmethod
@@ -91,7 +107,10 @@ class ChatMessage(BaseModel):
 
         _obj = cls.model_validate({
             "role": obj.get("role"),
-            "content": obj.get("content")
+            "content": obj.get("content"),
+            "name": obj.get("name"),
+            "tool_calls": [ChatToolCall.from_dict(_item) for _item in obj["tool_calls"]] if obj.get("tool_calls") is not None else None,
+            "tool_call_id": obj.get("tool_call_id")
         })
         return _obj
 

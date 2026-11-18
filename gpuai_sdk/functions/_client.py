@@ -9,25 +9,48 @@ import urllib.error
 import urllib.request
 import uuid
 from typing import Any, Dict, Optional
+from urllib.parse import urlsplit
 
 from .errors import APIError, AuthenticationError, ConfigurationError, InsufficientBalanceError
 
 DEFAULT_API_BASE = "https://api.gpu.ai/v1"
 _USER_AGENT = "gpuai-sdk-python-functions"
 
-_config: Dict[str, Optional[str]] = {"api_key": None, "api_base": None}
+_config: Dict[str, Any] = {"api_key": None, "api_base": None, "progress": None}
 
 
-def configure(api_key: Optional[str] = None, api_base: Optional[str] = None) -> None:
-    """Set the API key and base URL in code.
+def configure(api_key: Optional[str] = None, api_base: Optional[str] = None, progress: Optional[bool] = None) -> None:
+    """Set the API key, base URL and progress messages in code.
 
-    Both default to the environment: ``GPUAI_API_KEY`` and ``GPUAI_API_BASE``
-    (``https://api.gpu.ai/v1`` when unset). Values passed here win.
+    They default to the environment: ``GPUAI_API_KEY``, ``GPUAI_API_BASE``
+    (``https://api.gpu.ai/v1`` when unset) and ``GPUAI_PROGRESS`` (set it to
+    ``0`` to silence the progress lines ``.remote()`` prints to stderr while a
+    call waits for its machine). Values passed here win.
     """
     if api_key is not None:
         _config["api_key"] = api_key
     if api_base is not None:
         _config["api_base"] = api_base
+    if progress is not None:
+        _config["progress"] = bool(progress)
+
+
+def progress_enabled() -> bool:
+    """Whether ``.remote()`` prints progress lines to stderr while it waits."""
+    if _config.get("progress") is not None:
+        return bool(_config["progress"])
+    return os.environ.get("GPUAI_PROGRESS", "1").strip().lower() not in ("0", "false", "no", "off")
+
+
+def console_url(path: str) -> Optional[str]:
+    """The console page for ``path``, derived from the API base
+    (``https://api.gpu.ai/v1`` -> ``https://gpu.ai``). None when the API base
+    is not an ``api.`` host, for example a local test server."""
+    parts = urlsplit(_api_base())
+    host = parts.hostname or ""
+    if not host.startswith("api."):
+        return None
+    return f"{parts.scheme}://{host[len('api.'):]}{path}"
 
 
 def _api_key() -> str:
@@ -57,6 +80,9 @@ def _raise_for(status: int, body: bytes) -> None:
     if status in (401, 403):
         raise AuthenticationError(status, code, detail, request_id)
     if status == 402:
+        billing = console_url("/cloud/billing?tab=credits")
+        if billing:
+            detail = f"{detail.rstrip()} Top up at {billing}"
         raise InsufficientBalanceError(status, code, detail, request_id)
     raise APIError(status, code, detail, request_id)
 

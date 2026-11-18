@@ -26,10 +26,80 @@ from .errors import (
 )
 
 _NAME_RE = re.compile(r"^[A-Za-z][A-Za-z0-9_-]{0,62}$")
+_SECRET_NAME_RE = re.compile(r"^[A-Za-z_][A-Za-z0-9_]{0,127}$")
 _FINAL = ("succeeded", "failed", "timed_out", "cancelled")
 # How long one "wait for this run" request is held by the API.
 _WAIT_SECONDS = 25
 MAX_INPUT_BYTES = 4 * 1024 * 1024
+
+# Progress lines (``.remote()`` only). The first wait is short so a warm call
+# that finishes at once prints nothing; after that, poll often enough to see
+# each status change, and repeat the current one every minute.
+_PROGRESS_FIRST_WAIT = 3
+_PROGRESS_WAIT = 10
+_PROGRESS_REPEAT_SECONDS = 60
+_PROGRESS_TEXT = {
+    "queued": "waiting for a GPU machine. A first call usually takes 2 to 4 minutes (up to about 10 on a slow host)",
+    "setting_up": "the machine is up; installing Python and the pip requirements",
+    "running": "running",
+}
+_PROGRESS_STILL = {"queued": "waiting for a machine", "setting_up": "installing", "running": "running"}
+
+
+def _elapsed(seconds: float) -> str:
+    seconds = int(seconds)
+    return f"{seconds // 60}m {seconds % 60:02d}s" if seconds >= 60 else f"{seconds}s"
+
+
+class _Progress:
+    """Prints one stderr line per status change of a call, so a cold start
+    that takes minutes does not look like a hang."""
+
+    def __init__(self, handle: "RunHandle"):
+        self.handle = handle
+        self.started = time.monotonic()
+        self.last_status: Optional[str] = None
+        self.last_print = 0.0
+        self.polls = 0
+        self.printed = False
+
+    def next_wait(self, wait: int) -> int:
+        self.polls += 1
+        return min(wait, _PROGRESS_FIRST_WAIT if self.polls == 1 else _PROGRESS_WAIT)
+
+    def _print(self, text: str) -> None:
+        # Progress is a courtesy: it must never turn a call that works into an
+        # exception, and never land on stdout. With no stderr (pythonw, some
+        # daemons) print(file=None) would write to stdout, so skip it; a closed
+        # or broken stderr (a pipe whose reader exited) is ignored the same way.
+        stream = sys.stderr
+        if stream is not None:
+            try:
+                print(f"gpuai: {self.handle.name or 'function'}: {text}", file=stream, flush=True)
+            except (OSError, ValueError):
+                pass
+        self.printed = True
+        self.last_print = time.monotonic()
+
+    def update(self, info: dict) -> None:
+        status = info.get("status") or "queued"
+        elapsed = time.monotonic() - self.started
+        if status in _FINAL:
+            if self.printed:
+                self._print(f"{status} after {_elapsed(elapsed)}")
+            return
+        if status != self.last_status:
+            text = _PROGRESS_TEXT.get(status, status)
+            if self.last_status is None:
+                url = _client.console_url(
+                    f"/cloud/functions/{self.handle.function_id}/runs/{self.handle.id}"
+                )
+                if url:
+                    text += f". Follow it at {url}"
+            self._print(text)
+            self.last_status = status
+        elif time.monotonic() - self.last_print >= _PROGRESS_REPEAT_SECONDS:
+            self._print(f"still {_PROGRESS_STILL.get(status, status)} ({_elapsed(elapsed)} so far)")
 
 
 def _python_version() -> str:
@@ -52,9 +122,10 @@ class RunHandle:
     to: ``result()`` waits, the rest return at once.
     """
 
-    def __init__(self, function_id: str, run_id: str, info: Optional[dict] = None):
+    def __init__(self, function_id: str, run_id: str, info: Optional[dict] = None, name: str = ""):
         self.function_id = function_id
         self.id = run_id
+        self.name = name
         self._info: dict = info or {"id": run_id, "status": "queued"}
 
     def __repr__(self) -> str:
@@ -80,17 +151,23 @@ class RunHandle:
     def done(self) -> bool:
         return self.status() in _FINAL
 
-    def result(self, timeout: Optional[float] = None) -> Any:
+    def result(self, timeout: Optional[float] = None, progress: bool = False) -> Any:
         """Wait for the call and return what the function returned.
 
         Raises RemoteError (or its subclasses RemoteTimeout and
         RemoteCancelled) if the call did not succeed, and ResultTimeout if
         ``timeout`` seconds pass first. A ResultTimeout does not stop the
         call; use ``cancel()`` for that.
+
+        With ``progress=True`` a line goes to stderr each time the call
+        changes status (waiting for a machine, installing, running) and once
+        a minute while it stays the same. ``.remote()`` turns this on unless
+        ``GPUAI_PROGRESS=0``.
         """
+        reporter = _Progress(self) if progress else None
         deadline = None if timeout is None else time.monotonic() + timeout
         while True:
-            wait = _WAIT_SECONDS
+            wait = reporter.next_wait(_WAIT_SECONDS) if reporter else _WAIT_SECONDS
             if deadline is not None:
                 remaining = deadline - time.monotonic()
                 if remaining <= 0:
@@ -100,6 +177,8 @@ class RunHandle:
                 "GET", f"{self._path}?wait={wait}&include_result=true", timeout=wait + 30
             )
             status = self._info.get("status")
+            if reporter:
+                reporter.update(self._info)
             if status in _FINAL:
                 break
         if status == "succeeded":
@@ -175,6 +254,7 @@ class Function:
         regions: Optional[Sequence[str]],
         max_price_per_hour: Optional[float],
         include: Sequence[Any],
+        secrets: Sequence[str] = (),
     ):
         if not callable(fn):
             raise TypeError("@function must decorate a function")
@@ -201,6 +281,16 @@ class Function:
             raise ValueError("max_concurrency must be at least 1")
         self.regions: List[str] = list(regions or [])
         self.max_price_per_hour = max_price_per_hour
+        if isinstance(secrets, str):
+            raise TypeError('secrets must be a list of secret names, for example secrets=["HF_TOKEN"]')
+        names = sorted({str(n).strip() for n in secrets})
+        for n in names:
+            if not _SECRET_NAME_RE.match(n) or n.upper().startswith("GPUAI_"):
+                raise ValueError(
+                    f"{n!r} is not a valid secret name. Secret names are environment variable names: a letter or "
+                    "underscore, then letters, digits and underscores, not starting with GPUAI_."
+                )
+        self.secrets: List[str] = names
         self._include = list(include)
         self._lock = threading.Lock()
         self._deployed: Optional[Tuple[str, str]] = None  # (function_id, version_id)
@@ -274,6 +364,10 @@ class Function:
             spec["gpu"] = self.gpu
         if self.max_price_per_hour is not None:
             spec["max_price_per_hour"] = float(self.max_price_per_hour)
+        if self.secrets:
+            # Only when set, so a function without secrets keeps the content
+            # hash it had before this option existed.
+            spec["secrets"] = self.secrets
         # The version is the code plus everything declared about it: change
         # either and the next call registers a new version.
         spec["content_hash"] = hashlib.sha256(json.dumps(spec, sort_keys=True).encode("utf-8")).hexdigest()
@@ -333,16 +427,19 @@ class Function:
             function_id, version_id = self._deployed  # type: ignore[misc]
             body["version_id"] = version_id
             run = _client.request("POST", f"/functions/{function_id}/runs", body, idempotent=True)
-        return RunHandle(function_id, run["id"], run)
+        return RunHandle(function_id, run["id"], run, name=self.name)
 
     def remote(self, *args: Any, **kwargs: Any) -> Any:
         """Run the function on GPU.ai and return its result.
 
         Blocks until the call finishes. If the function raises, this raises
         RemoteError carrying the remote exception's type, message and
-        traceback.
+        traceback. While it waits it prints a progress line to stderr when
+        the call changes status, so a cold start does not look like a hang.
+        Set ``GPUAI_PROGRESS=0`` (or ``configure(progress=False)``) to
+        silence it.
         """
-        return self.spawn(*args, **kwargs).result()
+        return self.spawn(*args, **kwargs).result(progress=_client.progress_enabled())
 
     def map(self, inputs: Sequence[Any]) -> List[Any]:
         """Call the function once per item and return the results in order.
@@ -377,6 +474,7 @@ def function(
     regions: Optional[Sequence[str]] = None,
     max_price_per_hour: Optional[float] = None,
     include: Sequence[Any] = (),
+    secrets: Sequence[str] = (),
 ) -> Any:
     """Mark a function to run on a GPU.ai GPU.
 
@@ -410,6 +508,10 @@ def function(
         include: extra local modules to ship with the function. The module
             the function is defined in is always shipped; helpers imported
             from your other local modules must be listed here.
+        secrets: names of organization secrets (``gpu secrets set NAME``) to
+            put in the function's environment, as ``os.environ["NAME"]``. The
+            values are fetched for each call and never pass through this
+            library. Every name must exist when the function is deployed.
     """
 
     def wrap(f: Callable[..., Any]) -> Function:
@@ -426,6 +528,7 @@ def function(
             regions=regions,
             max_price_per_hour=max_price_per_hour,
             include=include,
+            secrets=secrets,
         )
 
     if fn is not None:  # used as a bare @function

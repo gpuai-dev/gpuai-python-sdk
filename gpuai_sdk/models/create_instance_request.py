@@ -22,6 +22,7 @@ from pydantic import BaseModel, ConfigDict, Field, StrictFloat, StrictInt, Stric
 from typing import Any, ClassVar, Dict, List, Optional, Union
 from typing_extensions import Annotated
 from gpuai_sdk.models.create_instance_request_ports_inner import CreateInstanceRequestPortsInner
+from gpuai_sdk.models.dedicated_ip_request import DedicatedIPRequest
 from typing import Optional, Set
 from typing_extensions import Self
 from pydantic_core import to_jsonable_python
@@ -49,7 +50,9 @@ class CreateInstanceRequest(BaseModel):
     entrypoint: Optional[List[StrictStr]] = Field(default=None, description="Override the image's ENTRYPOINT (docker semantics — also drops the image CMD unless `cmd` is given). Omit to use the image's own; an explicit empty array clears it while keeping the image CMD (docker `--entrypoint \"\"` semantics). Empty strings inside a non-empty argv are rejected (422). At most 32 arguments / 4KB. Requires `image`.")
     cmd: Optional[List[StrictStr]] = Field(default=None, description="Override the image's CMD. Omit to use the image's own (or none, when `entrypoint` is overridden with a non-empty argv; an empty-array entrypoint clear keeps the image CMD). An explicit empty array clears the CMD. Empty strings inside a non-empty argv are rejected (422). Requires `image`.")
     ports: Optional[List[CreateInstanceRequestPortsInner]] = Field(default=None, description="Container ports to expose on a custom-image launch (at most 10; port 22 is reserved). At most one entry may be `primary` — it must be http and is served at the instance's app URL (`https://<id>.apps.gpu.ai`) behind the per-instance basic-auth login. Requires `image`.")
-    __properties: ClassVar[List[str]] = ["gpu_type", "gpu_count", "region", "tier", "ssh_key_ids", "name", "max_price_per_hour", "viewed_price_per_hour", "template_id", "environment", "offering_id", "disk_gb", "auto_terminate_hours", "env", "image", "registry_credential_id", "entrypoint", "cmd", "ports"]
+    dedicated_ip: Optional[DedicatedIPRequest] = Field(default=None, description="Attach a dedicated public IPv4 address owned by GPU.ai. Its inbound TCP ports (80 and 443 unless `ports` says otherwise) forward, raw and without TLS termination, to the same ports on the instance's loopback, so your own certificates work. Billed hourly while attached plus per GB of transfer in both directions (see GET /dedicated-ip). on_demand tier only (422 `validation_failed` otherwise). Returns 409 `dedicated_ip_limit` when the organization already holds its limit, 503 `dedicated_ip_unavailable` when no address is free, 422 `validation_failed` for ports outside the allowed set, and 400 `validation_failed` on deployments where the add-on is not enabled. A launch whose address cannot be attached fails its operation with `dedicated_ip_unavailable`. The address is released when the instance terminates or fails.")
+    secrets: Optional[Annotated[List[StrictStr], Field(max_length=50)]] = Field(default=None, description="Names of organization secrets (POST /secrets) to deliver to the machine at boot as environment variables of the same names. Values are never in a response or a log. Returns 422 `validation_failed` when a name does not exist or secrets are not enabled on this deployment.")
+    __properties: ClassVar[List[str]] = ["gpu_type", "gpu_count", "region", "tier", "ssh_key_ids", "name", "max_price_per_hour", "viewed_price_per_hour", "template_id", "environment", "offering_id", "disk_gb", "auto_terminate_hours", "env", "image", "registry_credential_id", "entrypoint", "cmd", "ports", "dedicated_ip", "secrets"]
 
     @field_validator('tier')
     def tier_validate_enum(cls, value):
@@ -104,6 +107,9 @@ class CreateInstanceRequest(BaseModel):
                 if _item_ports:
                     _items.append(_item_ports.to_dict())
             _dict['ports'] = _items
+        # override the default output from pydantic by calling `to_dict()` of dedicated_ip
+        if self.dedicated_ip:
+            _dict['dedicated_ip'] = self.dedicated_ip.to_dict()
         return _dict
 
     @classmethod
@@ -134,7 +140,9 @@ class CreateInstanceRequest(BaseModel):
             "registry_credential_id": obj.get("registry_credential_id"),
             "entrypoint": obj.get("entrypoint"),
             "cmd": obj.get("cmd"),
-            "ports": [CreateInstanceRequestPortsInner.from_dict(_item) for _item in obj["ports"]] if obj.get("ports") is not None else None
+            "ports": [CreateInstanceRequestPortsInner.from_dict(_item) for _item in obj["ports"]] if obj.get("ports") is not None else None,
+            "dedicated_ip": DedicatedIPRequest.from_dict(obj["dedicated_ip"]) if obj.get("dedicated_ip") is not None else None,
+            "secrets": obj.get("secrets")
         })
         return _obj
 

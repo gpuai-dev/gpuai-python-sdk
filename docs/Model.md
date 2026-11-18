@@ -14,6 +14,8 @@ Name | Type | Description | Notes
 **category** | **str** | Browse-facing category; mirrors modality (chat/image/video/embedding). | [optional] 
 **context_length** | **int** |  | [optional] 
 **supported_parameters** | **List[str]** |  | [optional] 
+**supports_tools** | **bool** | Chat models only. True when POST /v1/chat/completions accepts tools / tool_choice / parallel_tool_calls for this model and tier. | [optional] 
+**supports_structured_outputs** | **bool** | Chat models only. True when POST /v1/chat/completions accepts response_format json_object / json_schema for this model and tier. | [optional] 
 **parameters** | [**List[ModelParametersInner]**](ModelParametersInner.md) | Typed parameter descriptors for media (image/video) models — name, type, enum/bounds/default. Playgrounds render input forms from these. | [optional] 
 **pricing** | [**ModelPricing**](ModelPricing.md) |  | 
 **aliases** | **List[str]** |  | [optional] 

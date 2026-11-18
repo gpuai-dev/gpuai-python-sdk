@@ -21,6 +21,7 @@ Name | Type | Description | Notes
 **timeout** | **int** |  | 
 **idle_timeout** | **int** |  | 
 **max_concurrency** | **int** |  | 
+**secrets** | **List[str]** | Names of the organization secrets each run receives. Empty when none. | 
 **created_at** | **datetime** |  | 
 
 ## Example

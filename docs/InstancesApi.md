@@ -17,6 +17,8 @@ Method | HTTP request | Description
 
 Create an instance (async — returns 202 + Operation-Id header)
 
+Running a one-off script or batch work? Submit it as a job instead (POST /jobs): the machine is started for it and shut down a few minutes after it finishes, so nothing bills after the work is done.
+
 ### Example
 
 * Bearer (gpuai_live_<24-base62>) Authentication (bearerAuth):
@@ -87,7 +89,7 @@ Name | Type | Description  | Notes
 
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**202** | Accepted; long-running operation |  * Operation-Id -  <br>  |
+**202** | Accepted; long-running operation |  * Operation-Id -  <br>  * GPUAI-Hint - Advisory only, and absent on most launches. Sent when the request is a one-off batch run (a custom image with a command and auto_terminate_hours) to point at Jobs (POST /jobs), which start a machine for the work and shut it down a few minutes after it ends. It never changes the launch. <br>  |
 **429** | Rate limit exceeded (RFC 7807). Retry-After header indicates seconds to wait. |  * Retry-After - Seconds the client should wait before retrying. <br>  |
 **0** | Error response (RFC 7807) |  -  |
 

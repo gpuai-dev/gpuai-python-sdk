@@ -21,7 +21,10 @@ import json
 from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictFloat, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional, Union
 from typing_extensions import Annotated
+from gpuai_sdk.models.chat_completion_request_tool_choice import ChatCompletionRequestToolChoice
 from gpuai_sdk.models.chat_message import ChatMessage
+from gpuai_sdk.models.chat_response_format import ChatResponseFormat
+from gpuai_sdk.models.chat_tool import ChatTool
 from gpuai_sdk.models.stream_options import StreamOptions
 from typing import Optional, Set
 from typing_extensions import Self
@@ -37,7 +40,11 @@ class ChatCompletionRequest(BaseModel):
     max_tokens: Optional[Annotated[int, Field(strict=True, ge=1)]] = None
     stream: Optional[StrictBool] = False
     stream_options: Optional[StreamOptions] = None
-    __properties: ClassVar[List[str]] = ["model", "messages", "temperature", "max_tokens", "stream", "stream_options"]
+    tools: Optional[Annotated[List[ChatTool], Field(max_length=128)]] = Field(default=None, description="Functions the model may call (OpenAI shape). Only models whose /v1/models entry has supports_tools: true accept it; any other model returns 400 unsupported_parameter (param \"tools\").")
+    tool_choice: Optional[ChatCompletionRequestToolChoice] = None
+    parallel_tool_calls: Optional[StrictBool] = Field(default=None, description="Whether the model may call several tools in one turn. Passed through.")
+    response_format: Optional[ChatResponseFormat] = None
+    __properties: ClassVar[List[str]] = ["model", "messages", "temperature", "max_tokens", "stream", "stream_options", "tools", "tool_choice", "parallel_tool_calls", "response_format"]
 
     model_config = ConfigDict(
         validate_by_name=True,
@@ -88,6 +95,19 @@ class ChatCompletionRequest(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of stream_options
         if self.stream_options:
             _dict['stream_options'] = self.stream_options.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of each item in tools (list)
+        _items = []
+        if self.tools:
+            for _item_tools in self.tools:
+                if _item_tools:
+                    _items.append(_item_tools.to_dict())
+            _dict['tools'] = _items
+        # override the default output from pydantic by calling `to_dict()` of tool_choice
+        if self.tool_choice:
+            _dict['tool_choice'] = self.tool_choice.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of response_format
+        if self.response_format:
+            _dict['response_format'] = self.response_format.to_dict()
         return _dict
 
     @classmethod
@@ -105,7 +125,11 @@ class ChatCompletionRequest(BaseModel):
             "temperature": obj.get("temperature"),
             "max_tokens": obj.get("max_tokens"),
             "stream": obj.get("stream") if obj.get("stream") is not None else False,
-            "stream_options": StreamOptions.from_dict(obj["stream_options"]) if obj.get("stream_options") is not None else None
+            "stream_options": StreamOptions.from_dict(obj["stream_options"]) if obj.get("stream_options") is not None else None,
+            "tools": [ChatTool.from_dict(_item) for _item in obj["tools"]] if obj.get("tools") is not None else None,
+            "tool_choice": ChatCompletionRequestToolChoice.from_dict(obj["tool_choice"]) if obj.get("tool_choice") is not None else None,
+            "parallel_tool_calls": obj.get("parallel_tool_calls"),
+            "response_format": ChatResponseFormat.from_dict(obj["response_format"]) if obj.get("response_format") is not None else None
         })
         return _obj
 

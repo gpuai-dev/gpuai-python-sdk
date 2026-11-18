@@ -19,6 +19,7 @@ Name | Type | Description | Notes
 **timeout** | **int** | Seconds one call may run. 1 to 86400. | 
 **idle_timeout** | **int** | Seconds a machine stays ready after a call. 0 releases it at once. | [optional] [default to 300]
 **max_concurrency** | **int** |  | [optional] [default to 1]
+**secrets** | **List[str]** | Names of organization secrets (POST /secrets) each run receives as environment variables of the same names, resolved per call so a rotated value reaches the next call. Values are never in a response or a log. Returns 422 &#x60;validation_failed&#x60; when a name does not exist or secrets are not enabled on this deployment. | [optional] 
 
 ## Example
 

@@ -371,3 +371,129 @@ def test_upload_failure_is_reported(api, monkeypatch):
     with pytest.raises(APIError):
         f.remote()
     assert not api.runs
+
+
+def _scripted_run(monkeypatch, statuses, api_base):
+    """A RunHandle whose GETs return the given statuses in turn, ending in success."""
+    import gpuai_sdk.functions._function as fn_mod
+
+    infos = [{"id": "run-9", "status": s} for s in statuses]
+    infos.append({"id": "run-9", "status": "succeeded", "result": base64.b64encode(cloudpickle.dumps(7)).decode()})
+    waits = []
+
+    def fake_request(method, path, body=None, **kw):
+        waits.append(int(path.split("wait=")[1].split("&")[0]))
+        return infos.pop(0)
+
+    monkeypatch.setenv("GPUAI_API_BASE", api_base)
+    monkeypatch.setattr(fn_mod._client, "request", fake_request)
+    return fn_mod.RunHandle("fn-9", "run-9", {"id": "run-9", "status": "queued"}, name="gpu_name"), waits
+
+
+def test_progress_prints_each_status_change_to_stderr(monkeypatch, capsys):
+    handle, waits = _scripted_run(monkeypatch, ["queued", "queued", "setting_up", "running"], "https://api.gpu.ai/v1")
+    assert handle.result(progress=True) == 7
+    err = capsys.readouterr().err.splitlines()
+    assert err[0].startswith("gpuai: gpu_name: waiting for a GPU machine")
+    assert err[0].endswith("Follow it at https://gpu.ai/cloud/functions/fn-9/runs/run-9")
+    assert err[1] == "gpuai: gpu_name: the machine is up; installing Python and the pip requirements"
+    assert err[2] == "gpuai: gpu_name: running"
+    assert err[3].startswith("gpuai: gpu_name: succeeded after ")
+    assert len(err) == 4, "an unchanged status is not repeated within a minute"
+    assert waits[0] == 3 and set(waits[1:]) == {10}
+
+
+def test_progress_is_silent_for_a_call_that_finishes_at_once(monkeypatch, capsys):
+    handle, _ = _scripted_run(monkeypatch, [], "https://api.gpu.ai/v1")
+    assert handle.result(progress=True) == 7
+    assert capsys.readouterr().err == ""
+
+
+def test_progress_has_no_console_link_for_a_non_api_host(monkeypatch, capsys):
+    handle, _ = _scripted_run(monkeypatch, ["queued"], "http://127.0.0.1:9/v1")
+    handle.result(progress=True)
+    assert "Follow it" not in capsys.readouterr().err
+
+
+def test_progress_never_breaks_a_call_or_writes_to_stdout(monkeypatch, capsys):
+    import io
+    import sys as _sys
+
+    class Broken(io.StringIO):
+        def write(self, s):
+            raise BrokenPipeError("reader went away")
+
+    handle, _ = _scripted_run(monkeypatch, ["queued", "running"], "https://api.gpu.ai/v1")
+    monkeypatch.setattr(_sys, "stderr", Broken())
+    assert handle.result(progress=True) == 7
+
+    handle, _ = _scripted_run(monkeypatch, ["queued", "running"], "https://api.gpu.ai/v1")
+    monkeypatch.setattr(_sys, "stderr", None)
+    assert handle.result(progress=True) == 7
+    assert capsys.readouterr().out == ""
+
+
+def test_remote_prints_progress_unless_switched_off(api, monkeypatch, capsys):
+    api.hold = True
+
+    @function
+    def slow():
+        return 1
+
+    calls = {"n": 0}
+    real = fn_lib._client.request
+
+    def finish_on_second_poll(method, path, body=None, **kw):
+        if method == "GET" and "/runs/" in path and "wait=" in path:
+            calls["n"] += 1
+            if calls["n"] == 2:
+                api.execute(api.runs["run-1"] if "run-1" in path else api.runs["run-2"])
+        return real(method, path, body, **kw)
+
+    monkeypatch.setattr(fn_lib._client, "request", finish_on_second_poll)
+    assert slow.remote() == 1
+    assert "gpuai: slow: waiting for a GPU machine" in capsys.readouterr().err
+
+    calls["n"] = 0
+    monkeypatch.setenv("GPUAI_PROGRESS", "0")
+    assert slow.remote() == 1
+    assert capsys.readouterr().err == ""
+
+
+def test_insufficient_balance_names_the_billing_page(monkeypatch):
+    monkeypatch.setattr(fn_lib._client, "_config", {"api_key": None, "api_base": None})
+    monkeypatch.setenv("GPUAI_API_BASE", "https://api.demo.gpu.ai/v1")
+    body = json.dumps({"status": 402, "code": "insufficient_balance",
+                       "detail": "Insufficient balance. Add credits before calling a function."}).encode()
+    with pytest.raises(InsufficientBalanceError) as info:
+        fn_lib._client._raise_for(402, body)
+    assert str(info.value).startswith(
+        "Insufficient balance. Add credits before calling a function. "
+        "Top up at https://demo.gpu.ai/cloud/billing?tab=credits [402 insufficient_balance]"
+    )
+
+
+def test_secrets_are_sent_sorted_and_change_the_version(api):
+    def make(secrets):
+        @function(name="with_secrets", secrets=secrets)
+        def f():
+            return 1
+
+        return f
+
+    make(()).remote()
+    assert "secrets" not in api.versions["ver-1"], "no secrets keeps the spec (and its hash) as before"
+    make(["WANDB_API_KEY", "HF_TOKEN", "HF_TOKEN"]).remote()
+    assert len(api.versions) == 2, "adding secrets is a new version"
+    assert api.versions["ver-2"]["secrets"] == ["HF_TOKEN", "WANDB_API_KEY"]
+    make(["HF_TOKEN", "WANDB_API_KEY"]).remote()
+    assert len(api.versions) == 2, "the same names in another order are the same version"
+
+
+def test_secret_names_are_validated_before_any_request(api):
+    with pytest.raises(TypeError):
+        function(secrets="HF_TOKEN", name="x")(len)
+    for bad in (["bad-name"], ["GPUAI_TOKEN"], ["1X"]):
+        with pytest.raises(ValueError):
+            function(secrets=bad, name="x")(len)
+    assert api.requests == []

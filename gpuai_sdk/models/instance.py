@@ -23,6 +23,7 @@ from pydantic import BaseModel, ConfigDict, Field, StrictFloat, StrictInt, Stric
 from typing import Any, ClassVar, Dict, List, Optional, Union
 from typing_extensions import Annotated
 from gpuai_sdk.models.instance_connection import InstanceConnection
+from gpuai_sdk.models.instance_dedicated_ip import InstanceDedicatedIP
 from gpuai_sdk.models.instance_gpu_memory import InstanceGpuMemory
 from typing import Optional, Set
 from typing_extensions import Self
@@ -53,7 +54,8 @@ class Instance(BaseModel):
     last_reachable_at: Optional[datetime] = Field(default=None, description="Last time the platform verified the SSH path to this instance end-to-end through the tunnel. Absent means the instance has not been probed yet (freshly launched, or no tunnel) — it does NOT mean unreachable. An instance whose status is still \"running\" while this timestamp stops advancing is one whose SSH has died even though the machine is up.")
     unreachable_since: Optional[datetime] = Field(default=None, description="Start of the confirmed tunnel outage the instance is currently in. Present exactly when status is \"unreachable\", absent otherwise. It is the timestamp the auto-credit for the dead window is computed from, so a ledger credit can be reconciled against it.")
     boot_phase: Optional[StrictStr] = Field(default=None, description="How far a launch that is not ready yet has got. machine_requested means the machine was requested and no image download has been reported yet; pulling_image means the image is downloading or unpacking; setting_up means the container is up and the platform is finishing SSH and the GPU check. Present only while status is allocating or starting and the platform is following the boot; absent otherwise. Lets a client with a fixed timeout tell a launch that is still moving from one that is stuck.")
-    __properties: ClassVar[List[str]] = ["id", "name", "status", "gpu_type", "gpu_count", "region", "tier", "price_per_hour", "gpu_memory", "connection", "disk_gb", "image", "auto_terminate_hours", "auto_terminate_at", "status_reason", "created_at", "ready_at", "terminated_at", "last_reachable_at", "unreachable_since", "boot_phase"]
+    dedicated_ip: Optional[InstanceDedicatedIP] = None
+    __properties: ClassVar[List[str]] = ["id", "name", "status", "gpu_type", "gpu_count", "region", "tier", "price_per_hour", "gpu_memory", "connection", "disk_gb", "image", "auto_terminate_hours", "auto_terminate_at", "status_reason", "created_at", "ready_at", "terminated_at", "last_reachable_at", "unreachable_since", "boot_phase", "dedicated_ip"]
 
     @field_validator('status')
     def status_validate_enum(cls, value):
@@ -124,6 +126,9 @@ class Instance(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of connection
         if self.connection:
             _dict['connection'] = self.connection.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of dedicated_ip
+        if self.dedicated_ip:
+            _dict['dedicated_ip'] = self.dedicated_ip.to_dict()
         return _dict
 
     @classmethod
@@ -156,7 +161,8 @@ class Instance(BaseModel):
             "terminated_at": obj.get("terminated_at"),
             "last_reachable_at": obj.get("last_reachable_at"),
             "unreachable_since": obj.get("unreachable_since"),
-            "boot_phase": obj.get("boot_phase")
+            "boot_phase": obj.get("boot_phase"),
+            "dedicated_ip": InstanceDedicatedIP.from_dict(obj["dedicated_ip"]) if obj.get("dedicated_ip") is not None else None
         })
         return _obj
 

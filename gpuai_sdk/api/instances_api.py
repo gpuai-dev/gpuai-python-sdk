@@ -64,6 +64,7 @@ class InstancesApi:
     ) -> Operation:
         """Create an instance (async — returns 202 + Operation-Id header)
 
+        Running a one-off script or batch work? Submit it as a job instead (POST /jobs): the machine is started for it and shut down a few minutes after it finishes, so nothing bills after the work is done.
 
         :param create_instance_request: (required)
         :type create_instance_request: CreateInstanceRequest
@@ -136,6 +137,7 @@ class InstancesApi:
     ) -> ApiResponse[Operation]:
         """Create an instance (async — returns 202 + Operation-Id header)
 
+        Running a one-off script or batch work? Submit it as a job instead (POST /jobs): the machine is started for it and shut down a few minutes after it finishes, so nothing bills after the work is done.
 
         :param create_instance_request: (required)
         :type create_instance_request: CreateInstanceRequest
@@ -208,6 +210,7 @@ class InstancesApi:
     ) -> RESTResponseType:
         """Create an instance (async — returns 202 + Operation-Id header)
 
+        Running a one-off script or batch work? Submit it as a job instead (POST /jobs): the machine is started for it and shut down a few minutes after it finishes, so nothing bills after the work is done.
 
         :param create_instance_request: (required)
         :type create_instance_request: CreateInstanceRequest

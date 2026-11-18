@@ -20,6 +20,7 @@ import json
 
 from pydantic import BaseModel, ConfigDict, Field, StrictFloat, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional, Union
+from typing_extensions import Annotated
 from typing import Optional, Set
 from typing_extensions import Self
 from pydantic_core import to_jsonable_python
@@ -42,7 +43,8 @@ class CreateFunctionVersionRequest(BaseModel):
     timeout: StrictInt = Field(description="Seconds one call may run. 1 to 86400.")
     idle_timeout: Optional[StrictInt] = Field(default=300, description="Seconds a machine stays ready after a call. 0 releases it at once.")
     max_concurrency: Optional[StrictInt] = 1
-    __properties: ClassVar[List[str]] = ["content_hash", "bundle_sha256", "bundle_bytes", "python_version", "cloudpickle_version", "pip", "gpu", "gpu_count", "min_vram_gb", "regions", "max_price_per_hour", "timeout", "idle_timeout", "max_concurrency"]
+    secrets: Optional[Annotated[List[StrictStr], Field(max_length=50)]] = Field(default=None, description="Names of organization secrets (POST /secrets) each run receives as environment variables of the same names, resolved per call so a rotated value reaches the next call. Values are never in a response or a log. Returns 422 `validation_failed` when a name does not exist or secrets are not enabled on this deployment.")
+    __properties: ClassVar[List[str]] = ["content_hash", "bundle_sha256", "bundle_bytes", "python_version", "cloudpickle_version", "pip", "gpu", "gpu_count", "min_vram_gb", "regions", "max_price_per_hour", "timeout", "idle_timeout", "max_concurrency", "secrets"]
 
     model_config = ConfigDict(
         validate_by_name=True,
@@ -108,7 +110,8 @@ class CreateFunctionVersionRequest(BaseModel):
             "max_price_per_hour": obj.get("max_price_per_hour"),
             "timeout": obj.get("timeout"),
             "idle_timeout": obj.get("idle_timeout") if obj.get("idle_timeout") is not None else 300,
-            "max_concurrency": obj.get("max_concurrency") if obj.get("max_concurrency") is not None else 1
+            "max_concurrency": obj.get("max_concurrency") if obj.get("max_concurrency") is not None else 1,
+            "secrets": obj.get("secrets")
         })
         return _obj
 

@@ -22,8 +22,17 @@ from gpuai_sdk.models.balance import Balance
 from gpuai_sdk.models.billing_details import BillingDetails
 from gpuai_sdk.models.chat_choice import ChatChoice
 from gpuai_sdk.models.chat_completion_request import ChatCompletionRequest
+from gpuai_sdk.models.chat_completion_request_tool_choice import ChatCompletionRequestToolChoice
 from gpuai_sdk.models.chat_completion_response import ChatCompletionResponse
+from gpuai_sdk.models.chat_json_schema_format import ChatJSONSchemaFormat
 from gpuai_sdk.models.chat_message import ChatMessage
+from gpuai_sdk.models.chat_named_tool_choice import ChatNamedToolChoice
+from gpuai_sdk.models.chat_named_tool_choice_function import ChatNamedToolChoiceFunction
+from gpuai_sdk.models.chat_response_format import ChatResponseFormat
+from gpuai_sdk.models.chat_tool import ChatTool
+from gpuai_sdk.models.chat_tool_call import ChatToolCall
+from gpuai_sdk.models.chat_tool_call_function import ChatToolCallFunction
+from gpuai_sdk.models.chat_tool_function import ChatToolFunction
 from gpuai_sdk.models.community_machine import CommunityMachine
 from gpuai_sdk.models.community_machine_delist_result import CommunityMachineDelistResult
 from gpuai_sdk.models.community_machine_registration import CommunityMachineRegistration
@@ -42,6 +51,7 @@ from gpuai_sdk.models.create_registry_credential_request import CreateRegistryCr
 from gpuai_sdk.models.create_ssh_key_request import CreateSshKeyRequest
 from gpuai_sdk.models.create_webhook_endpoint_request import CreateWebhookEndpointRequest
 from gpuai_sdk.models.crypto_deposit import CryptoDeposit
+from gpuai_sdk.models.dedicated_ip_request import DedicatedIPRequest
 from gpuai_sdk.models.embedding import Embedding
 from gpuai_sdk.models.embeddings_request import EmbeddingsRequest
 from gpuai_sdk.models.embeddings_request_input import EmbeddingsRequestInput
@@ -79,6 +89,7 @@ from gpuai_sdk.models.images_response_usage import ImagesResponseUsage
 from gpuai_sdk.models.include_item import IncludeItem
 from gpuai_sdk.models.instance import Instance
 from gpuai_sdk.models.instance_connection import InstanceConnection
+from gpuai_sdk.models.instance_dedicated_ip import InstanceDedicatedIP
 from gpuai_sdk.models.instance_gpu_memory import InstanceGpuMemory
 from gpuai_sdk.models.instance_page import InstancePage
 from gpuai_sdk.models.invoice import Invoice

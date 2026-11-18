@@ -11,6 +11,10 @@ Name | Type | Description | Notes
 **max_tokens** | **int** |  | [optional] 
 **stream** | **bool** |  | [optional] [default to False]
 **stream_options** | [**StreamOptions**](StreamOptions.md) |  | [optional] 
+**tools** | [**List[ChatTool]**](ChatTool.md) | Functions the model may call (OpenAI shape). Only models whose /v1/models entry has supports_tools: true accept it; any other model returns 400 unsupported_parameter (param \&quot;tools\&quot;). | [optional] 
+**tool_choice** | [**ChatCompletionRequestToolChoice**](ChatCompletionRequestToolChoice.md) |  | [optional] 
+**parallel_tool_calls** | **bool** | Whether the model may call several tools in one turn. Passed through. | [optional] 
+**response_format** | [**ChatResponseFormat**](ChatResponseFormat.md) |  | [optional] 
 
 ## Example
 

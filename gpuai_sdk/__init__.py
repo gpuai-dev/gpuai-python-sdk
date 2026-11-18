@@ -15,7 +15,7 @@
 """  # noqa: E501
 
 
-__version__ = "0.4.4"
+__version__ = "0.5.0"
 
 # Define package exports
 __all__ = [
@@ -55,8 +55,17 @@ __all__ = [
     "BillingDetails",
     "ChatChoice",
     "ChatCompletionRequest",
+    "ChatCompletionRequestToolChoice",
     "ChatCompletionResponse",
+    "ChatJSONSchemaFormat",
     "ChatMessage",
+    "ChatNamedToolChoice",
+    "ChatNamedToolChoiceFunction",
+    "ChatResponseFormat",
+    "ChatTool",
+    "ChatToolCall",
+    "ChatToolCallFunction",
+    "ChatToolFunction",
     "CommunityMachine",
     "CommunityMachineDelistResult",
     "CommunityMachineRegistration",
@@ -75,6 +84,7 @@ __all__ = [
     "CreateSshKeyRequest",
     "CreateWebhookEndpointRequest",
     "CryptoDeposit",
+    "DedicatedIPRequest",
     "Embedding",
     "EmbeddingsRequest",
     "EmbeddingsRequestInput",
@@ -112,6 +122,7 @@ __all__ = [
     "IncludeItem",
     "Instance",
     "InstanceConnection",
+    "InstanceDedicatedIP",
     "InstanceGpuMemory",
     "InstancePage",
     "Invoice",
@@ -205,8 +216,17 @@ from gpuai_sdk.models.balance import Balance as Balance
 from gpuai_sdk.models.billing_details import BillingDetails as BillingDetails
 from gpuai_sdk.models.chat_choice import ChatChoice as ChatChoice
 from gpuai_sdk.models.chat_completion_request import ChatCompletionRequest as ChatCompletionRequest
+from gpuai_sdk.models.chat_completion_request_tool_choice import ChatCompletionRequestToolChoice as ChatCompletionRequestToolChoice
 from gpuai_sdk.models.chat_completion_response import ChatCompletionResponse as ChatCompletionResponse
+from gpuai_sdk.models.chat_json_schema_format import ChatJSONSchemaFormat as ChatJSONSchemaFormat
 from gpuai_sdk.models.chat_message import ChatMessage as ChatMessage
+from gpuai_sdk.models.chat_named_tool_choice import ChatNamedToolChoice as ChatNamedToolChoice
+from gpuai_sdk.models.chat_named_tool_choice_function import ChatNamedToolChoiceFunction as ChatNamedToolChoiceFunction
+from gpuai_sdk.models.chat_response_format import ChatResponseFormat as ChatResponseFormat
+from gpuai_sdk.models.chat_tool import ChatTool as ChatTool
+from gpuai_sdk.models.chat_tool_call import ChatToolCall as ChatToolCall
+from gpuai_sdk.models.chat_tool_call_function import ChatToolCallFunction as ChatToolCallFunction
+from gpuai_sdk.models.chat_tool_function import ChatToolFunction as ChatToolFunction
 from gpuai_sdk.models.community_machine import CommunityMachine as CommunityMachine
 from gpuai_sdk.models.community_machine_delist_result import CommunityMachineDelistResult as CommunityMachineDelistResult
 from gpuai_sdk.models.community_machine_registration import CommunityMachineRegistration as CommunityMachineRegistration
@@ -225,6 +245,7 @@ from gpuai_sdk.models.create_registry_credential_request import CreateRegistryCr
 from gpuai_sdk.models.create_ssh_key_request import CreateSshKeyRequest as CreateSshKeyRequest
 from gpuai_sdk.models.create_webhook_endpoint_request import CreateWebhookEndpointRequest as CreateWebhookEndpointRequest
 from gpuai_sdk.models.crypto_deposit import CryptoDeposit as CryptoDeposit
+from gpuai_sdk.models.dedicated_ip_request import DedicatedIPRequest as DedicatedIPRequest
 from gpuai_sdk.models.embedding import Embedding as Embedding
 from gpuai_sdk.models.embeddings_request import EmbeddingsRequest as EmbeddingsRequest
 from gpuai_sdk.models.embeddings_request_input import EmbeddingsRequestInput as EmbeddingsRequestInput
@@ -262,6 +283,7 @@ from gpuai_sdk.models.images_response_usage import ImagesResponseUsage as Images
 from gpuai_sdk.models.include_item import IncludeItem as IncludeItem
 from gpuai_sdk.models.instance import Instance as Instance
 from gpuai_sdk.models.instance_connection import InstanceConnection as InstanceConnection
+from gpuai_sdk.models.instance_dedicated_ip import InstanceDedicatedIP as InstanceDedicatedIP
 from gpuai_sdk.models.instance_gpu_memory import InstanceGpuMemory as InstanceGpuMemory
 from gpuai_sdk.models.instance_page import InstancePage as InstancePage
 from gpuai_sdk.models.invoice import Invoice as Invoice
