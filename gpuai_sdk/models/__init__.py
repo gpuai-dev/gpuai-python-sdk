@@ -51,6 +51,7 @@ from gpuai_sdk.models.create_registry_credential_request import CreateRegistryCr
 from gpuai_sdk.models.create_ssh_key_request import CreateSshKeyRequest
 from gpuai_sdk.models.create_webhook_endpoint_request import CreateWebhookEndpointRequest
 from gpuai_sdk.models.crypto_deposit import CryptoDeposit
+from gpuai_sdk.models.data_retention import DataRetention
 from gpuai_sdk.models.dedicated_ip_request import DedicatedIPRequest
 from gpuai_sdk.models.embedding import Embedding
 from gpuai_sdk.models.embeddings_request import EmbeddingsRequest
@@ -126,6 +127,7 @@ from gpuai_sdk.models.template_env_inner import TemplateEnvInner
 from gpuai_sdk.models.template_list import TemplateList
 from gpuai_sdk.models.template_ports_inner import TemplatePortsInner
 from gpuai_sdk.models.update_billing_details_request import UpdateBillingDetailsRequest
+from gpuai_sdk.models.update_data_retention_request import UpdateDataRetentionRequest
 from gpuai_sdk.models.update_instance_request import UpdateInstanceRequest
 from gpuai_sdk.models.update_spending_limit_request import UpdateSpendingLimitRequest
 from gpuai_sdk.models.usage import Usage

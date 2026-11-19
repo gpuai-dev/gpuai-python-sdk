@@ -40,6 +40,7 @@ docs/CreateRegistryCredentialRequest.md
 docs/CreateSshKeyRequest.md
 docs/CreateWebhookEndpointRequest.md
 docs/CryptoDeposit.md
+docs/DataRetention.md
 docs/DedicatedIPRequest.md
 docs/Embedding.md
 docs/EmbeddingsRequest.md
@@ -128,6 +129,7 @@ docs/TemplateList.md
 docs/TemplatePortsInner.md
 docs/TemplatesApi.md
 docs/UpdateBillingDetailsRequest.md
+docs/UpdateDataRetentionRequest.md
 docs/UpdateInstanceRequest.md
 docs/UpdateSpendingLimitRequest.md
 docs/Usage.md
@@ -209,6 +211,7 @@ gpuai_sdk/models/create_registry_credential_request.py
 gpuai_sdk/models/create_ssh_key_request.py
 gpuai_sdk/models/create_webhook_endpoint_request.py
 gpuai_sdk/models/crypto_deposit.py
+gpuai_sdk/models/data_retention.py
 gpuai_sdk/models/dedicated_ip_request.py
 gpuai_sdk/models/embedding.py
 gpuai_sdk/models/embeddings_request.py
@@ -284,6 +287,7 @@ gpuai_sdk/models/template_env_inner.py
 gpuai_sdk/models/template_list.py
 gpuai_sdk/models/template_ports_inner.py
 gpuai_sdk/models/update_billing_details_request.py
+gpuai_sdk/models/update_data_retention_request.py
 gpuai_sdk/models/update_instance_request.py
 gpuai_sdk/models/update_spending_limit_request.py
 gpuai_sdk/models/usage.py

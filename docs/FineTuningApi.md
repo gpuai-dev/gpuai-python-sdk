@@ -168,7 +168,7 @@ Name | Type | Description  | Notes
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | The uploaded file object. |  -  |
-**400** | Invalid request (OpenAI error envelope). |  -  |
+**400** | Invalid request (OpenAI error envelope). On inference routes this includes &#x60;zero_data_retention_unavailable&#x60; when zero data retention is required and the model has no zero-data-retention host. |  -  |
 **401** | Missing or invalid API key (OpenAI error envelope). |  -  |
 **403** | API key lacks the required scope (OpenAI error envelope). |  -  |
 **429** | Rate limit exceeded (OpenAI error envelope). Retry-After header indicates seconds to wait. |  * Retry-After - Seconds the client should wait before retrying. <br>  |
@@ -250,7 +250,7 @@ Name | Type | Description  | Notes
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | The created fine-tuning job. |  -  |
-**400** | Invalid request (OpenAI error envelope). |  -  |
+**400** | Invalid request (OpenAI error envelope). On inference routes this includes &#x60;zero_data_retention_unavailable&#x60; when zero data retention is required and the model has no zero-data-retention host. |  -  |
 **401** | Missing or invalid API key (OpenAI error envelope). |  -  |
 **402** | Insufficient balance (OpenAI error envelope, SERV-06). |  -  |
 **403** | API key lacks the required scope (OpenAI error envelope). |  -  |

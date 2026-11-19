@@ -15,7 +15,7 @@
 """  # noqa: E501
 
 
-__version__ = "0.5.1"
+__version__ = "0.5.2"
 
 # Define package exports
 __all__ = [
@@ -84,6 +84,7 @@ __all__ = [
     "CreateSshKeyRequest",
     "CreateWebhookEndpointRequest",
     "CryptoDeposit",
+    "DataRetention",
     "DedicatedIPRequest",
     "Embedding",
     "EmbeddingsRequest",
@@ -159,6 +160,7 @@ __all__ = [
     "TemplateList",
     "TemplatePortsInner",
     "UpdateBillingDetailsRequest",
+    "UpdateDataRetentionRequest",
     "UpdateInstanceRequest",
     "UpdateSpendingLimitRequest",
     "Usage",
@@ -246,6 +248,7 @@ from gpuai_sdk.models.create_registry_credential_request import CreateRegistryCr
 from gpuai_sdk.models.create_ssh_key_request import CreateSshKeyRequest as CreateSshKeyRequest
 from gpuai_sdk.models.create_webhook_endpoint_request import CreateWebhookEndpointRequest as CreateWebhookEndpointRequest
 from gpuai_sdk.models.crypto_deposit import CryptoDeposit as CryptoDeposit
+from gpuai_sdk.models.data_retention import DataRetention as DataRetention
 from gpuai_sdk.models.dedicated_ip_request import DedicatedIPRequest as DedicatedIPRequest
 from gpuai_sdk.models.embedding import Embedding as Embedding
 from gpuai_sdk.models.embeddings_request import EmbeddingsRequest as EmbeddingsRequest
@@ -321,6 +324,7 @@ from gpuai_sdk.models.template_env_inner import TemplateEnvInner as TemplateEnvI
 from gpuai_sdk.models.template_list import TemplateList as TemplateList
 from gpuai_sdk.models.template_ports_inner import TemplatePortsInner as TemplatePortsInner
 from gpuai_sdk.models.update_billing_details_request import UpdateBillingDetailsRequest as UpdateBillingDetailsRequest
+from gpuai_sdk.models.update_data_retention_request import UpdateDataRetentionRequest as UpdateDataRetentionRequest
 from gpuai_sdk.models.update_instance_request import UpdateInstanceRequest as UpdateInstanceRequest
 from gpuai_sdk.models.update_spending_limit_request import UpdateSpendingLimitRequest as UpdateSpendingLimitRequest
 from gpuai_sdk.models.usage import Usage as Usage

@@ -41,13 +41,14 @@ class Model(BaseModel):
     supported_parameters: Optional[List[StrictStr]] = None
     supports_tools: Optional[StrictBool] = Field(default=None, description="Chat models only. True when POST /v1/chat/completions accepts tools / tool_choice / parallel_tool_calls for this model and tier.")
     supports_structured_outputs: Optional[StrictBool] = Field(default=None, description="Chat models only. True when POST /v1/chat/completions accepts response_format json_object / json_schema for this model and tier.")
+    zero_data_retention: Optional[StrictBool] = Field(default=None, description="True when this model and tier can be served with zero data retention: at least one model host keeps no prompt or output content. Only these models are callable by an org with zero data retention on, or with the X-GPUAI-Zero-Data-Retention header. Always false for video.")
     parameters: Optional[List[ModelParametersInner]] = Field(default=None, description="Typed parameter descriptors for media (image/video) models — name, type, enum/bounds/default. Playgrounds render input forms from these.")
     pricing: ModelPricing
     aliases: Optional[List[StrictStr]] = None
     fine_tunable: Optional[StrictBool] = Field(default=None, description="Whether this model can be used as the base of a managed fine-tuning job. The tunable allowlist is operator-curated and much narrower than the serving catalog, so this is false for almost every model. Absent means false.")
     fine_tune_base_model: Optional[StrictStr] = Field(default=None, description="The exact id to send as `model` when creating a fine-tuning job for this entry. Present only when `fine_tunable` is true, and deliberately distinct from `id`: the allowlist matches the customer-facing base id (e.g. `qwen2.5-7b-instruct`), which a served model normally carries as an alias rather than as its namespaced catalog id.")
     status: StrictStr
-    __properties: ClassVar[List[str]] = ["id", "object", "created", "owned_by", "author", "modality", "category", "context_length", "supported_parameters", "supports_tools", "supports_structured_outputs", "parameters", "pricing", "aliases", "fine_tunable", "fine_tune_base_model", "status"]
+    __properties: ClassVar[List[str]] = ["id", "object", "created", "owned_by", "author", "modality", "category", "context_length", "supported_parameters", "supports_tools", "supports_structured_outputs", "zero_data_retention", "parameters", "pricing", "aliases", "fine_tunable", "fine_tune_base_model", "status"]
 
     @field_validator('object')
     def object_validate_enum(cls, value):
@@ -142,6 +143,7 @@ class Model(BaseModel):
             "supported_parameters": obj.get("supported_parameters"),
             "supports_tools": obj.get("supports_tools"),
             "supports_structured_outputs": obj.get("supports_structured_outputs"),
+            "zero_data_retention": obj.get("zero_data_retention"),
             "parameters": [ModelParametersInner.from_dict(_item) for _item in obj["parameters"]] if obj.get("parameters") is not None else None,
             "pricing": ModelPricing.from_dict(obj["pricing"]) if obj.get("pricing") is not None else None,
             "aliases": obj.get("aliases"),
