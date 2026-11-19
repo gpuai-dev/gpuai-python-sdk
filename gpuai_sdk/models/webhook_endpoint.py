@@ -42,8 +42,8 @@ class WebhookEndpoint(BaseModel):
     def event_types_validate_enum(cls, value):
         """Validates the enum"""
         for i in value:
-            if i not in set(['instance.creating', 'instance.running', 'instance.terminated', 'instance.failed', 'video.completed', 'video.failed']):
-                raise ValueError("each list item must be one of ('instance.creating', 'instance.running', 'instance.terminated', 'instance.failed', 'video.completed', 'video.failed')")
+            if i not in set(['instance.creating', 'instance.running', 'instance.terminated', 'instance.failed', 'video.completed', 'video.failed', 'watch.alert.fired', 'balance.low', 'balance.exhausted']):
+                raise ValueError("each list item must be one of ('instance.creating', 'instance.running', 'instance.terminated', 'instance.failed', 'video.completed', 'video.failed', 'watch.alert.fired', 'balance.low', 'balance.exhausted')")
         return value
 
     model_config = ConfigDict(

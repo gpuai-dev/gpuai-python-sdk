@@ -6,6 +6,7 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**create_instance**](InstancesApi.md#create_instance) | **POST** /instances | Create an instance (async — returns 202 + Operation-Id header)
 [**delete_instance**](InstancesApi.md#delete_instance) | **DELETE** /instances/{id} | Terminate an instance (idempotent)
+[**get_dedicated_ip_offer**](InstancesApi.md#get_dedicated_ip_offer) | **GET** /dedicated-ip | Get the dedicated public IP add-on offer
 [**get_instance**](InstancesApi.md#get_instance) | **GET** /instances/{id} | Get an instance
 [**get_instance_gpu_suggestion**](InstancesApi.md#get_instance_gpu_suggestion) | **GET** /instances/{id}/gpu-suggestion | Suggest a lower-priced GPU for an instance
 [**list_instances**](InstancesApi.md#list_instances) | **GET** /instances | List instances
@@ -89,7 +90,7 @@ Name | Type | Description  | Notes
 
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**202** | Accepted; long-running operation |  * Operation-Id -  <br>  * GPUAI-Hint - Advisory only, and absent on most launches. Sent when the request is a one-off batch run (a custom image with a command and auto_terminate_hours) to point at Jobs (POST /jobs), which start a machine for the work and shut it down a few minutes after it ends. It never changes the launch. <br>  |
+**202** | Accepted; long-running operation |  * Operation-Id -  <br>  * GPUAI-Hint - Advisory only. Sent while the organization&#39;s first jobs are free (GET /jobs/trial), e.g. \&quot;Your first jobs are free, up to $10. We credit back what they cost as they run.\&quot; <br>  * GPUAI-Balance-Warning -  <br>  |
 **429** | Rate limit exceeded (RFC 7807). Retry-After header indicates seconds to wait. |  * Retry-After - Seconds the client should wait before retrying. <br>  |
 **0** | Error response (RFC 7807) |  -  |
 
@@ -174,6 +175,86 @@ Name | Type | Description  | Notes
 **202** | Accepted; termination in progress |  * Operation-Id -  <br>  |
 **403** | Forbidden — members can only terminate instances they created |  -  |
 **404** | Already gone — idempotent terminate (D-07) |  -  |
+**429** | Rate limit exceeded (RFC 7807). Retry-After header indicates seconds to wait. |  * Retry-After - Seconds the client should wait before retrying. <br>  |
+**0** | Error response (RFC 7807) |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_dedicated_ip_offer**
+> DedicatedIPOffer get_dedicated_ip_offer()
+
+Get the dedicated public IP add-on offer
+
+Describes the dedicated public IPv4 add-on for instances and the caller's usage of it. A dedicated IP is a GPU.ai-owned public address (never the supplier's) that forwards the chosen inbound TCP ports, raw and without TLS termination, to the same ports on the instance's loopback. Request one at launch with the `dedicated_ip` field on POST /instances.
+
+The response carries the hourly fee charged while the address is attached, the transfer price per GB (counted in both directions), the transfer cap per attachment after which forwarding is suspended, the ports a launch may forward, the organization's limit and how many it holds, how many addresses are free right now, and the acceptable use policy. Requires the `instances:read` scope. Returns 404 when the add-on is not enabled for this deployment.
+
+
+### Example
+
+* Bearer (gpuai_live_<24-base62>) Authentication (bearerAuth):
+
+```python
+import gpuai_sdk
+from gpuai_sdk.models.dedicated_ip_offer import DedicatedIPOffer
+from gpuai_sdk.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to https://api.gpu.ai/v1
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gpuai_sdk.Configuration(
+    host = "https://api.gpu.ai/v1"
+)
+
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (gpuai_live_<24-base62>): bearerAuth
+configuration = gpuai_sdk.Configuration(
+    access_token = os.environ["BEARER_TOKEN"]
+)
+
+# Enter a context with an instance of the API client
+with gpuai_sdk.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = gpuai_sdk.InstancesApi(api_client)
+
+    try:
+        # Get the dedicated public IP add-on offer
+        api_response = api_instance.get_dedicated_ip_offer()
+        print("The response of InstancesApi->get_dedicated_ip_offer:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling InstancesApi->get_dedicated_ip_offer: %s\n" % e)
+```
+
+
+
+### Parameters
+
+This endpoint does not need any parameter.
+
+### Return type
+
+[**DedicatedIPOffer**](DedicatedIPOffer.md)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json, application/problem+json
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+**404** | The dedicated IP add-on is not enabled for this deployment. |  -  |
 **429** | Rate limit exceeded (RFC 7807). Retry-After header indicates seconds to wait. |  * Retry-After - Seconds the client should wait before retrying. <br>  |
 **0** | Error response (RFC 7807) |  -  |
 

@@ -15,24 +15,27 @@
 """  # noqa: E501
 
 
-__version__ = "0.5.3"
+__version__ = "0.5.5"
 
 # Define package exports
 __all__ = [
     "AutolaunchApi",
     "BillingApi",
     "CommunityApi",
+    "EndpointsApi",
     "EnvironmentsApi",
     "FineTuningApi",
     "FunctionsApi",
     "GpuTypesApi",
     "InferenceApi",
     "InstancesApi",
+    "JobsApi",
     "MarketApi",
     "MetaApi",
     "OperationsApi",
     "PricingApi",
     "RegistryCredentialsApi",
+    "SecretsApi",
     "SshKeysApi",
     "TemplatesApi",
     "UsageApi",
@@ -85,12 +88,18 @@ __all__ = [
     "CreateWebhookEndpointRequest",
     "CryptoDeposit",
     "DataRetention",
+    "DedicatedIPOffer",
     "DedicatedIPRequest",
     "Embedding",
     "EmbeddingsRequest",
     "EmbeddingsRequestInput",
     "EmbeddingsResponse",
     "EmbeddingsUsage",
+    "Endpoint",
+    "EndpointCreate",
+    "EndpointList",
+    "EndpointMachine",
+    "EndpointReplicaCounts",
     "Environments",
     "FileObject",
     "FineTuningJob",
@@ -128,6 +137,18 @@ __all__ = [
     "InstancePage",
     "Invoice",
     "InvoiceList",
+    "Job",
+    "JobAttempt",
+    "JobCreate",
+    "JobGpuTypes",
+    "JobGpuTypesDataInner",
+    "JobLogChunk",
+    "JobLogs",
+    "JobPage",
+    "JobSharingHint",
+    "JobTelemetry",
+    "JobTelemetryPoint",
+    "JobTrial",
     "ListCommunityMachines200Response",
     "ListDeposits200Response",
     "ListRegistryCredentials200Response",
@@ -152,6 +173,13 @@ __all__ = [
     "RegistryCredential",
     "SSHKey",
     "SSHKeyPage",
+    "Secret",
+    "SecretCreate",
+    "SecretImportItem",
+    "SecretImportRequest",
+    "SecretImportResult",
+    "SecretList",
+    "SecretPut",
     "SpendingLimit",
     "StreamOptions",
     "SupplierMachineView",
@@ -182,17 +210,20 @@ __all__ = [
 from gpuai_sdk.api.autolaunch_api import AutolaunchApi as AutolaunchApi
 from gpuai_sdk.api.billing_api import BillingApi as BillingApi
 from gpuai_sdk.api.community_api import CommunityApi as CommunityApi
+from gpuai_sdk.api.endpoints_api import EndpointsApi as EndpointsApi
 from gpuai_sdk.api.environments_api import EnvironmentsApi as EnvironmentsApi
 from gpuai_sdk.api.fine_tuning_api import FineTuningApi as FineTuningApi
 from gpuai_sdk.api.functions_api import FunctionsApi as FunctionsApi
 from gpuai_sdk.api.gpu_types_api import GpuTypesApi as GpuTypesApi
 from gpuai_sdk.api.inference_api import InferenceApi as InferenceApi
 from gpuai_sdk.api.instances_api import InstancesApi as InstancesApi
+from gpuai_sdk.api.jobs_api import JobsApi as JobsApi
 from gpuai_sdk.api.market_api import MarketApi as MarketApi
 from gpuai_sdk.api.meta_api import MetaApi as MetaApi
 from gpuai_sdk.api.operations_api import OperationsApi as OperationsApi
 from gpuai_sdk.api.pricing_api import PricingApi as PricingApi
 from gpuai_sdk.api.registry_credentials_api import RegistryCredentialsApi as RegistryCredentialsApi
+from gpuai_sdk.api.secrets_api import SecretsApi as SecretsApi
 from gpuai_sdk.api.ssh_keys_api import SshKeysApi as SshKeysApi
 from gpuai_sdk.api.templates_api import TemplatesApi as TemplatesApi
 from gpuai_sdk.api.usage_api import UsageApi as UsageApi
@@ -249,12 +280,18 @@ from gpuai_sdk.models.create_ssh_key_request import CreateSshKeyRequest as Creat
 from gpuai_sdk.models.create_webhook_endpoint_request import CreateWebhookEndpointRequest as CreateWebhookEndpointRequest
 from gpuai_sdk.models.crypto_deposit import CryptoDeposit as CryptoDeposit
 from gpuai_sdk.models.data_retention import DataRetention as DataRetention
+from gpuai_sdk.models.dedicated_ip_offer import DedicatedIPOffer as DedicatedIPOffer
 from gpuai_sdk.models.dedicated_ip_request import DedicatedIPRequest as DedicatedIPRequest
 from gpuai_sdk.models.embedding import Embedding as Embedding
 from gpuai_sdk.models.embeddings_request import EmbeddingsRequest as EmbeddingsRequest
 from gpuai_sdk.models.embeddings_request_input import EmbeddingsRequestInput as EmbeddingsRequestInput
 from gpuai_sdk.models.embeddings_response import EmbeddingsResponse as EmbeddingsResponse
 from gpuai_sdk.models.embeddings_usage import EmbeddingsUsage as EmbeddingsUsage
+from gpuai_sdk.models.endpoint import Endpoint as Endpoint
+from gpuai_sdk.models.endpoint_create import EndpointCreate as EndpointCreate
+from gpuai_sdk.models.endpoint_list import EndpointList as EndpointList
+from gpuai_sdk.models.endpoint_machine import EndpointMachine as EndpointMachine
+from gpuai_sdk.models.endpoint_replica_counts import EndpointReplicaCounts as EndpointReplicaCounts
 from gpuai_sdk.models.environments import Environments as Environments
 from gpuai_sdk.models.file_object import FileObject as FileObject
 from gpuai_sdk.models.fine_tuning_job import FineTuningJob as FineTuningJob
@@ -292,6 +329,18 @@ from gpuai_sdk.models.instance_gpu_memory import InstanceGpuMemory as InstanceGp
 from gpuai_sdk.models.instance_page import InstancePage as InstancePage
 from gpuai_sdk.models.invoice import Invoice as Invoice
 from gpuai_sdk.models.invoice_list import InvoiceList as InvoiceList
+from gpuai_sdk.models.job import Job as Job
+from gpuai_sdk.models.job_attempt import JobAttempt as JobAttempt
+from gpuai_sdk.models.job_create import JobCreate as JobCreate
+from gpuai_sdk.models.job_gpu_types import JobGpuTypes as JobGpuTypes
+from gpuai_sdk.models.job_gpu_types_data_inner import JobGpuTypesDataInner as JobGpuTypesDataInner
+from gpuai_sdk.models.job_log_chunk import JobLogChunk as JobLogChunk
+from gpuai_sdk.models.job_logs import JobLogs as JobLogs
+from gpuai_sdk.models.job_page import JobPage as JobPage
+from gpuai_sdk.models.job_sharing_hint import JobSharingHint as JobSharingHint
+from gpuai_sdk.models.job_telemetry import JobTelemetry as JobTelemetry
+from gpuai_sdk.models.job_telemetry_point import JobTelemetryPoint as JobTelemetryPoint
+from gpuai_sdk.models.job_trial import JobTrial as JobTrial
 from gpuai_sdk.models.list_community_machines200_response import ListCommunityMachines200Response as ListCommunityMachines200Response
 from gpuai_sdk.models.list_deposits200_response import ListDeposits200Response as ListDeposits200Response
 from gpuai_sdk.models.list_registry_credentials200_response import ListRegistryCredentials200Response as ListRegistryCredentials200Response
@@ -316,6 +365,13 @@ from gpuai_sdk.models.register_community_machine_request import RegisterCommunit
 from gpuai_sdk.models.registry_credential import RegistryCredential as RegistryCredential
 from gpuai_sdk.models.ssh_key import SSHKey as SSHKey
 from gpuai_sdk.models.ssh_key_page import SSHKeyPage as SSHKeyPage
+from gpuai_sdk.models.secret import Secret as Secret
+from gpuai_sdk.models.secret_create import SecretCreate as SecretCreate
+from gpuai_sdk.models.secret_import_item import SecretImportItem as SecretImportItem
+from gpuai_sdk.models.secret_import_request import SecretImportRequest as SecretImportRequest
+from gpuai_sdk.models.secret_import_result import SecretImportResult as SecretImportResult
+from gpuai_sdk.models.secret_list import SecretList as SecretList
+from gpuai_sdk.models.secret_put import SecretPut as SecretPut
 from gpuai_sdk.models.spending_limit import SpendingLimit as SpendingLimit
 from gpuai_sdk.models.stream_options import StreamOptions as StreamOptions
 from gpuai_sdk.models.supplier_machine_view import SupplierMachineView as SupplierMachineView

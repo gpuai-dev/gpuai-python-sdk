@@ -34,7 +34,8 @@ class Balance(BaseModel):
     auto_pay_threshold_cents: StrictInt = Field(description="Auto-pay triggers when the balance falls below this. Meaningful only when auto_pay_enabled.")
     auto_pay_amount_cents: StrictInt = Field(description="Amount auto-pay charges when it triggers. Meaningful only when auto_pay_enabled.")
     burn_cents_per_hour: Optional[StrictInt] = Field(description="Live burn rate in USD cents per hour: the committed hourly price of every instance that is live, counted from launch — so instances still creating, provisioning or booting are included, not only those that have reached running. 0 when nothing is live.  `null` means the burn rate could not be determined. Treat that as unknown, never as 0: reading an unavailable burn rate as \"nothing running\" reports unbounded runway to an organization that may be minutes from empty.")
-    __properties: ClassVar[List[str]] = ["balance_cents", "balance_dollars", "auto_pay_enabled", "auto_pay_threshold_cents", "auto_pay_amount_cents", "burn_cents_per_hour"]
+    runway_hours: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="How many hours the balance lasts at the current usage: the balance divided by `burn_cents_per_hour` plus serverless inference spend over the last hour, rounded to 2 places. `null` when nothing is running or the burn rate could not be determined; 0 when the balance is at or below $0 while burning. Machines stop when the balance reaches $0.")
+    __properties: ClassVar[List[str]] = ["balance_cents", "balance_dollars", "auto_pay_enabled", "auto_pay_threshold_cents", "auto_pay_amount_cents", "burn_cents_per_hour", "runway_hours"]
 
     model_config = ConfigDict(
         validate_by_name=True,
@@ -80,6 +81,11 @@ class Balance(BaseModel):
         if self.burn_cents_per_hour is None and "burn_cents_per_hour" in self.model_fields_set:
             _dict['burn_cents_per_hour'] = None
 
+        # set to None if runway_hours (nullable) is None
+        # and model_fields_set contains the field
+        if self.runway_hours is None and "runway_hours" in self.model_fields_set:
+            _dict['runway_hours'] = None
+
         return _dict
 
     @classmethod
@@ -97,7 +103,8 @@ class Balance(BaseModel):
             "auto_pay_enabled": obj.get("auto_pay_enabled"),
             "auto_pay_threshold_cents": obj.get("auto_pay_threshold_cents"),
             "auto_pay_amount_cents": obj.get("auto_pay_amount_cents"),
-            "burn_cents_per_hour": obj.get("burn_cents_per_hour")
+            "burn_cents_per_hour": obj.get("burn_cents_per_hour"),
+            "runway_hours": obj.get("runway_hours")
         })
         return _obj
 

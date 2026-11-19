@@ -194,6 +194,8 @@ Divide `balance_cents` by `burn_cents_per_hour` for the remaining runway in hour
 
 This is the balance itself — for spend against a configured cap see `/billing/spending-limit`, and for past consumption see `/usage`.
 
+`runway_hours` does that division for you, adding serverless inference spend over the last hour to the burn. While it is under the low-balance threshold (2 hours by default) and auto-pay is off or failing, every authenticated response carries the `GPUAI-Balance-Warning` header.
+
 
 ### Example
 
@@ -258,7 +260,7 @@ This endpoint does not need any parameter.
 
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | OK |  -  |
+**200** | OK |  * GPUAI-Balance-Warning -  <br>  |
 **429** | Rate limit exceeded (RFC 7807). Retry-After header indicates seconds to wait. |  * Retry-After - Seconds the client should wait before retrying. <br>  |
 **0** | Error response (RFC 7807) |  -  |
 

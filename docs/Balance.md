@@ -12,6 +12,7 @@ Name | Type | Description | Notes
 **auto_pay_threshold_cents** | **int** | Auto-pay triggers when the balance falls below this. Meaningful only when auto_pay_enabled. | 
 **auto_pay_amount_cents** | **int** | Amount auto-pay charges when it triggers. Meaningful only when auto_pay_enabled. | 
 **burn_cents_per_hour** | **int** | Live burn rate in USD cents per hour: the committed hourly price of every instance that is live, counted from launch — so instances still creating, provisioning or booting are included, not only those that have reached running. 0 when nothing is live.  &#x60;null&#x60; means the burn rate could not be determined. Treat that as unknown, never as 0: reading an unavailable burn rate as \&quot;nothing running\&quot; reports unbounded runway to an organization that may be minutes from empty. | 
+**runway_hours** | **float** | How many hours the balance lasts at the current usage: the balance divided by &#x60;burn_cents_per_hour&#x60; plus serverless inference spend over the last hour, rounded to 2 places. &#x60;null&#x60; when nothing is running or the burn rate could not be determined; 0 when the balance is at or below $0 while burning. Machines stop when the balance reaches $0. | [optional] 
 
 ## Example
 
