@@ -92,7 +92,7 @@ class ApiClient:
             self.default_headers[header_name] = header_value
         self.cookie = cookie
         # Set default User-Agent.
-        self.user_agent = 'gpuai-sdk-python/0.5.5'
+        self.user_agent = 'gpuai-sdk-python/0.5.6'
         self.client_side_validation = configuration.client_side_validation
 
     def __enter__(self):
