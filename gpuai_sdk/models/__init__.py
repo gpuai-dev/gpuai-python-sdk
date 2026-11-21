@@ -104,6 +104,7 @@ from gpuai_sdk.models.invoice_list import InvoiceList
 from gpuai_sdk.models.job import Job
 from gpuai_sdk.models.job_attempt import JobAttempt
 from gpuai_sdk.models.job_create import JobCreate
+from gpuai_sdk.models.job_create_repo import JobCreateRepo
 from gpuai_sdk.models.job_gpu_types import JobGpuTypes
 from gpuai_sdk.models.job_gpu_types_data_inner import JobGpuTypesDataInner
 from gpuai_sdk.models.job_log_chunk import JobLogChunk

@@ -21,6 +21,7 @@ import json
 from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional, Union
 from typing_extensions import Annotated
+from gpuai_sdk.models.job_create_repo import JobCreateRepo
 from typing import Optional, Set
 from typing_extensions import Self
 from pydantic_core import to_jsonable_python
@@ -30,8 +31,10 @@ class JobCreate(BaseModel):
     JobCreate
     """ # noqa: E501
     name: Optional[Annotated[str, Field(strict=True, max_length=120)]] = Field(default=None, description="A label for the job. Jobs whose names match once digits are removed (`train-run-17`, `train-run-18`) are treated as repeats of the same work, and the peak memory of earlier finished runs is used to size later ones. Naming repeat jobs consistently is the simplest way to have them share a GPU without a memory hint. ")
-    image: StrictStr = Field(description="The container image to run, such as `registry.example.com/team/train:1.2`. The machine must be able to pull it without credentials. ")
-    command: Annotated[List[StrictStr], Field(min_length=1, max_length=256)] = Field(description="The program and its arguments. The first item replaces the image's entrypoint and the rest are its arguments, so `[\"python\", \"train.py\", \"--epochs\", \"3\"]` runs exactly that. ")
+    image: Optional[StrictStr] = Field(default=None, description="The container image to run, such as `registry.example.com/team/train:1.2`. The machine must be able to pull it without credentials. Required unless the deployment runs a default image: then it may be left out, `gpu_type` is required, and the job runs on the GPU.ai PyTorch image built for that GPU. ")
+    command: Optional[Annotated[List[StrictStr], Field(min_length=1, max_length=256)]] = Field(default=None, description="The program and its arguments. The first item replaces the image's entrypoint and the rest are its arguments, so `[\"python\", \"train.py\", \"--epochs\", \"3\"]` runs exactly that. Send this or `script`. ")
+    script: Optional[Annotated[str, Field(strict=True, max_length=30720)]] = Field(default=None, description="A shell script run with `bash -c` in place of `command`, such as `pip install -r requirements.txt && python train.py`. Only where the deployment runs a default image; elsewhere it is refused with a 422. ")
+    repo: Optional[JobCreateRepo] = None
     env: Optional[Dict[str, StrictStr]] = Field(default=None, description="Environment variables for the job, at most 100. Names starting with `GPUAI_` are reserved. Values are stored to run the job and are never returned by the API. ")
     gpu_type: Optional[StrictStr] = Field(default=None, description="The GPU model to run on, as in GET /v1/gpu-types. One of `gpu_type` or `min_vram_gb` is required. ")
     min_vram_gb: Optional[Annotated[int, Field(le=1024, strict=True, ge=1)]] = Field(default=None, description="Run on any GPU model with at least this much memory, in GB. Used when `gpu_type` is not given. ")
@@ -46,7 +49,8 @@ class JobCreate(BaseModel):
     max_retries: Optional[Annotated[int, Field(le=5, strict=True, ge=0)]] = Field(default=None, description="How many times to rerun the job after it runs out of GPU memory or is stopped for outgrowing its reservation. Defaults to 2. Other failures are never retried. ")
     max_price_per_hour: Optional[Union[Annotated[float, Field(strict=True, gt=0)], Annotated[int, Field(strict=True, gt=0)]]] = Field(default=None, description="Only run on a machine whose hourly price is at most this. Machines are launched on the cheapest suitable listing in any region. ")
     secrets: Optional[Annotated[List[StrictStr], Field(max_length=50)]] = Field(default=None, description="Names of organization secrets (POST /secrets) the job's container receives as environment variables of the same names. Values are never in a response or a log. Returns 422 `validation_failed` when a name does not exist or secrets are not enabled on this deployment.")
-    __properties: ClassVar[List[str]] = ["name", "image", "command", "env", "gpu_type", "min_vram_gb", "memory_hint_mb", "compute_hint_pct", "timeout_seconds", "max_wait_seconds", "allow_sharing", "allow_restart", "isolation", "checkpoint_path", "max_retries", "max_price_per_hour", "secrets"]
+    additional_properties: Dict[str, Any] = {}
+    __properties: ClassVar[List[str]] = ["name", "image", "command", "script", "repo", "env", "gpu_type", "min_vram_gb", "memory_hint_mb", "compute_hint_pct", "timeout_seconds", "max_wait_seconds", "allow_sharing", "allow_restart", "isolation", "checkpoint_path", "max_retries", "max_price_per_hour", "secrets"]
 
     @field_validator('isolation')
     def isolation_validate_enum(cls, value):
@@ -88,8 +92,10 @@ class JobCreate(BaseModel):
         * `None` is only added to the output dict for nullable fields that
           were set at model initialization. Other fields with value `None`
           are ignored.
+        * Fields in `self.additional_properties` are added to the output dict.
         """
         excluded_fields: Set[str] = set([
+            "additional_properties",
         ])
 
         _dict = self.model_dump(
@@ -97,6 +103,14 @@ class JobCreate(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of repo
+        if self.repo:
+            _dict['repo'] = self.repo.to_dict()
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         # set to None if memory_hint_mb (nullable) is None
         # and model_fields_set contains the field
         if self.memory_hint_mb is None and "memory_hint_mb" in self.model_fields_set:
@@ -132,6 +146,8 @@ class JobCreate(BaseModel):
             "name": obj.get("name"),
             "image": obj.get("image"),
             "command": obj.get("command"),
+            "script": obj.get("script"),
+            "repo": JobCreateRepo.from_dict(obj["repo"]) if obj.get("repo") is not None else None,
             "env": obj.get("env"),
             "gpu_type": obj.get("gpu_type"),
             "min_vram_gb": obj.get("min_vram_gb"),
@@ -147,6 +163,11 @@ class JobCreate(BaseModel):
             "max_price_per_hour": obj.get("max_price_per_hour"),
             "secrets": obj.get("secrets")
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 
 

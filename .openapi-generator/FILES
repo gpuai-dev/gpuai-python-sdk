@@ -100,6 +100,7 @@ docs/InvoiceList.md
 docs/Job.md
 docs/JobAttempt.md
 docs/JobCreate.md
+docs/JobCreateRepo.md
 docs/JobGpuTypes.md
 docs/JobGpuTypesDataInner.md
 docs/JobLogChunk.md
@@ -295,6 +296,7 @@ gpuai_sdk/models/invoice_list.py
 gpuai_sdk/models/job.py
 gpuai_sdk/models/job_attempt.py
 gpuai_sdk/models/job_create.py
+gpuai_sdk/models/job_create_repo.py
 gpuai_sdk/models/job_gpu_types.py
 gpuai_sdk/models/job_gpu_types_data_inner.py
 gpuai_sdk/models/job_log_chunk.py

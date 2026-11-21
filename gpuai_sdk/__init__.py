@@ -15,7 +15,7 @@
 """  # noqa: E501
 
 
-__version__ = "0.5.7"
+__version__ = "0.5.8"
 
 # Define package exports
 __all__ = [
@@ -140,6 +140,7 @@ __all__ = [
     "Job",
     "JobAttempt",
     "JobCreate",
+    "JobCreateRepo",
     "JobGpuTypes",
     "JobGpuTypesDataInner",
     "JobLogChunk",
@@ -332,6 +333,7 @@ from gpuai_sdk.models.invoice_list import InvoiceList as InvoiceList
 from gpuai_sdk.models.job import Job as Job
 from gpuai_sdk.models.job_attempt import JobAttempt as JobAttempt
 from gpuai_sdk.models.job_create import JobCreate as JobCreate
+from gpuai_sdk.models.job_create_repo import JobCreateRepo as JobCreateRepo
 from gpuai_sdk.models.job_gpu_types import JobGpuTypes as JobGpuTypes
 from gpuai_sdk.models.job_gpu_types_data_inner import JobGpuTypesDataInner as JobGpuTypesDataInner
 from gpuai_sdk.models.job_log_chunk import JobLogChunk as JobLogChunk

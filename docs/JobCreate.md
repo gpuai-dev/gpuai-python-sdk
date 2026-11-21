@@ -6,8 +6,10 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **name** | **str** | A label for the job. Jobs whose names match once digits are removed (&#x60;train-run-17&#x60;, &#x60;train-run-18&#x60;) are treated as repeats of the same work, and the peak memory of earlier finished runs is used to size later ones. Naming repeat jobs consistently is the simplest way to have them share a GPU without a memory hint.  | [optional] 
-**image** | **str** | The container image to run, such as &#x60;registry.example.com/team/train:1.2&#x60;. The machine must be able to pull it without credentials.  | 
-**command** | **List[str]** | The program and its arguments. The first item replaces the image&#39;s entrypoint and the rest are its arguments, so &#x60;[\&quot;python\&quot;, \&quot;train.py\&quot;, \&quot;--epochs\&quot;, \&quot;3\&quot;]&#x60; runs exactly that.  | 
+**image** | **str** | The container image to run, such as &#x60;registry.example.com/team/train:1.2&#x60;. The machine must be able to pull it without credentials. Required unless the deployment runs a default image: then it may be left out, &#x60;gpu_type&#x60; is required, and the job runs on the GPU.ai PyTorch image built for that GPU.  | [optional] 
+**command** | **List[str]** | The program and its arguments. The first item replaces the image&#39;s entrypoint and the rest are its arguments, so &#x60;[\&quot;python\&quot;, \&quot;train.py\&quot;, \&quot;--epochs\&quot;, \&quot;3\&quot;]&#x60; runs exactly that. Send this or &#x60;script&#x60;.  | [optional] 
+**script** | **str** | A shell script run with &#x60;bash -c&#x60; in place of &#x60;command&#x60;, such as &#x60;pip install -r requirements.txt &amp;&amp; python train.py&#x60;. Only where the deployment runs a default image; elsewhere it is refused with a 422.  | [optional] 
+**repo** | [**JobCreateRepo**](JobCreateRepo.md) |  | [optional] 
 **env** | **Dict[str, str]** | Environment variables for the job, at most 100. Names starting with &#x60;GPUAI_&#x60; are reserved. Values are stored to run the job and are never returned by the API.  | [optional] 
 **gpu_type** | **str** | The GPU model to run on, as in GET /v1/gpu-types. One of &#x60;gpu_type&#x60; or &#x60;min_vram_gb&#x60; is required.  | [optional] 
 **min_vram_gb** | **int** | Run on any GPU model with at least this much memory, in GB. Used when &#x60;gpu_type&#x60; is not given.  | [optional] 
