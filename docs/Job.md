@@ -25,6 +25,7 @@ Name | Type | Description | Notes
 **checkpoint_path** | **str** |  | 
 **max_retries** | **int** |  | 
 **max_price_per_hour** | **float** |  | 
+**trial_funded** | **bool** | The job was submitted with no balance and runs on the free trial. It stops when the trial credit is used.  | [optional] 
 **status** | **str** | &#x60;queued&#x60; is waiting for a GPU, &#x60;assigned&#x60; has a GPU and is about to start, &#x60;running&#x60; is running. &#x60;succeeded&#x60;, &#x60;failed&#x60; and &#x60;cancelled&#x60; are final. A job that is retried goes back to &#x60;queued&#x60;.  | 
 **status_reason** | **str** | Why the job is waiting, or why it failed or was retried. | 
 **cancel_requested** | **bool** | True once a cancel has been asked for and until the job stops. | 

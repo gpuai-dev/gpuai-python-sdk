@@ -12,6 +12,9 @@ Name | Type | Description | Notes
 **credited_cents** | **int** | Trial credit added to the balance so far, in cents. | 
 **remaining_cents** | **int** | How much more job cost the trial covers, in cents. | 
 **message** | **str** | The line to show the user, e.g. \&quot;Your first jobs are free, up to $10.\&quot; Omitted when not eligible. | [optional] 
+**funding** | **str** | How an eligible organization&#39;s trial is paid for. &#x60;credit_back&#x60;: it pays as usual and job cost is credited back. &#x60;no_deposit&#x60;: it has no balance and may submit a trial job now. &#x60;deposit_first&#x60;: it has no balance and must add credits first. Omitted when not eligible.  | [optional] 
+**max_price_per_hour** | **float** | The most a trial job&#39;s GPU may cost per hour. Only with &#x60;funding&#x60; no_deposit, and only when the deployment sets such a limit (by default it sets none). | [optional] 
+**max_runtime_seconds** | **int** | The longest a trial job may run. Only with &#x60;funding&#x60; no_deposit, and only when the deployment sets such a limit (by default it sets none). | [optional] 
 
 ## Example
 

@@ -18,8 +18,8 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt, StrictStr, field_validator
-from typing import Any, ClassVar, Dict, List, Optional
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictFloat, StrictInt, StrictStr, field_validator
+from typing import Any, ClassVar, Dict, List, Optional, Union
 from typing import Optional, Set
 from typing_extensions import Self
 from pydantic_core import to_jsonable_python
@@ -35,7 +35,10 @@ class JobTrial(BaseModel):
     credited_cents: StrictInt = Field(description="Trial credit added to the balance so far, in cents.")
     remaining_cents: StrictInt = Field(description="How much more job cost the trial covers, in cents.")
     message: Optional[StrictStr] = Field(default=None, description="The line to show the user, e.g. \"Your first jobs are free, up to $10.\" Omitted when not eligible.")
-    __properties: ClassVar[List[str]] = ["enabled", "eligible", "reason", "cap_cents", "credited_cents", "remaining_cents", "message"]
+    funding: Optional[StrictStr] = Field(default=None, description="How an eligible organization's trial is paid for. `credit_back`: it pays as usual and job cost is credited back. `no_deposit`: it has no balance and may submit a trial job now. `deposit_first`: it has no balance and must add credits first. Omitted when not eligible. ")
+    max_price_per_hour: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="The most a trial job's GPU may cost per hour. Only with `funding` no_deposit, and only when the deployment sets such a limit (by default it sets none).")
+    max_runtime_seconds: Optional[StrictInt] = Field(default=None, description="The longest a trial job may run. Only with `funding` no_deposit, and only when the deployment sets such a limit (by default it sets none).")
+    __properties: ClassVar[List[str]] = ["enabled", "eligible", "reason", "cap_cents", "credited_cents", "remaining_cents", "message", "funding", "max_price_per_hour", "max_runtime_seconds"]
 
     @field_validator('reason')
     def reason_validate_enum(cls, value):
@@ -45,6 +48,16 @@ class JobTrial(BaseModel):
 
         if value not in set(['used', 'existing_user', 'internal', 'frozen', 'linked_account']):
             raise ValueError("must be one of enum values ('used', 'existing_user', 'internal', 'frozen', 'linked_account')")
+        return value
+
+    @field_validator('funding')
+    def funding_validate_enum(cls, value):
+        """Validates the enum"""
+        if value is None:
+            return value
+
+        if value not in set(['credit_back', 'no_deposit', 'deposit_first']):
+            raise ValueError("must be one of enum values ('credit_back', 'no_deposit', 'deposit_first')")
         return value
 
     model_config = ConfigDict(
@@ -104,7 +117,10 @@ class JobTrial(BaseModel):
             "cap_cents": obj.get("cap_cents"),
             "credited_cents": obj.get("credited_cents"),
             "remaining_cents": obj.get("remaining_cents"),
-            "message": obj.get("message")
+            "message": obj.get("message"),
+            "funding": obj.get("funding"),
+            "max_price_per_hour": obj.get("max_price_per_hour"),
+            "max_runtime_seconds": obj.get("max_runtime_seconds")
         })
         return _obj
 

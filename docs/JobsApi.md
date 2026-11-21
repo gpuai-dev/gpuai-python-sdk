@@ -117,6 +117,8 @@ Billing: the machines a job runs on are instances of your organization and are b
 
 Free trial: when this deployment runs one, an organization's first jobs are free up to a cap (GET /jobs/trial). Their attributed cost is credited back to the balance as they run.
 
+No balance: an organization with no balance is refused (402) unless the deployment runs the free trial for organizations with no balance and GET /jobs/trial reports `funding` "no_deposit". Then the job runs on the trial with `trial_funded` true. When the trial credit is used the job is cancelled with the status reason "Stopped because your free Jobs trial credit ran out. Add credits to keep running jobs."
+
 
 ### Example
 
@@ -188,8 +190,8 @@ Name | Type | Description  | Notes
 
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**201** | Created |  * GPUAI-Hint - Advisory only. Sent while the organization&#39;s first jobs are free (GET /jobs/trial), e.g. \&quot;Your first jobs are free, up to $10. We credit back what they cost as they run.\&quot; <br>  |
-**402** | The organization has no balance. Add credits, then submit again. |  -  |
+**201** | Created |  * GPUAI-Hint - Advisory only. Sent while the organization&#39;s first jobs are free (GET /jobs/trial), e.g. \&quot;Your first jobs are free, up to $10. We credit back what they cost as they run.\&quot; For a job that runs on the trial with no balance it says the job stops when the trial credit is used. <br>  |
+**402** | The organization has no balance and the job cannot run on the free trial (the trial is off, used, or at its limit for today, or the person already used it). The detail says which. Add credits, then submit again.  |  -  |
 **422** | Validation failed. The detail names the field: a missing image or command, an unknown field, an unknown &#x60;gpu_type&#x60;, neither &#x60;gpu_type&#x60; nor &#x60;min_vram_gb&#x60;, a memory hint larger than the GPU, an environment variable name starting with &#x60;GPUAI_&#x60;, or a value out of range.  |  -  |
 **429** | Rate limited, or the organization already has the maximum number of queued and running jobs.  |  -  |
 **0** | Error response (RFC 7807) |  -  |

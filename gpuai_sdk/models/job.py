@@ -50,6 +50,7 @@ class Job(BaseModel):
     checkpoint_path: Optional[StrictStr]
     max_retries: StrictInt
     max_price_per_hour: Optional[Union[StrictFloat, StrictInt]]
+    trial_funded: Optional[StrictBool] = Field(default=None, description="The job was submitted with no balance and runs on the free trial. It stops when the trial credit is used. ")
     status: StrictStr = Field(description="`queued` is waiting for a GPU, `assigned` has a GPU and is about to start, `running` is running. `succeeded`, `failed` and `cancelled` are final. A job that is retried goes back to `queued`. ")
     status_reason: Optional[StrictStr] = Field(description="Why the job is waiting, or why it failed or was retried.")
     cancel_requested: StrictBool = Field(description="True once a cancel has been asked for and until the job stops.")
@@ -77,7 +78,7 @@ class Job(BaseModel):
     finished_at: Optional[datetime]
     sharing_hint: Optional[JobSharingHint] = None
     attempts: Optional[List[JobAttempt]] = Field(default=None, description="The job's attempts, oldest first. Returned by GET /v1/jobs/{id} only.")
-    __properties: ClassVar[List[str]] = ["id", "name", "image", "command", "env_names", "secrets", "gpu_type", "min_vram_gb", "memory_hint_mb", "compute_hint_pct", "timeout_seconds", "max_wait_seconds", "allow_sharing", "allow_restart", "isolation", "mig_profile", "checkpoint_path", "max_retries", "max_price_per_hour", "status", "status_reason", "cancel_requested", "attempt", "retries", "evictions", "oom_exits", "reservation_mb", "whole_gpu", "predicted_mb", "prediction_source", "predicted_compute_pct", "compute_prediction_source", "peak_memory_mb", "gpu_memory_total_mb", "util_mean_pct", "busy_pct", "memory_source", "sharing_mode", "gpu_seconds", "attributed_cost_usd", "exit_code", "created_at", "started_at", "finished_at", "sharing_hint", "attempts"]
+    __properties: ClassVar[List[str]] = ["id", "name", "image", "command", "env_names", "secrets", "gpu_type", "min_vram_gb", "memory_hint_mb", "compute_hint_pct", "timeout_seconds", "max_wait_seconds", "allow_sharing", "allow_restart", "isolation", "mig_profile", "checkpoint_path", "max_retries", "max_price_per_hour", "trial_funded", "status", "status_reason", "cancel_requested", "attempt", "retries", "evictions", "oom_exits", "reservation_mb", "whole_gpu", "predicted_mb", "prediction_source", "predicted_compute_pct", "compute_prediction_source", "peak_memory_mb", "gpu_memory_total_mb", "util_mean_pct", "busy_pct", "memory_source", "sharing_mode", "gpu_seconds", "attributed_cost_usd", "exit_code", "created_at", "started_at", "finished_at", "sharing_hint", "attempts"]
 
     @field_validator('isolation')
     def isolation_validate_enum(cls, value):
@@ -298,6 +299,7 @@ class Job(BaseModel):
             "checkpoint_path": obj.get("checkpoint_path"),
             "max_retries": obj.get("max_retries"),
             "max_price_per_hour": obj.get("max_price_per_hour"),
+            "trial_funded": obj.get("trial_funded"),
             "status": obj.get("status"),
             "status_reason": obj.get("status_reason"),
             "cancel_requested": obj.get("cancel_requested"),

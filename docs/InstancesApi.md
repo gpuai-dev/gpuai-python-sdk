@@ -90,7 +90,7 @@ Name | Type | Description  | Notes
 
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**202** | Accepted; long-running operation |  * Operation-Id -  <br>  * GPUAI-Hint - Advisory only. Sent while the organization&#39;s first jobs are free (GET /jobs/trial), e.g. \&quot;Your first jobs are free, up to $10. We credit back what they cost as they run.\&quot; <br>  * GPUAI-Balance-Warning -  <br>  |
+**202** | Accepted; long-running operation |  * Operation-Id -  <br>  * GPUAI-Hint - Advisory only. Sent while the organization&#39;s first jobs are free (GET /jobs/trial), e.g. \&quot;Your first jobs are free, up to $10. We credit back what they cost as they run.\&quot; For a job that runs on the trial with no balance it says the job stops when the trial credit is used. <br>  * GPUAI-Balance-Warning -  <br>  |
 **429** | Rate limit exceeded (RFC 7807). Retry-After header indicates seconds to wait. |  * Retry-After - Seconds the client should wait before retrying. <br>  |
 **0** | Error response (RFC 7807) |  -  |
 
