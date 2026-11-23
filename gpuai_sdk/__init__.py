@@ -15,7 +15,7 @@
 """  # noqa: E501
 
 
-__version__ = "0.5.8"
+__version__ = "0.5.9"
 
 # Define package exports
 __all__ = [
@@ -56,6 +56,9 @@ __all__ = [
     "AutolaunchRulePage",
     "Balance",
     "BillingDetails",
+    "CardDeposit",
+    "CardDepositStatus",
+    "CardDepositStatusMatch",
     "ChatChoice",
     "ChatCompletionRequest",
     "ChatCompletionRequestToolChoice",
@@ -73,6 +76,8 @@ __all__ = [
     "CommunityMachineDelistResult",
     "CommunityMachineRegistration",
     "CommunitySupplier",
+    "CreateCardCheckoutRequest",
+    "CreateCardDepositRequest",
     "CreateCryptoDepositRequest",
     "CreateFineTuningJobRequest",
     "CreateFineTuningJobRequestGpuai",
@@ -143,8 +148,12 @@ __all__ = [
     "JobCreateRepo",
     "JobGpuTypes",
     "JobGpuTypesDataInner",
+    "JobInput",
+    "JobInputCreate",
     "JobLogChunk",
     "JobLogs",
+    "JobOutputFile",
+    "JobOutputs",
     "JobPage",
     "JobSharingHint",
     "JobTelemetry",
@@ -152,6 +161,7 @@ __all__ = [
     "JobTrial",
     "ListCommunityMachines200Response",
     "ListDeposits200Response",
+    "ListPaymentMethods200Response",
     "ListRegistryCredentials200Response",
     "MarketHistoryPoint",
     "MarketHistoryResponse",
@@ -174,6 +184,7 @@ __all__ = [
     "RegistryCredential",
     "SSHKey",
     "SSHKeyPage",
+    "SavedCard",
     "Secret",
     "SecretCreate",
     "SecretImportItem",
@@ -249,6 +260,9 @@ from gpuai_sdk.models.autolaunch_rule_disarm import AutolaunchRuleDisarm as Auto
 from gpuai_sdk.models.autolaunch_rule_page import AutolaunchRulePage as AutolaunchRulePage
 from gpuai_sdk.models.balance import Balance as Balance
 from gpuai_sdk.models.billing_details import BillingDetails as BillingDetails
+from gpuai_sdk.models.card_deposit import CardDeposit as CardDeposit
+from gpuai_sdk.models.card_deposit_status import CardDepositStatus as CardDepositStatus
+from gpuai_sdk.models.card_deposit_status_match import CardDepositStatusMatch as CardDepositStatusMatch
 from gpuai_sdk.models.chat_choice import ChatChoice as ChatChoice
 from gpuai_sdk.models.chat_completion_request import ChatCompletionRequest as ChatCompletionRequest
 from gpuai_sdk.models.chat_completion_request_tool_choice import ChatCompletionRequestToolChoice as ChatCompletionRequestToolChoice
@@ -266,6 +280,8 @@ from gpuai_sdk.models.community_machine import CommunityMachine as CommunityMach
 from gpuai_sdk.models.community_machine_delist_result import CommunityMachineDelistResult as CommunityMachineDelistResult
 from gpuai_sdk.models.community_machine_registration import CommunityMachineRegistration as CommunityMachineRegistration
 from gpuai_sdk.models.community_supplier import CommunitySupplier as CommunitySupplier
+from gpuai_sdk.models.create_card_checkout_request import CreateCardCheckoutRequest as CreateCardCheckoutRequest
+from gpuai_sdk.models.create_card_deposit_request import CreateCardDepositRequest as CreateCardDepositRequest
 from gpuai_sdk.models.create_crypto_deposit_request import CreateCryptoDepositRequest as CreateCryptoDepositRequest
 from gpuai_sdk.models.create_fine_tuning_job_request import CreateFineTuningJobRequest as CreateFineTuningJobRequest
 from gpuai_sdk.models.create_fine_tuning_job_request_gpuai import CreateFineTuningJobRequestGpuai as CreateFineTuningJobRequestGpuai
@@ -336,8 +352,12 @@ from gpuai_sdk.models.job_create import JobCreate as JobCreate
 from gpuai_sdk.models.job_create_repo import JobCreateRepo as JobCreateRepo
 from gpuai_sdk.models.job_gpu_types import JobGpuTypes as JobGpuTypes
 from gpuai_sdk.models.job_gpu_types_data_inner import JobGpuTypesDataInner as JobGpuTypesDataInner
+from gpuai_sdk.models.job_input import JobInput as JobInput
+from gpuai_sdk.models.job_input_create import JobInputCreate as JobInputCreate
 from gpuai_sdk.models.job_log_chunk import JobLogChunk as JobLogChunk
 from gpuai_sdk.models.job_logs import JobLogs as JobLogs
+from gpuai_sdk.models.job_output_file import JobOutputFile as JobOutputFile
+from gpuai_sdk.models.job_outputs import JobOutputs as JobOutputs
 from gpuai_sdk.models.job_page import JobPage as JobPage
 from gpuai_sdk.models.job_sharing_hint import JobSharingHint as JobSharingHint
 from gpuai_sdk.models.job_telemetry import JobTelemetry as JobTelemetry
@@ -345,6 +365,7 @@ from gpuai_sdk.models.job_telemetry_point import JobTelemetryPoint as JobTelemet
 from gpuai_sdk.models.job_trial import JobTrial as JobTrial
 from gpuai_sdk.models.list_community_machines200_response import ListCommunityMachines200Response as ListCommunityMachines200Response
 from gpuai_sdk.models.list_deposits200_response import ListDeposits200Response as ListDeposits200Response
+from gpuai_sdk.models.list_payment_methods200_response import ListPaymentMethods200Response as ListPaymentMethods200Response
 from gpuai_sdk.models.list_registry_credentials200_response import ListRegistryCredentials200Response as ListRegistryCredentials200Response
 from gpuai_sdk.models.market_history_point import MarketHistoryPoint as MarketHistoryPoint
 from gpuai_sdk.models.market_history_response import MarketHistoryResponse as MarketHistoryResponse
@@ -367,6 +388,7 @@ from gpuai_sdk.models.register_community_machine_request import RegisterCommunit
 from gpuai_sdk.models.registry_credential import RegistryCredential as RegistryCredential
 from gpuai_sdk.models.ssh_key import SSHKey as SSHKey
 from gpuai_sdk.models.ssh_key_page import SSHKeyPage as SSHKeyPage
+from gpuai_sdk.models.saved_card import SavedCard as SavedCard
 from gpuai_sdk.models.secret import Secret as Secret
 from gpuai_sdk.models.secret_create import SecretCreate as SecretCreate
 from gpuai_sdk.models.secret_import_item import SecretImportItem as SecretImportItem

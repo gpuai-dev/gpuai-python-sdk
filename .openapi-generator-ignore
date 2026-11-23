@@ -52,3 +52,11 @@ LICENSE
 gpuai_sdk/functions/**
 tests/**
 examples/**
+
+# WHY: hand-written, not generated. gpuai_sdk.jobs is the Jobs helper
+# (JobsClient: submit a job, stream its output, wait for it). It wraps the
+# generated JobsApi and returns its models, adding the retry, log-following and
+# wait loops a queue worker would otherwise write by hand, so it must survive
+# every regeneration. Its tests and examples sit under tests/ and examples/,
+# already listed above.
+gpuai_sdk/jobs/**

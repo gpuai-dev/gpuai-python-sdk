@@ -4,17 +4,202 @@ All URIs are relative to *https://api.gpu.ai/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**create_card_checkout**](BillingApi.md#create_card_checkout) | **POST** /billing/deposits/card/checkout | Top up the balance with Stripe Checkout
+[**create_card_deposit**](BillingApi.md#create_card_deposit) | **POST** /billing/deposits/card | Top up the balance by charging a saved card
 [**create_crypto_deposit**](BillingApi.md#create_crypto_deposit) | **POST** /billing/deposits/crypto | Create a stablecoin deposit
 [**download_invoice_pdf**](BillingApi.md#download_invoice_pdf) | **GET** /billing/invoices/{id}/pdf | Download an invoice PDF
 [**get_balance**](BillingApi.md#get_balance) | **GET** /billing/balance | Get the org credit balance
 [**get_billing_details**](BillingApi.md#get_billing_details) | **GET** /billing/details | Get billing details
+[**get_card_deposit**](BillingApi.md#get_card_deposit) | **GET** /billing/deposits/card/{id} | Get a card deposit&#39;s status
 [**get_deposit**](BillingApi.md#get_deposit) | **GET** /billing/deposits/{id} | Get one stablecoin deposit
 [**get_spending_limit**](BillingApi.md#get_spending_limit) | **GET** /billing/spending-limit | Get the org spending limit
 [**list_deposits**](BillingApi.md#list_deposits) | **GET** /billing/deposits | List stablecoin deposits
 [**list_invoices**](BillingApi.md#list_invoices) | **GET** /billing/invoices | List invoices
+[**list_payment_methods**](BillingApi.md#list_payment_methods) | **GET** /billing/payment-methods | List saved cards
 [**update_billing_details**](BillingApi.md#update_billing_details) | **PATCH** /billing/details | Update billing details
 [**update_spending_limit**](BillingApi.md#update_spending_limit) | **PUT** /billing/spending-limit | Set the org spending limit
 
+
+# **create_card_checkout**
+> CardDeposit create_card_checkout(create_card_checkout_request)
+
+Top up the balance with Stripe Checkout
+
+Creates the same Stripe Checkout session as the dashboard's "Add credits" and returns its URL as `checkout_url`. Nothing is charged until the customer pays on that page; paying saves the card for later `POST /billing/deposits/card` top-ups. Requires the `billing:write` scope AND an organization admin. `deposit_id` is the Checkout Session id; poll `GET /billing/deposits/card/{id}`.
+
+
+### Example
+
+* Bearer (gpuai_live_<24-base62>) Authentication (bearerAuth):
+
+```python
+import gpuai_sdk
+from gpuai_sdk.models.card_deposit import CardDeposit
+from gpuai_sdk.models.create_card_checkout_request import CreateCardCheckoutRequest
+from gpuai_sdk.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to https://api.gpu.ai/v1
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gpuai_sdk.Configuration(
+    host = "https://api.gpu.ai/v1"
+)
+
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (gpuai_live_<24-base62>): bearerAuth
+configuration = gpuai_sdk.Configuration(
+    access_token = os.environ["BEARER_TOKEN"]
+)
+
+# Enter a context with an instance of the API client
+with gpuai_sdk.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = gpuai_sdk.BillingApi(api_client)
+    create_card_checkout_request = gpuai_sdk.CreateCardCheckoutRequest() # CreateCardCheckoutRequest | 
+
+    try:
+        # Top up the balance with Stripe Checkout
+        api_response = api_instance.create_card_checkout(create_card_checkout_request)
+        print("The response of BillingApi->create_card_checkout:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling BillingApi->create_card_checkout: %s\n" % e)
+```
+
+
+
+### Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **create_card_checkout_request** | [**CreateCardCheckoutRequest**](CreateCardCheckoutRequest.md)|  | 
+
+### Return type
+
+[**CardDeposit**](CardDeposit.md)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json, application/problem+json
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+**400** | &#x60;validation-error&#x60; — amount below $5.00. |  -  |
+**403** | &#x60;forbidden&#x60; — not an organization admin. &#x60;org-frozen&#x60; — the organization cannot add funds. |  -  |
+**422** | &#x60;card-topup-limit&#x60; — over the per-charge limit. |  -  |
+**429** | Rate limit exceeded (RFC 7807). Retry-After header indicates seconds to wait. |  * Retry-After - Seconds the client should wait before retrying. <br>  |
+**0** | Error response (RFC 7807) |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **create_card_deposit**
+> CardDeposit create_card_deposit(create_card_deposit_request, idempotency_key=idempotency_key)
+
+Top up the balance by charging a saved card
+
+Charges one of the organization's saved cards off-session and returns the Stripe PaymentIntent id as `deposit_id`. The balance is credited a few seconds later by GPU.ai's Stripe webhook, exactly like a deposit made on the website, including any deposit-match promotion and its card hold; poll `GET /billing/deposits/card/{id}` to see it land.
+
+Requires the `payments:write` scope, carried by `full_access` keys (what `gpu login` issues to an organization admin) and by an explicit `{"payments": "write"}` grant, never by `standard` or `read_only`. The key owner must also be an organization admin.
+
+Limits (server configuration, defaults shown): at most $10,000 per charge and $25,000 of saved-card charges per organization in any rolling 24 hours (declined or canceled charges do not count, and a charge left waiting for 3-D Secure stops counting after an hour). Saved-card charging can be switched off by an operator; it then answers `503 card-topup-disabled` and `POST /billing/deposits/card/checkout` still works.
+
+An `Idempotency-Key` header is REQUIRED. Retrying with the same key replays the first attempt (here and at Stripe) instead of charging again; use a new key for each deliberate top-up. When the card issuer requires 3-D Secure, the response has `status: requires_action` and an `action_url` to open in a browser.
+
+
+### Example
+
+* Bearer (gpuai_live_<24-base62>) Authentication (bearerAuth):
+
+```python
+import gpuai_sdk
+from gpuai_sdk.models.card_deposit import CardDeposit
+from gpuai_sdk.models.create_card_deposit_request import CreateCardDepositRequest
+from gpuai_sdk.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to https://api.gpu.ai/v1
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gpuai_sdk.Configuration(
+    host = "https://api.gpu.ai/v1"
+)
+
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (gpuai_live_<24-base62>): bearerAuth
+configuration = gpuai_sdk.Configuration(
+    access_token = os.environ["BEARER_TOKEN"]
+)
+
+# Enter a context with an instance of the API client
+with gpuai_sdk.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = gpuai_sdk.BillingApi(api_client)
+    create_card_deposit_request = gpuai_sdk.CreateCardDepositRequest() # CreateCardDepositRequest | 
+    idempotency_key = 'idempotency_key_example' # str |  (optional)
+
+    try:
+        # Top up the balance by charging a saved card
+        api_response = api_instance.create_card_deposit(create_card_deposit_request, idempotency_key=idempotency_key)
+        print("The response of BillingApi->create_card_deposit:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling BillingApi->create_card_deposit: %s\n" % e)
+```
+
+
+
+### Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **create_card_deposit_request** | [**CreateCardDepositRequest**](CreateCardDepositRequest.md)|  | 
+ **idempotency_key** | **str**|  | [optional] 
+
+### Return type
+
+[**CardDeposit**](CardDeposit.md)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json, application/problem+json
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Charged, processing, or awaiting 3-D Secure. |  -  |
+**400** | &#x60;validation-error&#x60; — amount below $5.00. &#x60;idempotency-key-required&#x60; — no Idempotency-Key header. |  -  |
+**402** | &#x60;card-declined&#x60; — the issuer declined; nothing was charged. |  -  |
+**403** | &#x60;insufficient_scope&#x60; — the key lacks &#x60;payments:write&#x60;. &#x60;forbidden&#x60; — not an organization admin. &#x60;org-frozen&#x60; — the organization cannot add funds. |  -  |
+**409** | &#x60;no-saved-card&#x60; — no (matching) saved card; use &#x60;POST /billing/deposits/card/checkout&#x60; once to save one. &#x60;idempotency-key-used&#x60; — this key belongs to a top-up that already failed. |  -  |
+**422** | &#x60;card-topup-limit&#x60; — over the per-charge limit. &#x60;card-topup-daily-limit&#x60; — over the organization&#39;s rolling-24h limit; the detail says how much is left. |  -  |
+**503** | &#x60;card-topup-disabled&#x60; — saved-card charging is switched off; use Checkout. |  -  |
+**429** | Rate limit exceeded (RFC 7807). Retry-After header indicates seconds to wait. |  * Retry-After - Seconds the client should wait before retrying. <br>  |
+**0** | Error response (RFC 7807) |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **create_crypto_deposit**
 > CryptoDeposit create_crypto_deposit(create_crypto_deposit_request)
@@ -343,6 +528,88 @@ This endpoint does not need any parameter.
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **get_card_deposit**
+> CardDepositStatus get_card_deposit(id)
+
+Get a card deposit's status
+
+Reports whether a card top-up has been credited to the balance, and what any deposit-match promotion decided for it. Requires the `billing:read` scope. Reads GPU.ai's ledger, never Stripe: an id that belongs to another organization reads as `pending`.
+
+
+### Example
+
+* Bearer (gpuai_live_<24-base62>) Authentication (bearerAuth):
+
+```python
+import gpuai_sdk
+from gpuai_sdk.models.card_deposit_status import CardDepositStatus
+from gpuai_sdk.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to https://api.gpu.ai/v1
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gpuai_sdk.Configuration(
+    host = "https://api.gpu.ai/v1"
+)
+
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (gpuai_live_<24-base62>): bearerAuth
+configuration = gpuai_sdk.Configuration(
+    access_token = os.environ["BEARER_TOKEN"]
+)
+
+# Enter a context with an instance of the API client
+with gpuai_sdk.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = gpuai_sdk.BillingApi(api_client)
+    id = 'id_example' # str | A card deposit id (`pi_...` or `cs_...`).
+
+    try:
+        # Get a card deposit's status
+        api_response = api_instance.get_card_deposit(id)
+        print("The response of BillingApi->get_card_deposit:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling BillingApi->get_card_deposit: %s\n" % e)
+```
+
+
+
+### Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **str**| A card deposit id (&#x60;pi_...&#x60; or &#x60;cs_...&#x60;). | 
+
+### Return type
+
+[**CardDepositStatus**](CardDepositStatus.md)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json, application/problem+json
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+**400** | &#x60;validation-error&#x60; — not a card deposit id. |  -  |
+**429** | Rate limit exceeded (RFC 7807). Retry-After header indicates seconds to wait. |  * Retry-After - Seconds the client should wait before retrying. <br>  |
+**0** | Error response (RFC 7807) |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **get_deposit**
 > CryptoDeposit get_deposit(id)
 
@@ -660,6 +927,84 @@ Name | Type | Description  | Notes
 |-------------|-------------|------------------|
 **200** | OK |  -  |
 **400** | Error response (RFC 7807) |  -  |
+**429** | Rate limit exceeded (RFC 7807). Retry-After header indicates seconds to wait. |  * Retry-After - Seconds the client should wait before retrying. <br>  |
+**0** | Error response (RFC 7807) |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **list_payment_methods**
+> ListPaymentMethods200Response list_payment_methods()
+
+List saved cards
+
+Returns the organization's saved cards as brand, last 4 digits and expiry. Card numbers are never returned. Requires the `payments:read` scope AND an organization admin (members get 403). An organization with no saved card returns an empty list. `saved_card_charge_allowed` says whether the calling key may charge these cards (`payments:write`).
+
+
+### Example
+
+* Bearer (gpuai_live_<24-base62>) Authentication (bearerAuth):
+
+```python
+import gpuai_sdk
+from gpuai_sdk.models.list_payment_methods200_response import ListPaymentMethods200Response
+from gpuai_sdk.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to https://api.gpu.ai/v1
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gpuai_sdk.Configuration(
+    host = "https://api.gpu.ai/v1"
+)
+
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (gpuai_live_<24-base62>): bearerAuth
+configuration = gpuai_sdk.Configuration(
+    access_token = os.environ["BEARER_TOKEN"]
+)
+
+# Enter a context with an instance of the API client
+with gpuai_sdk.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = gpuai_sdk.BillingApi(api_client)
+
+    try:
+        # List saved cards
+        api_response = api_instance.list_payment_methods()
+        print("The response of BillingApi->list_payment_methods:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling BillingApi->list_payment_methods: %s\n" % e)
+```
+
+
+
+### Parameters
+
+This endpoint does not need any parameter.
+
+### Return type
+
+[**ListPaymentMethods200Response**](ListPaymentMethods200Response.md)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json, application/problem+json
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+**403** | &#x60;forbidden&#x60; — the key owner is not an organization admin. &#x60;insufficient_scope&#x60; — the key lacks &#x60;payments:read&#x60;. |  -  |
 **429** | Rate limit exceeded (RFC 7807). Retry-After header indicates seconds to wait. |  * Retry-After - Seconds the client should wait before retrying. <br>  |
 **0** | Error response (RFC 7807) |  -  |
 

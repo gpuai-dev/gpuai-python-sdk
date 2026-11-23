@@ -48,9 +48,11 @@ class JobCreate(BaseModel):
     checkpoint_path: Optional[StrictStr] = Field(default=None, description="Where the job's checkpoint directory is mounted inside the container. Defaults to `/gpuai/checkpoint`. The same path is in the `GPUAI_CHECKPOINT_DIR` environment variable. Files written there are still present when the job is run again on the same machine. They do not follow the job to another machine. ")
     max_retries: Optional[Annotated[int, Field(le=5, strict=True, ge=0)]] = Field(default=None, description="How many times to rerun the job after it runs out of GPU memory or is stopped for outgrowing its reservation. Defaults to 2. Other failures are never retried. ")
     max_price_per_hour: Optional[Union[Annotated[float, Field(strict=True, gt=0)], Annotated[int, Field(strict=True, gt=0)]]] = Field(default=None, description="Only run on a machine whose hourly price is at most this. Machines are launched on the cheapest suitable listing in any region. ")
+    wait_for_capacity: Optional[StrictBool] = Field(default=False, description="Queue the job even when no machine of its GPU type is available right now (`available_now` false in `GET /jobs/gpu-types`), and keep it waiting for one for up to 24 hours. Without it such a job is refused with 422 and the nearest type that is available, and a queued job whose machine launches keep being refused for lack of capacity fails within a few minutes. ")
     secrets: Optional[Annotated[List[StrictStr], Field(max_length=50)]] = Field(default=None, description="Names of organization secrets (POST /secrets) the job's container receives as environment variables of the same names. Values are never in a response or a log. Returns 422 `validation_failed` when a name does not exist or secrets are not enabled on this deployment.")
+    input_file: Optional[StrictStr] = Field(default=None, description="The id of a file uploaded with POST /jobs/inputs. When the job starts it gets a short-lived URL of the file in `GPUAI_INPUT_URL` and its name in `GPUAI_INPUT_NAME`. A file is read by one job only. Returns 422 `validation_failed` when the file was not uploaded, has expired, is already used, or job files are not enabled on this deployment.")
     additional_properties: Dict[str, Any] = {}
-    __properties: ClassVar[List[str]] = ["name", "image", "command", "script", "repo", "env", "gpu_type", "min_vram_gb", "memory_hint_mb", "compute_hint_pct", "timeout_seconds", "max_wait_seconds", "allow_sharing", "allow_restart", "isolation", "checkpoint_path", "max_retries", "max_price_per_hour", "secrets"]
+    __properties: ClassVar[List[str]] = ["name", "image", "command", "script", "repo", "env", "gpu_type", "min_vram_gb", "memory_hint_mb", "compute_hint_pct", "timeout_seconds", "max_wait_seconds", "allow_sharing", "allow_restart", "isolation", "checkpoint_path", "max_retries", "max_price_per_hour", "wait_for_capacity", "secrets", "input_file"]
 
     @field_validator('isolation')
     def isolation_validate_enum(cls, value):
@@ -161,7 +163,9 @@ class JobCreate(BaseModel):
             "checkpoint_path": obj.get("checkpoint_path"),
             "max_retries": obj.get("max_retries"),
             "max_price_per_hour": obj.get("max_price_per_hour"),
-            "secrets": obj.get("secrets")
+            "wait_for_capacity": obj.get("wait_for_capacity") if obj.get("wait_for_capacity") is not None else False,
+            "secrets": obj.get("secrets"),
+            "input_file": obj.get("input_file")
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

@@ -31,7 +31,7 @@ class JobGpuTypesDataInner(BaseModel):
     """ # noqa: E501
     gpu_type: StrictStr = Field(description="The GPU model, as `gpu_type` in `POST /jobs`.")
     vram_gb: StrictInt = Field(description="The GPU's memory in GB.")
-    available_now: StrictBool = Field(description="True when a supplier that runs jobs had a one-GPU machine of this type to rent at the last catalog read, a few minutes ago. False means it was only seen earlier: a job for it is accepted and waits for one. ")
+    available_now: StrictBool = Field(description="True when a supplier that runs jobs had a one-GPU machine of this type to rent at the last catalog read, a few minutes ago, and recent launches of it were not refused. When `capacity_checked` is true, a job for a type that is not available now is refused unless it sets `wait_for_capacity`. ")
     price_per_gpu_hour: Optional[Union[StrictFloat, StrictInt]] = Field(description="Cheapest retail price in USD per GPU-hour of such a machine at that read. Null when not available now. ")
     last_seen_at: Optional[datetime] = Field(description="When a supplier that runs jobs last listed the type.")
     __properties: ClassVar[List[str]] = ["gpu_type", "vram_gb", "available_now", "price_per_gpu_hour", "last_seen_at"]

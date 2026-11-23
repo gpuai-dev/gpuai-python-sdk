@@ -19,7 +19,7 @@ import re  # noqa: F401
 import json
 
 from pydantic import BaseModel, ConfigDict, Field, StrictBool
-from typing import Any, ClassVar, Dict, List
+from typing import Any, ClassVar, Dict, List, Optional
 from gpuai_sdk.models.job_gpu_types_data_inner import JobGpuTypesDataInner
 from typing import Optional, Set
 from typing_extensions import Self
@@ -31,7 +31,8 @@ class JobGpuTypes(BaseModel):
     """ # noqa: E501
     data: List[JobGpuTypesDataInner]
     complete: StrictBool = Field(description="True when the list is authoritative and any other gpu_type is refused at submit.")
-    __properties: ClassVar[List[str]] = ["data", "complete"]
+    capacity_checked: Optional[StrictBool] = Field(default=None, description="True when `available_now` is a live answer that submit acts on: a job for a type that is not available now (or, with only `min_vram_gb`, when no available type is that large) is refused with 422 unless it sets `wait_for_capacity`. False when the stock could not be read just now: nothing is then refused for capacity. ")
+    __properties: ClassVar[List[str]] = ["data", "complete", "capacity_checked"]
 
     model_config = ConfigDict(
         validate_by_name=True,
@@ -92,7 +93,8 @@ class JobGpuTypes(BaseModel):
 
         _obj = cls.model_validate({
             "data": [JobGpuTypesDataInner.from_dict(_item) for _item in obj["data"]] if obj.get("data") is not None else None,
-            "complete": obj.get("complete")
+            "complete": obj.get("complete"),
+            "capacity_checked": obj.get("capacity_checked")
         })
         return _obj
 

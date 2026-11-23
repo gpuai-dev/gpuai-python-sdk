@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **data** | [**List[JobGpuTypesDataInner]**](JobGpuTypesDataInner.md) |  | 
 **complete** | **bool** | True when the list is authoritative and any other gpu_type is refused at submit. | 
+**capacity_checked** | **bool** | True when &#x60;available_now&#x60; is a live answer that submit acts on: a job for a type that is not available now (or, with only &#x60;min_vram_gb&#x60;, when no available type is that large) is refused with 422 unless it sets &#x60;wait_for_capacity&#x60;. False when the stock could not be read just now: nothing is then refused for capacity.  | [optional] 
 
 ## Example
 

@@ -8,6 +8,9 @@ docs/AutolaunchRulePage.md
 docs/Balance.md
 docs/BillingApi.md
 docs/BillingDetails.md
+docs/CardDeposit.md
+docs/CardDepositStatus.md
+docs/CardDepositStatusMatch.md
 docs/ChatChoice.md
 docs/ChatCompletionRequest.md
 docs/ChatCompletionRequestToolChoice.md
@@ -26,6 +29,8 @@ docs/CommunityMachine.md
 docs/CommunityMachineDelistResult.md
 docs/CommunityMachineRegistration.md
 docs/CommunitySupplier.md
+docs/CreateCardCheckoutRequest.md
+docs/CreateCardDepositRequest.md
 docs/CreateCryptoDepositRequest.md
 docs/CreateFineTuningJobRequest.md
 docs/CreateFineTuningJobRequestGpuai.md
@@ -103,8 +108,12 @@ docs/JobCreate.md
 docs/JobCreateRepo.md
 docs/JobGpuTypes.md
 docs/JobGpuTypesDataInner.md
+docs/JobInput.md
+docs/JobInputCreate.md
 docs/JobLogChunk.md
 docs/JobLogs.md
+docs/JobOutputFile.md
+docs/JobOutputs.md
 docs/JobPage.md
 docs/JobSharingHint.md
 docs/JobTelemetry.md
@@ -113,6 +122,7 @@ docs/JobTrial.md
 docs/JobsApi.md
 docs/ListCommunityMachines200Response.md
 docs/ListDeposits200Response.md
+docs/ListPaymentMethods200Response.md
 docs/ListRegistryCredentials200Response.md
 docs/MarketApi.md
 docs/MarketHistoryPoint.md
@@ -140,6 +150,7 @@ docs/RegistryCredential.md
 docs/RegistryCredentialsApi.md
 docs/SSHKey.md
 docs/SSHKeyPage.md
+docs/SavedCard.md
 docs/Secret.md
 docs/SecretCreate.md
 docs/SecretImportItem.md
@@ -212,6 +223,9 @@ gpuai_sdk/models/autolaunch_rule_disarm.py
 gpuai_sdk/models/autolaunch_rule_page.py
 gpuai_sdk/models/balance.py
 gpuai_sdk/models/billing_details.py
+gpuai_sdk/models/card_deposit.py
+gpuai_sdk/models/card_deposit_status.py
+gpuai_sdk/models/card_deposit_status_match.py
 gpuai_sdk/models/chat_choice.py
 gpuai_sdk/models/chat_completion_request.py
 gpuai_sdk/models/chat_completion_request_tool_choice.py
@@ -229,6 +243,8 @@ gpuai_sdk/models/community_machine.py
 gpuai_sdk/models/community_machine_delist_result.py
 gpuai_sdk/models/community_machine_registration.py
 gpuai_sdk/models/community_supplier.py
+gpuai_sdk/models/create_card_checkout_request.py
+gpuai_sdk/models/create_card_deposit_request.py
 gpuai_sdk/models/create_crypto_deposit_request.py
 gpuai_sdk/models/create_fine_tuning_job_request.py
 gpuai_sdk/models/create_fine_tuning_job_request_gpuai.py
@@ -299,8 +315,12 @@ gpuai_sdk/models/job_create.py
 gpuai_sdk/models/job_create_repo.py
 gpuai_sdk/models/job_gpu_types.py
 gpuai_sdk/models/job_gpu_types_data_inner.py
+gpuai_sdk/models/job_input.py
+gpuai_sdk/models/job_input_create.py
 gpuai_sdk/models/job_log_chunk.py
 gpuai_sdk/models/job_logs.py
+gpuai_sdk/models/job_output_file.py
+gpuai_sdk/models/job_outputs.py
 gpuai_sdk/models/job_page.py
 gpuai_sdk/models/job_sharing_hint.py
 gpuai_sdk/models/job_telemetry.py
@@ -308,6 +328,7 @@ gpuai_sdk/models/job_telemetry_point.py
 gpuai_sdk/models/job_trial.py
 gpuai_sdk/models/list_community_machines200_response.py
 gpuai_sdk/models/list_deposits200_response.py
+gpuai_sdk/models/list_payment_methods200_response.py
 gpuai_sdk/models/list_registry_credentials200_response.py
 gpuai_sdk/models/market_history_point.py
 gpuai_sdk/models/market_history_response.py
@@ -328,6 +349,7 @@ gpuai_sdk/models/pricing_page.py
 gpuai_sdk/models/problem.py
 gpuai_sdk/models/register_community_machine_request.py
 gpuai_sdk/models/registry_credential.py
+gpuai_sdk/models/saved_card.py
 gpuai_sdk/models/secret.py
 gpuai_sdk/models/secret_create.py
 gpuai_sdk/models/secret_import_item.py
