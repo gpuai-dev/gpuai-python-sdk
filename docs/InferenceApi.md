@@ -92,7 +92,7 @@ Name | Type | Description  | Notes
 |-------------|-------------|------------------|
 **200** | A video generation job object. |  -  |
 **401** | Missing or invalid API key (OpenAI error envelope). |  -  |
-**403** | API key lacks the required scope (OpenAI error envelope). |  -  |
+**403** | API key lacks the required scope (&#x60;insufficient_scope&#x60;), or, for &#x60;POST /fine_tuning/jobs&#x60;, GPU.ai can&#39;t provide this service in the caller&#39;s country or region (&#x60;region_not_supported&#x60;). OpenAI error envelope.  |  -  |
 **404** | Model or resource not found (OpenAI error envelope). |  -  |
 **409** | Invalid request (OpenAI error envelope). On inference routes this includes &#x60;zero_data_retention_unavailable&#x60; when zero data retention is required and the model has no zero-data-retention host. |  -  |
 **429** | Rate limit exceeded (OpenAI error envelope). Retry-After header indicates seconds to wait. |  * Retry-After - Seconds the client should wait before retrying. <br>  |
@@ -178,7 +178,7 @@ Name | Type | Description  | Notes
 **400** | Invalid request (OpenAI error envelope). On inference routes this includes &#x60;zero_data_retention_unavailable&#x60; when zero data retention is required and the model has no zero-data-retention host. |  -  |
 **401** | Missing or invalid API key (OpenAI error envelope). |  -  |
 **402** | Insufficient balance (OpenAI error envelope, SERV-06). |  -  |
-**403** | API key lacks the required scope (OpenAI error envelope). |  -  |
+**403** | API key lacks the required scope (&#x60;insufficient_scope&#x60;), or, for &#x60;POST /fine_tuning/jobs&#x60;, GPU.ai can&#39;t provide this service in the caller&#39;s country or region (&#x60;region_not_supported&#x60;). OpenAI error envelope.  |  -  |
 **404** | Model or resource not found (OpenAI error envelope). |  -  |
 **422** | Request validation failed (OpenAI error envelope). |  -  |
 **429** | Rate limit exceeded (OpenAI error envelope). Retry-After header indicates seconds to wait. |  * Retry-After - Seconds the client should wait before retrying. <br>  |
@@ -268,7 +268,7 @@ Name | Type | Description  | Notes
 **400** | Invalid request (OpenAI error envelope). On inference routes this includes &#x60;zero_data_retention_unavailable&#x60; when zero data retention is required and the model has no zero-data-retention host. |  -  |
 **401** | Missing or invalid API key (OpenAI error envelope). |  -  |
 **402** | Insufficient balance (OpenAI error envelope, SERV-06). |  -  |
-**403** | API key lacks the required scope (OpenAI error envelope). |  -  |
+**403** | API key lacks the required scope (&#x60;insufficient_scope&#x60;), or, for &#x60;POST /fine_tuning/jobs&#x60;, GPU.ai can&#39;t provide this service in the caller&#39;s country or region (&#x60;region_not_supported&#x60;). OpenAI error envelope.  |  -  |
 **404** | Model or resource not found (OpenAI error envelope). |  -  |
 **413** | Request body too large (OpenAI error envelope, code request_too_large). |  -  |
 **429** | Rate limit exceeded (OpenAI error envelope). Retry-After header indicates seconds to wait. |  * Retry-After - Seconds the client should wait before retrying. <br>  |
@@ -362,7 +362,7 @@ Name | Type | Description  | Notes
 **400** | Invalid request (OpenAI error envelope). On inference routes this includes &#x60;zero_data_retention_unavailable&#x60; when zero data retention is required and the model has no zero-data-retention host. |  -  |
 **401** | Missing or invalid API key (OpenAI error envelope). |  -  |
 **402** | Insufficient balance (OpenAI error envelope, SERV-06). |  -  |
-**403** | API key lacks the required scope (OpenAI error envelope). |  -  |
+**403** | API key lacks the required scope (&#x60;insufficient_scope&#x60;), or, for &#x60;POST /fine_tuning/jobs&#x60;, GPU.ai can&#39;t provide this service in the caller&#39;s country or region (&#x60;region_not_supported&#x60;). OpenAI error envelope.  |  -  |
 **404** | Model or resource not found (OpenAI error envelope). |  -  |
 **422** | Request validation failed (OpenAI error envelope). |  -  |
 **429** | Rate limit exceeded (OpenAI error envelope). Retry-After header indicates seconds to wait. |  * Retry-After - Seconds the client should wait before retrying. <br>  |
@@ -453,7 +453,7 @@ Name | Type | Description  | Notes
 **400** | Invalid request (OpenAI error envelope). On inference routes this includes &#x60;zero_data_retention_unavailable&#x60; when zero data retention is required and the model has no zero-data-retention host. |  -  |
 **401** | Missing or invalid API key (OpenAI error envelope). |  -  |
 **402** | Insufficient balance (OpenAI error envelope, SERV-06). |  -  |
-**403** | API key lacks the required scope (OpenAI error envelope). |  -  |
+**403** | API key lacks the required scope (&#x60;insufficient_scope&#x60;), or, for &#x60;POST /fine_tuning/jobs&#x60;, GPU.ai can&#39;t provide this service in the caller&#39;s country or region (&#x60;region_not_supported&#x60;). OpenAI error envelope.  |  -  |
 **404** | Model or resource not found (OpenAI error envelope). |  -  |
 **429** | Rate limit exceeded (OpenAI error envelope). Retry-After header indicates seconds to wait. |  * Retry-After - Seconds the client should wait before retrying. <br>  |
 **500** | Internal server error (OpenAI error envelope). |  -  |
@@ -611,7 +611,7 @@ Name | Type | Description  | Notes
 |-------------|-------------|------------------|
 **200** | OpenAI-shaped single model. |  -  |
 **401** | Missing or invalid API key (OpenAI error envelope). |  -  |
-**403** | API key lacks the required scope (OpenAI error envelope). |  -  |
+**403** | API key lacks the required scope (&#x60;insufficient_scope&#x60;), or, for &#x60;POST /fine_tuning/jobs&#x60;, GPU.ai can&#39;t provide this service in the caller&#39;s country or region (&#x60;region_not_supported&#x60;). OpenAI error envelope.  |  -  |
 **404** | Model or resource not found (OpenAI error envelope). |  -  |
 **429** | Rate limit exceeded (OpenAI error envelope). Retry-After header indicates seconds to wait. |  * Retry-After - Seconds the client should wait before retrying. <br>  |
 
@@ -691,7 +691,7 @@ Name | Type | Description  | Notes
 |-------------|-------------|------------------|
 **200** | A video generation job object. |  -  |
 **401** | Missing or invalid API key (OpenAI error envelope). |  -  |
-**403** | API key lacks the required scope (OpenAI error envelope). |  -  |
+**403** | API key lacks the required scope (&#x60;insufficient_scope&#x60;), or, for &#x60;POST /fine_tuning/jobs&#x60;, GPU.ai can&#39;t provide this service in the caller&#39;s country or region (&#x60;region_not_supported&#x60;). OpenAI error envelope.  |  -  |
 **404** | Model or resource not found (OpenAI error envelope). |  -  |
 **429** | Rate limit exceeded (OpenAI error envelope). Retry-After header indicates seconds to wait. |  * Retry-After - Seconds the client should wait before retrying. <br>  |
 
@@ -772,7 +772,7 @@ Name | Type | Description  | Notes
 |-------------|-------------|------------------|
 **200** | The generated video stream. |  -  |
 **401** | Missing or invalid API key (OpenAI error envelope). |  -  |
-**403** | API key lacks the required scope (OpenAI error envelope). |  -  |
+**403** | API key lacks the required scope (&#x60;insufficient_scope&#x60;), or, for &#x60;POST /fine_tuning/jobs&#x60;, GPU.ai can&#39;t provide this service in the caller&#39;s country or region (&#x60;region_not_supported&#x60;). OpenAI error envelope.  |  -  |
 **404** | Model or resource not found (OpenAI error envelope). |  -  |
 **410** | The requested artifact has expired and is no longer available (OpenAI error envelope). |  -  |
 **429** | Rate limit exceeded (OpenAI error envelope). Retry-After header indicates seconds to wait. |  * Retry-After - Seconds the client should wait before retrying. <br>  |
@@ -854,7 +854,7 @@ Name | Type | Description  | Notes
 **200** | OpenAI-shaped model list. |  -  |
 **400** | Invalid request (OpenAI error envelope). On inference routes this includes &#x60;zero_data_retention_unavailable&#x60; when zero data retention is required and the model has no zero-data-retention host. |  -  |
 **401** | Missing or invalid API key (OpenAI error envelope). |  -  |
-**403** | API key lacks the required scope (OpenAI error envelope). |  -  |
+**403** | API key lacks the required scope (&#x60;insufficient_scope&#x60;), or, for &#x60;POST /fine_tuning/jobs&#x60;, GPU.ai can&#39;t provide this service in the caller&#39;s country or region (&#x60;region_not_supported&#x60;). OpenAI error envelope.  |  -  |
 **429** | Rate limit exceeded (OpenAI error envelope). Retry-After header indicates seconds to wait. |  * Retry-After - Seconds the client should wait before retrying. <br>  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
@@ -935,7 +935,7 @@ Name | Type | Description  | Notes
 |-------------|-------------|------------------|
 **200** | A page of video generation jobs. |  -  |
 **401** | Missing or invalid API key (OpenAI error envelope). |  -  |
-**403** | API key lacks the required scope (OpenAI error envelope). |  -  |
+**403** | API key lacks the required scope (&#x60;insufficient_scope&#x60;), or, for &#x60;POST /fine_tuning/jobs&#x60;, GPU.ai can&#39;t provide this service in the caller&#39;s country or region (&#x60;region_not_supported&#x60;). OpenAI error envelope.  |  -  |
 **429** | Rate limit exceeded (OpenAI error envelope). Retry-After header indicates seconds to wait. |  * Retry-After - Seconds the client should wait before retrying. <br>  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

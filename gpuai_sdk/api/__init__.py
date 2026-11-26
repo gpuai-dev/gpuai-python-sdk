@@ -3,6 +3,7 @@
 # import apis into api package
 from gpuai_sdk.api.autolaunch_api import AutolaunchApi
 from gpuai_sdk.api.billing_api import BillingApi
+from gpuai_sdk.api.clusters_api import ClustersApi
 from gpuai_sdk.api.community_api import CommunityApi
 from gpuai_sdk.api.endpoints_api import EndpointsApi
 from gpuai_sdk.api.environments_api import EnvironmentsApi
@@ -23,4 +24,5 @@ from gpuai_sdk.api.templates_api import TemplatesApi
 from gpuai_sdk.api.usage_api import UsageApi
 from gpuai_sdk.api.watch_api import WatchApi
 from gpuai_sdk.api.webhooks_api import WebhooksApi
+from gpuai_sdk.api.workspaces_api import WorkspacesApi
 

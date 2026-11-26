@@ -192,7 +192,7 @@ Name | Type | Description  | Notes
 **200** | Charged, processing, or awaiting 3-D Secure. |  -  |
 **400** | &#x60;validation-error&#x60; — amount below $5.00. &#x60;idempotency-key-required&#x60; — no Idempotency-Key header. |  -  |
 **402** | &#x60;card-declined&#x60; — the issuer declined; nothing was charged. |  -  |
-**403** | &#x60;insufficient_scope&#x60; — the key lacks &#x60;payments:write&#x60;. &#x60;forbidden&#x60; — not an organization admin. &#x60;org-frozen&#x60; — the organization cannot add funds. |  -  |
+**403** | &#x60;insufficient_scope&#x60; — the key lacks &#x60;payments:write&#x60;. &#x60;forbidden&#x60; — not an organization admin. &#x60;org-frozen&#x60; — the organization cannot add funds. &#x60;region_not_supported&#x60; — GPU.ai can&#39;t provide this service in the caller&#39;s country or region. |  -  |
 **409** | &#x60;no-saved-card&#x60; — no (matching) saved card; use &#x60;POST /billing/deposits/card/checkout&#x60; once to save one. &#x60;idempotency-key-used&#x60; — this key belongs to a top-up that already failed. |  -  |
 **422** | &#x60;card-topup-limit&#x60; — over the per-charge limit. &#x60;card-topup-daily-limit&#x60; — over the organization&#39;s rolling-24h limit; the detail says how much is left. |  -  |
 **503** | &#x60;card-topup-disabled&#x60; — saved-card charging is switched off; use Checkout. |  -  |
@@ -279,7 +279,7 @@ Name | Type | Description  | Notes
 |-------------|-------------|------------------|
 **201** | Created |  -  |
 **400** | &#x60;validation-error&#x60; — &#x60;amount_cents&#x60; is below the configured minimum. &#x60;unsupported-chain-asset&#x60; — the chain/asset pair is not available. &#x60;invalid-request&#x60; — malformed JSON body.  |  -  |
-**403** | &#x60;org-frozen&#x60; — the organization cannot add funds; contact support. |  -  |
+**403** | &#x60;org-frozen&#x60; — the organization cannot add funds; contact support. &#x60;region_not_supported&#x60; — GPU.ai can&#39;t provide this service in the caller&#39;s country or region. |  -  |
 **404** | Error response (RFC 7807) |  -  |
 **429** | Rate limit exceeded (RFC 7807). Retry-After header indicates seconds to wait. |  * Retry-After - Seconds the client should wait before retrying. <br>  |
 **503** | &#x60;payment-source-unavailable&#x60; — deposits are temporarily unavailable; retry shortly. |  -  |

@@ -14,6 +14,7 @@ Method | HTTP request | Description
 [**get_job_trial**](JobsApi.md#get_job_trial) | **GET** /jobs/trial | Whether this organization&#39;s first jobs are free
 [**list_job_gpu_types**](JobsApi.md#list_job_gpu_types) | **GET** /jobs/gpu-types | List the GPU types a job can run on
 [**list_jobs**](JobsApi.md#list_jobs) | **GET** /jobs | List jobs
+[**rerun_job**](JobsApi.md#rerun_job) | **POST** /jobs/{id}/rerun | Run a job again
 
 
 # **cancel_job**
@@ -186,12 +187,13 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: application/json, application/problem+json
+ - **Accept**: application/problem+json, application/json
 
 ### HTTP response details
 
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
+**403** | &#x60;region_not_supported&#x60; — GPU.ai can&#39;t provide this service in the caller&#39;s country or region. Returned only for new spending (launches, deposits, key minting); reading, stopping and deleting resources are never refused, and support stays reachable.  |  -  |
 **201** | Created |  * GPUAI-Hint - Advisory only. Sent while the organization&#39;s first jobs are free (GET /jobs/trial), e.g. \&quot;Your first jobs are free, up to $10. We credit back what they cost as they run.\&quot; For a job that runs on the trial with no balance it says the job stops when the trial credit is used. <br>  |
 **402** | The organization has no balance and the job cannot run on the free trial (the trial is off, used, or at its limit for today, or the person already used it). The detail says which. Add credits, then submit again.  |  -  |
 **422** | Validation failed. The detail names the field: a missing image or command, an unknown field, an unknown &#x60;gpu_type&#x60;, neither &#x60;gpu_type&#x60; nor &#x60;min_vram_gb&#x60;, a memory hint larger than the GPU, an environment variable name starting with &#x60;GPUAI_&#x60;, or a value out of range.  |  -  |
@@ -851,6 +853,93 @@ Name | Type | Description  | Notes
 |-------------|-------------|------------------|
 **200** | OK |  -  |
 **422** | Validation failed, such as an unknown status or an invalid cursor. |  -  |
+**429** | Rate limit exceeded (RFC 7807). Retry-After header indicates seconds to wait. |  * Retry-After - Seconds the client should wait before retrying. <br>  |
+**0** | Error response (RFC 7807) |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **rerun_job**
+> Job rerun_job(id, idempotency_key=idempotency_key)
+
+Run a job again
+
+Submits one of your jobs again as a new job, with the same name, image, command or script, repository, environment, secrets, GPU and settings. It is an ordinary submission: the balance check, the capacity check and the free trial apply as they do to POST /jobs, with the same errors. A job that read an uploaded input file cannot be run again as it is (a file is used by one job only); that returns 422 `validation_failed`. To change anything first, submit with POST /jobs and `env_from_job`. Requires the `instances:write` scope.
+
+
+### Example
+
+* Bearer (gpuai_live_<24-base62>) Authentication (bearerAuth):
+
+```python
+import gpuai_sdk
+from gpuai_sdk.models.job import Job
+from gpuai_sdk.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to https://api.gpu.ai/v1
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gpuai_sdk.Configuration(
+    host = "https://api.gpu.ai/v1"
+)
+
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (gpuai_live_<24-base62>): bearerAuth
+configuration = gpuai_sdk.Configuration(
+    access_token = os.environ["BEARER_TOKEN"]
+)
+
+# Enter a context with an instance of the API client
+with gpuai_sdk.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = gpuai_sdk.JobsApi(api_client)
+    id = 'id_example' # str | The id of the job to run again.
+    idempotency_key = 'idempotency_key_example' # str |  (optional)
+
+    try:
+        # Run a job again
+        api_response = api_instance.rerun_job(id, idempotency_key=idempotency_key)
+        print("The response of JobsApi->rerun_job:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling JobsApi->rerun_job: %s\n" % e)
+```
+
+
+
+### Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **str**| The id of the job to run again. | 
+ **idempotency_key** | **str**|  | [optional] 
+
+### Return type
+
+[**Job**](Job.md)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/problem+json, application/json
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**403** | &#x60;region_not_supported&#x60; — GPU.ai can&#39;t provide this service in the caller&#39;s country or region. Returned only for new spending (launches, deposits, key minting); reading, stopping and deleting resources are never refused, and support stays reachable.  |  -  |
+**201** | The new job, queued. |  -  |
+**402** | Insufficient balance, or the free trial does not cover the job. |  -  |
+**404** | The job does not exist or is not owned by the caller&#39;s organization. |  -  |
+**422** | The job cannot be submitted again as it is, such as no machine of its GPU type is available now. |  -  |
 **429** | Rate limit exceeded (RFC 7807). Retry-After header indicates seconds to wait. |  * Retry-After - Seconds the client should wait before retrying. <br>  |
 **0** | Error response (RFC 7807) |  -  |
 

@@ -98,6 +98,7 @@ class EndpointsApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
+            '403': "Problem",
             '201': "Endpoint",
             '429': "Problem",
             'default': "Problem",
@@ -167,6 +168,7 @@ class EndpointsApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
+            '403': "Problem",
             '201': "Endpoint",
             '429': "Problem",
             'default': "Problem",
@@ -236,6 +238,7 @@ class EndpointsApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
+            '403': "Problem",
             '201': "Endpoint",
             '429': "Problem",
             'default': "Problem",
@@ -283,8 +286,8 @@ class EndpointsApi:
         if 'Accept' not in _header_params:
             _header_params['Accept'] = self.api_client.select_header_accept(
                 [
-                    'application/json', 
-                    'application/problem+json'
+                    'application/problem+json', 
+                    'application/json'
                 ]
             )
 

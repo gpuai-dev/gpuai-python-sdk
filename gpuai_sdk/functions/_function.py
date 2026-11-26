@@ -11,11 +11,12 @@ import re
 import sys
 import threading
 import time
+import warnings
 from typing import Any, Callable, Dict, Iterator, List, Optional, Sequence, Tuple, Union
 
 import cloudpickle
 
-from . import _client
+from . import _client, _imports
 from .errors import (
     GPUAIError,
     RemoteCancelled,
@@ -346,6 +347,31 @@ class Function:
                 except Exception:
                     pass
 
+    def check_imports(self) -> List[str]:
+        """Imports the machine will not have, found before anything starts.
+
+        Reads the function's code (nothing is run) and returns one message per
+        module it imports that its ``pip`` list does not install, judged from
+        the packages installed on this computer. Empty when every import is
+        covered, or when that cannot be shown here (a requirement this
+        computer does not have installed). ``deploy()``, and so the first
+        ``.remote()`` or ``.spawn()``, warns with these messages
+        (``MissingPackageWarning``).
+
+        It cannot see a package importing another without declaring it; that
+        fails on the machine with a ModuleNotFoundError naming the package to
+        add.
+        """
+        shipped = []
+        mod_name = getattr(self._fn, "__module__", None)
+        if mod_name and mod_name != "__main__" and mod_name in sys.modules:
+            shipped.append(sys.modules[mod_name])
+        shipped.extend(self._include)
+        try:
+            return _imports.find_missing(self._fn, self.pip, _python_version(), shipped)
+        except Exception:
+            return []  # a check that cannot run must never stop a deploy
+
     def _spec(self, bundle: bytes) -> dict:
         spec: Dict[str, Any] = {
             "bundle_sha256": hashlib.sha256(bundle).hexdigest(),
@@ -382,6 +408,8 @@ class Function:
         """
         with self._lock:
             if self._deployed is None:
+                for message in self.check_imports():
+                    warnings.warn(message, _imports.MissingPackageWarning, stacklevel=4)
                 bundle = self._bundle()
                 spec = self._spec(bundle)
                 fn = _client.request("POST", "/functions", {"name": self.name}, idempotent=True)

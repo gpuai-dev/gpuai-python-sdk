@@ -15,12 +15,13 @@
 """  # noqa: E501
 
 
-__version__ = "0.5.9"
+__version__ = "0.5.10"
 
 # Define package exports
 __all__ = [
     "AutolaunchApi",
     "BillingApi",
+    "ClustersApi",
     "CommunityApi",
     "EndpointsApi",
     "EnvironmentsApi",
@@ -41,6 +42,7 @@ __all__ = [
     "UsageApi",
     "WatchApi",
     "WebhooksApi",
+    "WorkspacesApi",
     "ApiResponse",
     "ApiClient",
     "Configuration",
@@ -72,6 +74,18 @@ __all__ = [
     "ChatToolCall",
     "ChatToolCallFunction",
     "ChatToolFunction",
+    "Cluster",
+    "ClusterCreate",
+    "ClusterK8sNode",
+    "ClusterList",
+    "ClusterMachine",
+    "ClusterNodeCounts",
+    "ClusterQueue",
+    "ClusterQueueList",
+    "ClusterQueueSet",
+    "ClusterReport",
+    "ClusterResize",
+    "ClusterWorkload",
     "CommunityMachine",
     "CommunityMachineDelistResult",
     "CommunityMachineRegistration",
@@ -124,6 +138,8 @@ __all__ = [
     "FunctionRunLogs",
     "FunctionUpload",
     "FunctionVersion",
+    "GPUStockList",
+    "GPUStockType",
     "GPUType",
     "GPUTypePage",
     "GetHealth200Response",
@@ -216,11 +232,23 @@ __all__ = [
     "WatchRuleUpdate",
     "WebhookEndpoint",
     "WebhookEndpointPage",
+    "Workspace",
+    "WorkspaceCreate",
+    "WorkspaceList",
+    "WorkspaceMachine",
+    "WorkspaceOpen",
+    "WorkspaceOpenLink",
+    "WorkspaceStart",
+    "WorkspaceTemplate",
+    "WorkspaceTemplateApp",
+    "WorkspaceTemplateList",
+    "WorkspaceUpdate",
 ]
 
 # import apis into sdk package
 from gpuai_sdk.api.autolaunch_api import AutolaunchApi as AutolaunchApi
 from gpuai_sdk.api.billing_api import BillingApi as BillingApi
+from gpuai_sdk.api.clusters_api import ClustersApi as ClustersApi
 from gpuai_sdk.api.community_api import CommunityApi as CommunityApi
 from gpuai_sdk.api.endpoints_api import EndpointsApi as EndpointsApi
 from gpuai_sdk.api.environments_api import EnvironmentsApi as EnvironmentsApi
@@ -241,6 +269,7 @@ from gpuai_sdk.api.templates_api import TemplatesApi as TemplatesApi
 from gpuai_sdk.api.usage_api import UsageApi as UsageApi
 from gpuai_sdk.api.watch_api import WatchApi as WatchApi
 from gpuai_sdk.api.webhooks_api import WebhooksApi as WebhooksApi
+from gpuai_sdk.api.workspaces_api import WorkspacesApi as WorkspacesApi
 
 # import ApiClient
 from gpuai_sdk.api_response import ApiResponse as ApiResponse
@@ -276,6 +305,18 @@ from gpuai_sdk.models.chat_tool import ChatTool as ChatTool
 from gpuai_sdk.models.chat_tool_call import ChatToolCall as ChatToolCall
 from gpuai_sdk.models.chat_tool_call_function import ChatToolCallFunction as ChatToolCallFunction
 from gpuai_sdk.models.chat_tool_function import ChatToolFunction as ChatToolFunction
+from gpuai_sdk.models.cluster import Cluster as Cluster
+from gpuai_sdk.models.cluster_create import ClusterCreate as ClusterCreate
+from gpuai_sdk.models.cluster_k8s_node import ClusterK8sNode as ClusterK8sNode
+from gpuai_sdk.models.cluster_list import ClusterList as ClusterList
+from gpuai_sdk.models.cluster_machine import ClusterMachine as ClusterMachine
+from gpuai_sdk.models.cluster_node_counts import ClusterNodeCounts as ClusterNodeCounts
+from gpuai_sdk.models.cluster_queue import ClusterQueue as ClusterQueue
+from gpuai_sdk.models.cluster_queue_list import ClusterQueueList as ClusterQueueList
+from gpuai_sdk.models.cluster_queue_set import ClusterQueueSet as ClusterQueueSet
+from gpuai_sdk.models.cluster_report import ClusterReport as ClusterReport
+from gpuai_sdk.models.cluster_resize import ClusterResize as ClusterResize
+from gpuai_sdk.models.cluster_workload import ClusterWorkload as ClusterWorkload
 from gpuai_sdk.models.community_machine import CommunityMachine as CommunityMachine
 from gpuai_sdk.models.community_machine_delist_result import CommunityMachineDelistResult as CommunityMachineDelistResult
 from gpuai_sdk.models.community_machine_registration import CommunityMachineRegistration as CommunityMachineRegistration
@@ -328,6 +369,8 @@ from gpuai_sdk.models.function_run_log_chunk import FunctionRunLogChunk as Funct
 from gpuai_sdk.models.function_run_logs import FunctionRunLogs as FunctionRunLogs
 from gpuai_sdk.models.function_upload import FunctionUpload as FunctionUpload
 from gpuai_sdk.models.function_version import FunctionVersion as FunctionVersion
+from gpuai_sdk.models.gpu_stock_list import GPUStockList as GPUStockList
+from gpuai_sdk.models.gpu_stock_type import GPUStockType as GPUStockType
 from gpuai_sdk.models.gpu_type import GPUType as GPUType
 from gpuai_sdk.models.gpu_type_page import GPUTypePage as GPUTypePage
 from gpuai_sdk.models.get_health200_response import GetHealth200Response as GetHealth200Response
@@ -420,4 +463,15 @@ from gpuai_sdk.models.watch_rule_page import WatchRulePage as WatchRulePage
 from gpuai_sdk.models.watch_rule_update import WatchRuleUpdate as WatchRuleUpdate
 from gpuai_sdk.models.webhook_endpoint import WebhookEndpoint as WebhookEndpoint
 from gpuai_sdk.models.webhook_endpoint_page import WebhookEndpointPage as WebhookEndpointPage
+from gpuai_sdk.models.workspace import Workspace as Workspace
+from gpuai_sdk.models.workspace_create import WorkspaceCreate as WorkspaceCreate
+from gpuai_sdk.models.workspace_list import WorkspaceList as WorkspaceList
+from gpuai_sdk.models.workspace_machine import WorkspaceMachine as WorkspaceMachine
+from gpuai_sdk.models.workspace_open import WorkspaceOpen as WorkspaceOpen
+from gpuai_sdk.models.workspace_open_link import WorkspaceOpenLink as WorkspaceOpenLink
+from gpuai_sdk.models.workspace_start import WorkspaceStart as WorkspaceStart
+from gpuai_sdk.models.workspace_template import WorkspaceTemplate as WorkspaceTemplate
+from gpuai_sdk.models.workspace_template_app import WorkspaceTemplateApp as WorkspaceTemplateApp
+from gpuai_sdk.models.workspace_template_list import WorkspaceTemplateList as WorkspaceTemplateList
+from gpuai_sdk.models.workspace_update import WorkspaceUpdate as WorkspaceUpdate
 

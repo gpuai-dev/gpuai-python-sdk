@@ -82,12 +82,13 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: application/json, application/problem+json
+ - **Accept**: application/problem+json, application/json
 
 ### HTTP response details
 
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
+**403** | &#x60;region_not_supported&#x60; — GPU.ai can&#39;t provide this service in the caller&#39;s country or region. Returned only for new spending (launches, deposits, key minting); reading, stopping and deleting resources are never refused, and support stays reachable.  |  -  |
 **201** | Created. |  -  |
 **429** | Rate limit exceeded (RFC 7807). Retry-After header indicates seconds to wait. |  * Retry-After - Seconds the client should wait before retrying. <br>  |
 **0** | Error response (RFC 7807) |  -  |
@@ -175,7 +176,7 @@ Name | Type | Description  | Notes
 **400** | Invalid request (OpenAI error envelope). On inference routes this includes &#x60;zero_data_retention_unavailable&#x60; when zero data retention is required and the model has no zero-data-retention host. |  -  |
 **401** | Missing or invalid API key (OpenAI error envelope). |  -  |
 **402** | Insufficient balance (OpenAI error envelope, SERV-06). |  -  |
-**403** | API key lacks the required scope (OpenAI error envelope). |  -  |
+**403** | API key lacks the required scope (&#x60;insufficient_scope&#x60;), or, for &#x60;POST /fine_tuning/jobs&#x60;, GPU.ai can&#39;t provide this service in the caller&#39;s country or region (&#x60;region_not_supported&#x60;). OpenAI error envelope.  |  -  |
 **404** | Model or resource not found (OpenAI error envelope). |  -  |
 **429** | Rate limit exceeded (OpenAI error envelope). Retry-After header indicates seconds to wait. |  * Retry-After - Seconds the client should wait before retrying. <br>  |
 **502** | Internal server error (OpenAI error envelope). |  -  |
@@ -262,7 +263,7 @@ Name | Type | Description  | Notes
 **400** | Invalid request (OpenAI error envelope). On inference routes this includes &#x60;zero_data_retention_unavailable&#x60; when zero data retention is required and the model has no zero-data-retention host. |  -  |
 **401** | Missing or invalid API key (OpenAI error envelope). |  -  |
 **402** | Insufficient balance (OpenAI error envelope, SERV-06). |  -  |
-**403** | API key lacks the required scope (OpenAI error envelope). |  -  |
+**403** | API key lacks the required scope (&#x60;insufficient_scope&#x60;), or, for &#x60;POST /fine_tuning/jobs&#x60;, GPU.ai can&#39;t provide this service in the caller&#39;s country or region (&#x60;region_not_supported&#x60;). OpenAI error envelope.  |  -  |
 **404** | Model or resource not found (OpenAI error envelope). |  -  |
 **429** | Rate limit exceeded (OpenAI error envelope). Retry-After header indicates seconds to wait. |  * Retry-After - Seconds the client should wait before retrying. <br>  |
 **502** | Internal server error (OpenAI error envelope). |  -  |
@@ -506,7 +507,7 @@ Name | Type | Description  | Notes
 **400** | Invalid request (OpenAI error envelope). On inference routes this includes &#x60;zero_data_retention_unavailable&#x60; when zero data retention is required and the model has no zero-data-retention host. |  -  |
 **401** | Missing or invalid API key (OpenAI error envelope). |  -  |
 **402** | Insufficient balance (OpenAI error envelope, SERV-06). |  -  |
-**403** | API key lacks the required scope (OpenAI error envelope). |  -  |
+**403** | API key lacks the required scope (&#x60;insufficient_scope&#x60;), or, for &#x60;POST /fine_tuning/jobs&#x60;, GPU.ai can&#39;t provide this service in the caller&#39;s country or region (&#x60;region_not_supported&#x60;). OpenAI error envelope.  |  -  |
 **404** | Model or resource not found (OpenAI error envelope). |  -  |
 **429** | Rate limit exceeded (OpenAI error envelope). Retry-After header indicates seconds to wait. |  * Retry-After - Seconds the client should wait before retrying. <br>  |
 **502** | Internal server error (OpenAI error envelope). |  -  |

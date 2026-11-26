@@ -36,6 +36,18 @@ from gpuai_sdk.models.chat_tool import ChatTool
 from gpuai_sdk.models.chat_tool_call import ChatToolCall
 from gpuai_sdk.models.chat_tool_call_function import ChatToolCallFunction
 from gpuai_sdk.models.chat_tool_function import ChatToolFunction
+from gpuai_sdk.models.cluster import Cluster
+from gpuai_sdk.models.cluster_create import ClusterCreate
+from gpuai_sdk.models.cluster_k8s_node import ClusterK8sNode
+from gpuai_sdk.models.cluster_list import ClusterList
+from gpuai_sdk.models.cluster_machine import ClusterMachine
+from gpuai_sdk.models.cluster_node_counts import ClusterNodeCounts
+from gpuai_sdk.models.cluster_queue import ClusterQueue
+from gpuai_sdk.models.cluster_queue_list import ClusterQueueList
+from gpuai_sdk.models.cluster_queue_set import ClusterQueueSet
+from gpuai_sdk.models.cluster_report import ClusterReport
+from gpuai_sdk.models.cluster_resize import ClusterResize
+from gpuai_sdk.models.cluster_workload import ClusterWorkload
 from gpuai_sdk.models.community_machine import CommunityMachine
 from gpuai_sdk.models.community_machine_delist_result import CommunityMachineDelistResult
 from gpuai_sdk.models.community_machine_registration import CommunityMachineRegistration
@@ -88,6 +100,8 @@ from gpuai_sdk.models.function_run_log_chunk import FunctionRunLogChunk
 from gpuai_sdk.models.function_run_logs import FunctionRunLogs
 from gpuai_sdk.models.function_upload import FunctionUpload
 from gpuai_sdk.models.function_version import FunctionVersion
+from gpuai_sdk.models.gpu_stock_list import GPUStockList
+from gpuai_sdk.models.gpu_stock_type import GPUStockType
 from gpuai_sdk.models.gpu_type import GPUType
 from gpuai_sdk.models.gpu_type_page import GPUTypePage
 from gpuai_sdk.models.get_health200_response import GetHealth200Response
@@ -180,4 +194,15 @@ from gpuai_sdk.models.watch_rule_page import WatchRulePage
 from gpuai_sdk.models.watch_rule_update import WatchRuleUpdate
 from gpuai_sdk.models.webhook_endpoint import WebhookEndpoint
 from gpuai_sdk.models.webhook_endpoint_page import WebhookEndpointPage
+from gpuai_sdk.models.workspace import Workspace
+from gpuai_sdk.models.workspace_create import WorkspaceCreate
+from gpuai_sdk.models.workspace_list import WorkspaceList
+from gpuai_sdk.models.workspace_machine import WorkspaceMachine
+from gpuai_sdk.models.workspace_open import WorkspaceOpen
+from gpuai_sdk.models.workspace_open_link import WorkspaceOpenLink
+from gpuai_sdk.models.workspace_start import WorkspaceStart
+from gpuai_sdk.models.workspace_template import WorkspaceTemplate
+from gpuai_sdk.models.workspace_template_app import WorkspaceTemplateApp
+from gpuai_sdk.models.workspace_template_list import WorkspaceTemplateList
+from gpuai_sdk.models.workspace_update import WorkspaceUpdate
 

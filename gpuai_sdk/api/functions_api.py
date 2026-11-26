@@ -707,6 +707,7 @@ class FunctionsApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
+            '403': "Problem",
             '200': "Function",
             '201': "Function",
             '429': "Problem",
@@ -781,6 +782,7 @@ class FunctionsApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
+            '403': "Problem",
             '200': "Function",
             '201': "Function",
             '429': "Problem",
@@ -855,6 +857,7 @@ class FunctionsApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
+            '403': "Problem",
             '200': "Function",
             '201': "Function",
             '429': "Problem",
@@ -906,8 +909,8 @@ class FunctionsApi:
         if 'Accept' not in _header_params:
             _header_params['Accept'] = self.api_client.select_header_accept(
                 [
-                    'application/json', 
-                    'application/problem+json'
+                    'application/problem+json', 
+                    'application/json'
                 ]
             )
 
@@ -1010,6 +1013,7 @@ class FunctionsApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
+            '403': "Problem",
             '202': "FunctionRun",
             '402': "Problem",
             '404': "Problem",
@@ -1089,6 +1093,7 @@ class FunctionsApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
+            '403': "Problem",
             '202': "FunctionRun",
             '402': "Problem",
             '404': "Problem",
@@ -1168,6 +1173,7 @@ class FunctionsApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
+            '403': "Problem",
             '202': "FunctionRun",
             '402': "Problem",
             '404': "Problem",
@@ -1223,8 +1229,8 @@ class FunctionsApi:
         if 'Accept' not in _header_params:
             _header_params['Accept'] = self.api_client.select_header_accept(
                 [
-                    'application/json', 
-                    'application/problem+json'
+                    'application/problem+json', 
+                    'application/json'
                 ]
             )
 
@@ -1327,6 +1333,7 @@ class FunctionsApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
+            '403': "Problem",
             '200': "FunctionVersion",
             '201': "FunctionVersion",
             '404': "Problem",
@@ -1406,6 +1413,7 @@ class FunctionsApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
+            '403': "Problem",
             '200': "FunctionVersion",
             '201': "FunctionVersion",
             '404': "Problem",
@@ -1485,6 +1493,7 @@ class FunctionsApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
+            '403': "Problem",
             '200': "FunctionVersion",
             '201': "FunctionVersion",
             '404': "Problem",
@@ -1540,8 +1549,8 @@ class FunctionsApi:
         if 'Accept' not in _header_params:
             _header_params['Accept'] = self.api_client.select_header_accept(
                 [
-                    'application/json', 
-                    'application/problem+json'
+                    'application/problem+json', 
+                    'application/json'
                 ]
             )
 

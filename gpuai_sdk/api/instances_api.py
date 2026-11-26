@@ -103,6 +103,7 @@ class InstancesApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
+            '403': "Problem",
             '202': "Operation",
             '429': "Problem",
             'default': "Problem",
@@ -176,6 +177,7 @@ class InstancesApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
+            '403': "Problem",
             '202': "Operation",
             '429': "Problem",
             'default': "Problem",
@@ -249,6 +251,7 @@ class InstancesApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
+            '403': "Problem",
             '202': "Operation",
             '429': "Problem",
             'default': "Problem",
@@ -299,8 +302,8 @@ class InstancesApi:
         if 'Accept' not in _header_params:
             _header_params['Accept'] = self.api_client.select_header_accept(
                 [
-                    'application/json', 
-                    'application/problem+json'
+                    'application/problem+json', 
+                    'application/json'
                 ]
             )
 
@@ -401,6 +404,7 @@ class InstancesApi:
         _response_types_map: Dict[str, Optional[str]] = {
             '202': "Operation",
             '403': "Problem",
+            '409': "Problem",
             '404': "Problem",
             '429': "Problem",
             'default': "Problem",
@@ -476,6 +480,7 @@ class InstancesApi:
         _response_types_map: Dict[str, Optional[str]] = {
             '202': "Operation",
             '403': "Problem",
+            '409': "Problem",
             '404': "Problem",
             '429': "Problem",
             'default': "Problem",
@@ -551,6 +556,7 @@ class InstancesApi:
         _response_types_map: Dict[str, Optional[str]] = {
             '202': "Operation",
             '403': "Problem",
+            '409': "Problem",
             '404': "Problem",
             '429': "Problem",
             'default': "Problem",
@@ -944,6 +950,7 @@ class InstancesApi:
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "Instance",
+            '409': "Problem",
             '429': "Problem",
             'default': "Problem",
         }
@@ -1016,6 +1023,7 @@ class InstancesApi:
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "Instance",
+            '409': "Problem",
             '429': "Problem",
             'default': "Problem",
         }
@@ -1088,6 +1096,7 @@ class InstancesApi:
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "Instance",
+            '409': "Problem",
             '429': "Problem",
             'default': "Problem",
         }
@@ -1460,7 +1469,7 @@ class InstancesApi:
     ) -> InstancePage:
         """List instances
 
-        Lists the organization's instances. By default terminated instances are excluded; pass status=terminated for the history or status=all for everything.
+        Lists the organization's instances. By default terminated instances are excluded; pass status=terminated for the history or status=all for everything. Machines that belong to a cluster or a workspace are never listed here; see GET /clusters and GET /workspaces.
 
         :param cursor:
         :type cursor: str
@@ -1537,7 +1546,7 @@ class InstancesApi:
     ) -> ApiResponse[InstancePage]:
         """List instances
 
-        Lists the organization's instances. By default terminated instances are excluded; pass status=terminated for the history or status=all for everything.
+        Lists the organization's instances. By default terminated instances are excluded; pass status=terminated for the history or status=all for everything. Machines that belong to a cluster or a workspace are never listed here; see GET /clusters and GET /workspaces.
 
         :param cursor:
         :type cursor: str
@@ -1614,7 +1623,7 @@ class InstancesApi:
     ) -> RESTResponseType:
         """List instances
 
-        Lists the organization's instances. By default terminated instances are excluded; pass status=terminated for the history or status=all for everything.
+        Lists the organization's instances. By default terminated instances are excluded; pass status=terminated for the history or status=all for everything. Machines that belong to a cluster or a workspace are never listed here; see GET /clusters and GET /workspaces.
 
         :param cursor:
         :type cursor: str

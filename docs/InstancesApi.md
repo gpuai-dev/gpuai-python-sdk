@@ -84,12 +84,13 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: application/json, application/problem+json
+ - **Accept**: application/problem+json, application/json
 
 ### HTTP response details
 
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
+**403** | &#x60;region_not_supported&#x60; — GPU.ai can&#39;t provide this service in the caller&#39;s country or region. Returned only for new spending (launches, deposits, key minting); reading, stopping and deleting resources are never refused, and support stays reachable.  |  -  |
 **202** | Accepted; long-running operation |  * Operation-Id -  <br>  * GPUAI-Hint - Advisory only. Sent while the organization&#39;s first jobs are free (GET /jobs/trial), e.g. \&quot;Your first jobs are free, up to $10. We credit back what they cost as they run.\&quot; For a job that runs on the trial with no balance it says the job stops when the trial credit is used. <br>  * GPUAI-Balance-Warning -  <br>  |
 **429** | Rate limit exceeded (RFC 7807). Retry-After header indicates seconds to wait. |  * Retry-After - Seconds the client should wait before retrying. <br>  |
 **0** | Error response (RFC 7807) |  -  |
@@ -174,6 +175,7 @@ Name | Type | Description  | Notes
 |-------------|-------------|------------------|
 **202** | Accepted; termination in progress |  * Operation-Id -  <br>  |
 **403** | Forbidden — members can only terminate instances they created |  -  |
+**409** | managed_machine. The machine belongs to a cluster or a workspace; delete the cluster or stop the workspace instead. |  -  |
 **404** | Already gone — idempotent terminate (D-07) |  -  |
 **429** | Rate limit exceeded (RFC 7807). Retry-After header indicates seconds to wait. |  * Retry-After - Seconds the client should wait before retrying. <br>  |
 **0** | Error response (RFC 7807) |  -  |
@@ -335,6 +337,7 @@ Name | Type | Description  | Notes
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | OK |  -  |
+**409** | managed_machine. The machine belongs to a cluster or a workspace and is managed through it; the detail names which one. |  -  |
 **429** | Rate limit exceeded (RFC 7807). Retry-After header indicates seconds to wait. |  * Retry-After - Seconds the client should wait before retrying. <br>  |
 **0** | Error response (RFC 7807) |  -  |
 
@@ -429,7 +432,7 @@ Name | Type | Description  | Notes
 
 List instances
 
-Lists the organization's instances. By default terminated instances are excluded; pass status=terminated for the history or status=all for everything.
+Lists the organization's instances. By default terminated instances are excluded; pass status=terminated for the history or status=all for everything. Machines that belong to a cluster or a workspace are never listed here; see GET /clusters and GET /workspaces.
 
 ### Example
 

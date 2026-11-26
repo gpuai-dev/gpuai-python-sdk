@@ -28,6 +28,7 @@ if _sys.version_info < (3, 10):  # pragma: no cover - exercised on 3.9 only
 
 from ._client import configure
 from ._function import Function, RunHandle, function
+from ._imports import MissingPackageWarning
 from .errors import (
     APIError,
     AuthenticationError,
@@ -56,4 +57,5 @@ __all__ = [
     "RemoteCancelled",
     "ResultTimeout",
     "SerializationError",
+    "MissingPackageWarning",
 ]
