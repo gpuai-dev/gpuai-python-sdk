@@ -15,7 +15,7 @@
 """  # noqa: E501
 
 
-__version__ = "0.5.10"
+__version__ = "0.5.11"
 
 # Define package exports
 __all__ = [
@@ -208,6 +208,7 @@ __all__ = [
     "SecretImportResult",
     "SecretList",
     "SecretPut",
+    "SoftwareTrial",
     "SpendingLimit",
     "StreamOptions",
     "SupplierMachineView",
@@ -439,6 +440,7 @@ from gpuai_sdk.models.secret_import_request import SecretImportRequest as Secret
 from gpuai_sdk.models.secret_import_result import SecretImportResult as SecretImportResult
 from gpuai_sdk.models.secret_list import SecretList as SecretList
 from gpuai_sdk.models.secret_put import SecretPut as SecretPut
+from gpuai_sdk.models.software_trial import SoftwareTrial as SoftwareTrial
 from gpuai_sdk.models.spending_limit import SpendingLimit as SpendingLimit
 from gpuai_sdk.models.stream_options import StreamOptions as StreamOptions
 from gpuai_sdk.models.supplier_machine_view import SupplierMachineView as SupplierMachineView

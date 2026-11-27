@@ -42,7 +42,7 @@ class Operation(BaseModel):
     updated_at: Optional[datetime] = None
     completed_at: Optional[datetime] = None
     warnings: Optional[List[StrictStr]] = Field(default=None, description="Create-time advisories, present only on the synchronous 202 from POST /instances (never on GET /operations/{id} polls) — e.g. the model-size guard failing open because a template deploy's MODEL is a gated or unknown Hugging Face repo whose size could not be verified.")
-    hint: Optional[StrictStr] = Field(default=None, description="Advisory pointer to Jobs (POST /jobs), present only on the synchronous 202 from POST /instances and only on some launches: when the request is a one-off batch run, or the organization launched many instances in the last 24 hours that each ran for less than 15 minutes. Same text as the GPUAI-Hint header. Never on GET /operations/{id} polls, and it never changes the launch.")
+    hint: Optional[StrictStr] = Field(default=None, description="Advisory line, present only on the synchronous 202 from POST /instances and only on some launches: a pointer to Jobs (POST /jobs) when the request is a one-off batch run, or the organization launched many instances in the last 24 hours that each ran for less than an hour; otherwise, when the organization is eligible for one, the free trial of the Cloud IDE, Ray clusters, or Functions. Same text as the GPUAI-Hint header. Never on GET /operations/{id} polls, and it never changes the launch.")
     __properties: ClassVar[List[str]] = ["operation_id", "kind", "state", "resource_id", "error", "result", "created_at", "updated_at", "completed_at", "warnings", "hint"]
 
     @field_validator('kind')

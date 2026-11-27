@@ -18,8 +18,8 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict
-from typing import Any, ClassVar, Dict, List, Optional
+from pydantic import BaseModel, ConfigDict, Field, StrictFloat, StrictInt
+from typing import Any, ClassVar, Dict, List, Optional, Union
 from gpuai_sdk.models.workspace_template import WorkspaceTemplate
 from typing import Optional, Set
 from typing_extensions import Self
@@ -30,7 +30,10 @@ class WorkspaceTemplateList(BaseModel):
     WorkspaceTemplateList
     """ # noqa: E501
     data: Optional[List[WorkspaceTemplate]] = None
-    __properties: ClassVar[List[str]] = ["data"]
+    storage_price_gb_month: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="Storage price of a saved folder, USD per GB-month (1 GB = 1e9 bytes), charged hourly.")
+    storage_limit_bytes: Optional[StrictInt] = Field(default=None, description="The most a workspace's saved folder may hold.")
+    save_interval_seconds: Optional[StrictInt] = Field(default=None, description="How often a running workspace saves its folder, besides every stop. 0 means only when it stops.")
+    __properties: ClassVar[List[str]] = ["data", "storage_price_gb_month", "storage_limit_bytes", "save_interval_seconds"]
 
     model_config = ConfigDict(
         validate_by_name=True,
@@ -90,7 +93,10 @@ class WorkspaceTemplateList(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "data": [WorkspaceTemplate.from_dict(_item) for _item in obj["data"]] if obj.get("data") is not None else None
+            "data": [WorkspaceTemplate.from_dict(_item) for _item in obj["data"]] if obj.get("data") is not None else None,
+            "storage_price_gb_month": obj.get("storage_price_gb_month"),
+            "storage_limit_bytes": obj.get("storage_limit_bytes"),
+            "save_interval_seconds": obj.get("save_interval_seconds")
         })
         return _obj
 

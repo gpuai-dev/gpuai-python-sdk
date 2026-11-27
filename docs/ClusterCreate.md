@@ -8,8 +8,8 @@ Name | Type | Description | Notes
 **name** | **str** | Lowercase letters, digits and hyphens, starting with a letter (32 at most). | 
 **gpu_type** | **str** | GPU type of every machine; see GET /gpu-types. | 
 **gpus_per_node** | **int** |  | [optional] [default to 1]
-**min_nodes** | **int** | Machines kept at all times. | [optional] [default to 2]
-**max_nodes** | **int** | Most machines under load. Defaults to min_nodes. | [optional] 
+**min_nodes** | **int** | Machines kept at all times. One machine is a working cluster; Ray runs on its GPUs. | [optional] [default to 1]
+**max_nodes** | **int** | Most machines under load. Defaults to min_nodes, or to 2 when min_nodes is omitted. | [optional] 
 **regions** | **List[str]** | Canonical regions to place machines in. Empty means the cheapest suitable listing anywhere. | [optional] 
 **placement** | **str** | \&quot;spread\&quot; places machines on different suppliers where it can. | [optional] [default to 'cheapest']
 **idle_timeout** | **int** | Seconds a machine may run no GPU work before it is removed (down to min_nodes). | [optional] [default to 600]

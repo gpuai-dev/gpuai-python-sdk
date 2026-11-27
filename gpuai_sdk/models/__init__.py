@@ -170,6 +170,7 @@ from gpuai_sdk.models.secret_import_request import SecretImportRequest
 from gpuai_sdk.models.secret_import_result import SecretImportResult
 from gpuai_sdk.models.secret_list import SecretList
 from gpuai_sdk.models.secret_put import SecretPut
+from gpuai_sdk.models.software_trial import SoftwareTrial
 from gpuai_sdk.models.spending_limit import SpendingLimit
 from gpuai_sdk.models.stream_options import StreamOptions
 from gpuai_sdk.models.supplier_machine_view import SupplierMachineView

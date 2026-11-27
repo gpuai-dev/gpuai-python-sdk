@@ -32,8 +32,8 @@ class ClusterCreate(BaseModel):
     name: StrictStr = Field(description="Lowercase letters, digits and hyphens, starting with a letter (32 at most).", json_schema_extra={"examples": ["train"]})
     gpu_type: StrictStr = Field(description="GPU type of every machine; see GET /gpu-types.", json_schema_extra={"examples": ["h100_sxm"]})
     gpus_per_node: Optional[Annotated[int, Field(le=8, strict=True, ge=1)]] = 1
-    min_nodes: Optional[Annotated[int, Field(strict=True, ge=1)]] = Field(default=2, description="Machines kept at all times.")
-    max_nodes: Optional[Annotated[int, Field(strict=True, ge=1)]] = Field(default=None, description="Most machines under load. Defaults to min_nodes.")
+    min_nodes: Optional[Annotated[int, Field(strict=True, ge=1)]] = Field(default=1, description="Machines kept at all times. One machine is a working cluster; Ray runs on its GPUs.")
+    max_nodes: Optional[Annotated[int, Field(strict=True, ge=1)]] = Field(default=None, description="Most machines under load. Defaults to min_nodes, or to 2 when min_nodes is omitted.")
     regions: Optional[List[StrictStr]] = Field(default=None, description="Canonical regions to place machines in. Empty means the cheapest suitable listing anywhere.")
     placement: Optional[StrictStr] = Field(default='cheapest', description="\"spread\" places machines on different suppliers where it can.")
     idle_timeout: Optional[Annotated[int, Field(strict=True, ge=60)]] = Field(default=600, description="Seconds a machine may run no GPU work before it is removed (down to min_nodes).")
@@ -104,7 +104,7 @@ class ClusterCreate(BaseModel):
             "name": obj.get("name"),
             "gpu_type": obj.get("gpu_type"),
             "gpus_per_node": obj.get("gpus_per_node") if obj.get("gpus_per_node") is not None else 1,
-            "min_nodes": obj.get("min_nodes") if obj.get("min_nodes") is not None else 2,
+            "min_nodes": obj.get("min_nodes") if obj.get("min_nodes") is not None else 1,
             "max_nodes": obj.get("max_nodes"),
             "regions": obj.get("regions"),
             "placement": obj.get("placement") if obj.get("placement") is not None else 'cheapest',

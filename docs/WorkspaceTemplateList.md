@@ -6,6 +6,9 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **data** | [**List[WorkspaceTemplate]**](WorkspaceTemplate.md) |  | [optional] 
+**storage_price_gb_month** | **float** | Storage price of a saved folder, USD per GB-month (1 GB &#x3D; 1e9 bytes), charged hourly. | [optional] 
+**storage_limit_bytes** | **int** | The most a workspace&#39;s saved folder may hold. | [optional] 
+**save_interval_seconds** | **int** | How often a running workspace saves its folder, besides every stop. 0 means only when it stops. | [optional] 
 
 ## Example
 

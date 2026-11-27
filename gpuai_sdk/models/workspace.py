@@ -47,7 +47,8 @@ class Workspace(BaseModel):
     folder_bytes: Optional[StrictInt] = Field(default=None, description="Size of the workspace folder now.")
     storage_limit_bytes: Optional[StrictInt] = None
     storage_price_gb_month: Optional[Union[StrictFloat, StrictInt]] = None
-    saved_at: Optional[datetime] = None
+    saved_at: Optional[datetime] = Field(default=None, description="When the folder was last saved (while running or on stop).")
+    save_interval_seconds: Optional[StrictInt] = Field(default=None, description="How often the folder is saved while the workspace runs, besides every stop. 0 means only when it stops.")
     gpu_cost: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="GPU time so far, USD.")
     storage_cost: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="Storage so far, USD.")
     cost: Optional[Union[StrictFloat, StrictInt]] = None
@@ -55,7 +56,7 @@ class Workspace(BaseModel):
     last_active_at: Optional[datetime] = None
     created_at: Optional[datetime] = None
     machines: Optional[List[WorkspaceMachine]] = None
-    __properties: ClassVar[List[str]] = ["id", "name", "template", "gpu_type", "gpu_count", "status", "status_message", "stop_reason", "idle_timeout", "max_price_per_hour", "url", "price_per_hour", "storage_bytes", "folder_bytes", "storage_limit_bytes", "storage_price_gb_month", "saved_at", "gpu_cost", "storage_cost", "cost", "owner_user_id", "last_active_at", "created_at", "machines"]
+    __properties: ClassVar[List[str]] = ["id", "name", "template", "gpu_type", "gpu_count", "status", "status_message", "stop_reason", "idle_timeout", "max_price_per_hour", "url", "price_per_hour", "storage_bytes", "folder_bytes", "storage_limit_bytes", "storage_price_gb_month", "saved_at", "save_interval_seconds", "gpu_cost", "storage_cost", "cost", "owner_user_id", "last_active_at", "created_at", "machines"]
 
     @field_validator('status')
     def status_validate_enum(cls, value):
@@ -63,8 +64,8 @@ class Workspace(BaseModel):
         if value is None:
             return value
 
-        if value not in set(['starting', 'running', 'stopping', 'stopped', 'failed', 'deleting']):
-            raise ValueError("must be one of enum values ('starting', 'running', 'stopping', 'stopped', 'failed', 'deleting')")
+        if value not in set(['starting', 'running', 'stopping', 'stopped', 'failed', 'deleting', 'deleted']):
+            raise ValueError("must be one of enum values ('starting', 'running', 'stopping', 'stopped', 'failed', 'deleting', 'deleted')")
         return value
 
     model_config = ConfigDict(
@@ -172,6 +173,7 @@ class Workspace(BaseModel):
             "storage_limit_bytes": obj.get("storage_limit_bytes"),
             "storage_price_gb_month": obj.get("storage_price_gb_month"),
             "saved_at": obj.get("saved_at"),
+            "save_interval_seconds": obj.get("save_interval_seconds"),
             "gpu_cost": obj.get("gpu_cost"),
             "storage_cost": obj.get("storage_cost"),
             "cost": obj.get("cost"),

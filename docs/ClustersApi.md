@@ -9,6 +9,7 @@ Method | HTTP request | Description
 [**delete_cluster_queue**](ClustersApi.md#delete_cluster_queue) | **DELETE** /clusters/{id}/queues/{name} | Delete a scheduler queue
 [**get_cluster**](ClustersApi.md#get_cluster) | **GET** /clusters/{id} | Get a cluster
 [**get_cluster_kubeconfig**](ClustersApi.md#get_cluster_kubeconfig) | **GET** /clusters/{id}/kubeconfig | Get a kubeconfig for a cluster
+[**get_cluster_trial**](ClustersApi.md#get_cluster_trial) | **GET** /clusters/trial | Whether this organization&#39;s first Ray clusters are free
 [**kubernetes_proxy_get**](ClustersApi.md#kubernetes_proxy_get) | **GET** /clusters/{id}/kubernetes/{path} | Kubernetes API (GET)
 [**kubernetes_proxy_post**](ClustersApi.md#kubernetes_proxy_post) | **POST** /clusters/{id}/kubernetes/{path} | Kubernetes API (POST)
 [**list_cluster_gpu_types**](ClustersApi.md#list_cluster_gpu_types) | **GET** /clusters/gpu-types | List the machines clusters can start now
@@ -415,6 +416,82 @@ Name | Type | Description  | Notes
 |-------------|-------------|------------------|
 **200** | The kubeconfig. |  -  |
 **404** | Error response (RFC 7807) |  -  |
+**0** | Error response (RFC 7807) |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_cluster_trial**
+> SoftwareTrial get_cluster_trial()
+
+Whether this organization's first Ray clusters are free
+
+Reports the Clusters free trial for this organization. When the deployment runs one, an organization's first Ray clusters are free up to `cap_cents`. What their machines are billed is credited back to its balance as it is billed, until the credits reach the cap. One trial per organization, for organizations that had not used Clusters before the trial started. `enabled` is false when there is no trial. Requires the `instances:read` scope.
+
+### Example
+
+* Bearer (gpuai_live_<24-base62>) Authentication (bearerAuth):
+
+```python
+import gpuai_sdk
+from gpuai_sdk.models.software_trial import SoftwareTrial
+from gpuai_sdk.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to https://api.gpu.ai/v1
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gpuai_sdk.Configuration(
+    host = "https://api.gpu.ai/v1"
+)
+
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (gpuai_live_<24-base62>): bearerAuth
+configuration = gpuai_sdk.Configuration(
+    access_token = os.environ["BEARER_TOKEN"]
+)
+
+# Enter a context with an instance of the API client
+with gpuai_sdk.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = gpuai_sdk.ClustersApi(api_client)
+
+    try:
+        # Whether this organization's first Ray clusters are free
+        api_response = api_instance.get_cluster_trial()
+        print("The response of ClustersApi->get_cluster_trial:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling ClustersApi->get_cluster_trial: %s\n" % e)
+```
+
+
+
+### Parameters
+
+This endpoint does not need any parameter.
+
+### Return type
+
+[**SoftwareTrial**](SoftwareTrial.md)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json, application/problem+json
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+**429** | Rate limit exceeded (RFC 7807). Retry-After header indicates seconds to wait. |  * Retry-After - Seconds the client should wait before retrying. <br>  |
 **0** | Error response (RFC 7807) |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

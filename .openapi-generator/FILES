@@ -174,6 +174,7 @@ docs/SecretImportResult.md
 docs/SecretList.md
 docs/SecretPut.md
 docs/SecretsApi.md
+docs/SoftwareTrial.md
 docs/SpendingLimit.md
 docs/SshKeysApi.md
 docs/StreamOptions.md
@@ -400,6 +401,7 @@ gpuai_sdk/models/secret_import_request.py
 gpuai_sdk/models/secret_import_result.py
 gpuai_sdk/models/secret_list.py
 gpuai_sdk/models/secret_put.py
+gpuai_sdk/models/software_trial.py
 gpuai_sdk/models/spending_limit.py
 gpuai_sdk/models/ssh_key.py
 gpuai_sdk/models/ssh_key_page.py
